@@ -1,0 +1,33 @@
+body {
+  background-color: var(--color-background);
+}
+
+/* ==========================================================================
+   Global Layout
+   ========================================================================== */
+
+html,
+body {
+  min-height: 100%;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+
+  min-height: 100vh;
+}
+
+/* Angular root container */
+#root,
+app-root {
+  display: flex;
+  flex-direction: column;
+
+  flex: 1;
+}
+
+/* Main content area */
+main {
+  flex: 1;
+}
