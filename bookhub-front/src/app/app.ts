@@ -8,5 +8,5 @@ import { RouterOutlet } from '@angular/router';
   styleUrl: './app.css'
 })
 export class App {
-  protected readonly title = signal('bookhub-front');
+  protected readonly title = signal('fr.eni.bookhub-front');
 }

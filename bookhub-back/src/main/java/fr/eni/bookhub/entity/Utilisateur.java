@@ -1,19 +1,9 @@
 package fr.eni.bookhub.entity;
 
-
 import jakarta.persistence.*;
 
 @Entity
-@Table(
-        name = "Utilisateur",
-        uniqueConstraints = {
-                @UniqueConstraint(
-                        name = "Utilisateur_email_UN",
-                        columnNames = "email"
-                )
-        }
-)
-
+@Table(name = "Utilisateur")
 public class Utilisateur {
 
     @Id
@@ -21,28 +11,32 @@ public class Utilisateur {
     @Column(name = "id_utilisateur")
     private Integer idUtilisateur;
 
-    @Column(nullable = false, length = 25)
+    @Column(name = "nom", nullable = false, length = 25)
     private String nom;
 
-    @Column(nullable = false, length = 25)
+    @Column(name = "prenom", nullable = false, length = 25)
     private String prenom;
 
-    @Column(unique = true, nullable = false, length = 100)
+    @Column(name = "email", nullable = false, unique = true, length = 100)
     private String email;
 
-    @Column(nullable = false, length = 255)
+    @Column(name = "motDePasse", nullable = false, length = 255)
     private String motDePasse;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false, length = 15)
+    @Column(name = "role", nullable = false, length = 15)
     private Role role;
 
-    /** constructor*/
-    public Utilisateur(){
-
+    public Utilisateur() {
     }
-    public Utilisateur(Integer idUtilisateur, String nom, String prenom, String email, String motDePasse, Role role) {
-        this.idUtilisateur = idUtilisateur;
+
+    public Utilisateur(
+            String nom,
+            String prenom,
+            String email,
+            String motDePasse,
+            Role role
+    ) {
         this.nom = nom;
         this.prenom = prenom;
         this.email = email;
@@ -50,7 +44,6 @@ public class Utilisateur {
         this.role = role;
     }
 
-    /** getter and setter*/
     public Integer getIdUtilisateur() {
         return idUtilisateur;
     }
