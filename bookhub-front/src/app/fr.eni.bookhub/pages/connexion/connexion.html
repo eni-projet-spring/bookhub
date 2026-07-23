@@ -1,0 +1,101 @@
+<main class="connexion-container">
+
+  <section class="connexion-card">
+
+    <h1>Connexion</h1>
+
+    <!--
+      formGroup relie le formulaire HTML au formulaire
+      formulaireConnexion défini dans le fichier TypeScript.
+    -->
+    <form
+      [formGroup]="formulaireConnexion"
+      (ngSubmit)="seConnecter()">
+
+      <!-- Champ email -->
+      <div class="form-group">
+
+        <label for="email">Adresse email</label>
+
+        <input
+          id="email"
+          type="email"
+          formControlName="email"
+          placeholder="exemple@email.com"
+          autocomplete="email">
+
+        <!--
+          Le message apparaît uniquement si le champ a été touché
+          et qu'il contient une erreur.
+        -->
+        @if (
+          formulaireConnexion.controls.email.touched &&
+          formulaireConnexion.controls.email.hasError('required')
+          ) {
+          <p class="message-erreur">
+            L'adresse email est obligatoire.
+          </p>
+        }
+
+        @if (
+          formulaireConnexion.controls.email.touched &&
+          formulaireConnexion.controls.email.hasError('email')
+          ) {
+          <p class="message-erreur">
+            L'adresse email n'est pas valide.
+          </p>
+        }
+
+      </div>
+
+      <!-- Champ mot de passe -->
+      <div class="form-group">
+
+        <label for="motDePasse">Mot de passe</label>
+
+        <input
+          id="motDePasse"
+          type="password"
+          formControlName="motDePasse"
+          placeholder="Votre mot de passe"
+          autocomplete="current-password">
+
+        @if (
+          formulaireConnexion.controls.motDePasse.touched &&
+          formulaireConnexion.controls.motDePasse.hasError('required')
+          ) {
+          <p class="message-erreur">
+            Le mot de passe est obligatoire.
+          </p>
+        }
+
+      </div>
+
+      <!-- Message renvoyé par le backend en cas d'échec -->
+      @if (messageErreur) {
+        <p class="message-erreur message-connexion">
+          {{ messageErreur }}
+        </p>
+      }
+
+      <!--
+        Le bouton est désactivé pendant la requête HTTP,
+        afin d'éviter plusieurs appels simultanés.
+      -->
+      <button
+        type="submit"
+        [disabled]="connexionEnCours">
+
+        @if (connexionEnCours) {
+          Connexion en cours...
+        } @else {
+          Se connecter
+        }
+
+      </button>
+
+    </form>
+
+  </section>
+
+</main>
