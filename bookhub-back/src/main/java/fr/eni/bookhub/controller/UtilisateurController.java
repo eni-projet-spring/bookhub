@@ -1,10 +1,12 @@
 package fr.eni.bookhub.controller;
 
 import fr.eni.bookhub.dto.ConnexionRequest;
+import fr.eni.bookhub.dto.InscriptionUtilisateurDto;
 import fr.eni.bookhub.dto.UtilisateurResponse;
 import fr.eni.bookhub.entity.Utilisateur;
 import fr.eni.bookhub.service.UtilisateurService;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,4 +39,24 @@ public class UtilisateurController {
 
         return ResponseEntity.ok(response);
     }
+
+    @PostMapping("/inscription")
+    public ResponseEntity<UtilisateurResponse> inscrire(
+            @Valid @RequestBody InscriptionUtilisateurDto inscriptionDto
+    ) {
+        Utilisateur utilisateur = utilisateurService.inscrire(inscriptionDto);
+
+        UtilisateurResponse response = new UtilisateurResponse(
+                utilisateur.getIdUtilisateur(),
+                utilisateur.getNom(),
+                utilisateur.getPrenom(),
+                utilisateur.getEmail(),
+                utilisateur.getRole()
+        );
+
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(response);
+    }
+
 }
