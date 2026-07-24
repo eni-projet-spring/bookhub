@@ -1,39 +1,40 @@
-<main class="connexion-container">
+<main class="connexion">
 
-  <section class="connexion-card">
+  <section class="connexion__card">
 
-    <h1>Connexion</h1>
+    <h1 class="page-title connexion__title">
+      Connexion
+    </h1>
 
-    <!--
-      formGroup relie le formulaire HTML au formulaire
-      formulaireConnexion défini dans le fichier TypeScript.
-    -->
     <form
       [formGroup]="formulaireConnexion"
-      (ngSubmit)="seConnecter()">
+      (ngSubmit)="seConnecter()"
+    >
 
-      <!-- Champ email -->
       <div class="form-group">
 
-        <label for="email">Adresse email</label>
+        <label
+          class="form-label"
+          for="email"
+        >
+          Adresse email
+        </label>
 
         <input
+          class="form-control"
           id="email"
           type="email"
           formControlName="email"
           placeholder="exemple@email.com"
-          autocomplete="email">
+          autocomplete="email"
+        >
 
-        <!--
-          Le message apparaît uniquement si le champ a été touché
-          et qu'il contient une erreur.
-        -->
         @if (
           formulaireConnexion.controls.email.touched &&
           formulaireConnexion.controls.email.hasError('required')
           ) {
-          <p class="message-erreur">
-            L'adresse email est obligatoire.
+          <p class="form-error">
+            L’adresse email est obligatoire.
           </p>
         }
 
@@ -41,57 +42,61 @@
           formulaireConnexion.controls.email.touched &&
           formulaireConnexion.controls.email.hasError('email')
           ) {
-          <p class="message-erreur">
-            L'adresse email n'est pas valide.
+          <p class="form-error">
+            L’adresse email n’est pas valide.
           </p>
         }
 
       </div>
 
-      <!-- Champ mot de passe -->
       <div class="form-group">
 
-        <label for="motDePasse">Mot de passe</label>
+        <label
+          class="form-label"
+          for="motDePasse"
+        >
+          Mot de passe
+        </label>
 
         <input
+          class="form-control"
           id="motDePasse"
           type="password"
           formControlName="motDePasse"
           placeholder="Votre mot de passe"
-          autocomplete="current-password">
+          autocomplete="current-password"
+        >
 
         @if (
           formulaireConnexion.controls.motDePasse.touched &&
           formulaireConnexion.controls.motDePasse.hasError('required')
           ) {
-          <p class="message-erreur">
+          <p class="form-error">
             Le mot de passe est obligatoire.
           </p>
         }
 
       </div>
 
-      <!-- Message renvoyé par le backend en cas d'échec -->
       @if (messageErreur) {
-        <p class="message-erreur message-connexion">
+        <p
+          class="form-error connexion__message"
+          role="alert"
+        >
           {{ messageErreur }}
         </p>
       }
 
-      <!--
-        Le bouton est désactivé pendant la requête HTTP,
-        afin d'éviter plusieurs appels simultanés.
-      -->
       <button
+        class="btn btn--primary connexion__submit"
         type="submit"
-        [disabled]="connexionEnCours">
-
+        [disabled]="connexionEnCours"
+      >
         @if (connexionEnCours) {
           Connexion en cours...
         } @else {
           Se connecter
         }
-
       </button>
 
     </form>
