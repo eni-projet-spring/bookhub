@@ -1,0 +1,253 @@
+/* ============================
+   Header
+============================ */
+
+.header {
+  display: flex;
+  flex-direction: column;
+  background: var(--color-primary);
+  color: white;
+}
+
+/* ============================
+   Top Bar
+============================ */
+
+.header__top {
+  display: grid;
+  grid-template-columns: 180px 1fr 180px;
+  align-items: center;
+
+  gap: 2rem;
+
+  padding: 1rem 4rem;
+}
+
+.header__logo {
+  width: 100px;
+  height: auto;
+  background-color: var(--color-background);
+  padding: 1rem;
+  border-radius: 16px;
+}
+
+/* ============================
+   Search
+============================ */
+
+.search-form {
+  display: flex;
+  align-items: center;
+
+  width: 100%;
+  max-width: 700px;
+  justify-self: center;
+
+  height: 48px;
+
+  background: white;
+  border-radius: 999px;
+
+  overflow: hidden;
+  box-shadow: 0 4px 10px rgba(0,0,0,.08);
+}
+
+.search-form input {
+  flex: 1;
+
+  border: none;
+  outline: none;
+
+  padding: 0 1.25rem;
+
+  background: transparent;
+}
+
+.search-form input::placeholder {
+  color: #9ca3af;
+}
+
+.search-form button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: 56px;
+  height: 100%;
+
+  border: none;
+
+  background: var(--color-highlight);
+
+  cursor: pointer;
+
+  transition: background .2s;
+}
+
+.search-form button:hover {
+  background: #f5b400;
+}
+
+.search-form img {
+  width: 20px;
+}
+
+/* ============================
+   Account
+============================ */
+
+.account-btn {
+  justify-self: end;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: 48px;
+  height: 48px;
+
+  border: none;
+  border-radius: 50%;
+
+  background: white;
+
+  cursor: pointer;
+
+  transition: transform .2s;
+}
+
+.account-btn:hover {
+  transform: scale(1.08);
+}
+
+.account-btn img {
+  width: 24px;
+}
+
+/* ============================
+   Bottom Bar
+============================ */
+
+.header__bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  padding: .8rem 4rem;
+
+  background: white;
+}
+
+/* Categories */
+
+.header__bottom select {
+  width: 220px;
+
+  padding: .7rem 1rem;
+
+  border: 1px solid var(--color-surface);
+  border-radius: .5rem;
+
+  background: var(--color-background);
+
+  color: var(--color-text);
+
+  cursor: pointer;
+}
+
+/* Navigation */
+
+.header__bottom ul {
+  display: flex;
+  gap: 2rem;
+
+  list-style: none;
+}
+
+.header__bottom a {
+  text-decoration: none;
+
+  color: var(--color-text);
+
+  font-family: var(--font-heading);
+  font-weight: 500;
+
+  transition: color .2s ease;
+}
+
+.header__bottom a:hover {
+  color: var(--color-accent);
+}
+
+
+@media (max-width: 900px) {
+
+  .header__top {
+    grid-template-columns: 1fr auto;
+    grid-template-areas:
+      "logo account"
+      "search search";
+
+    gap: 1rem;
+
+    padding: 1rem 2rem;
+  }
+
+  .header__logo {
+    grid-area: logo;
+  }
+
+  .search-form {
+    grid-area: search;
+
+    max-width: none;
+    width: 100%;
+  }
+
+  .account-btn {
+    grid-area: account;
+  }
+
+  .header__bottom {
+    flex-direction: column;
+    gap: 1rem;
+
+    padding: 1rem 2rem;
+  }
+
+  .header__bottom select {
+    width: 100%;
+    max-width: 400px;
+  }
+}
+
+@media (max-width: 600px) {
+
+  .header__top {
+    padding: 1rem;
+  }
+
+  .header__bottom {
+    padding: 1rem;
+  }
+
+  .header__bottom ul {
+    flex-direction: column;
+    align-items: center;
+
+    gap: .75rem;
+  }
+
+  .header__logo {
+    width: 80px;
+  }
+
+  .account-btn {
+    width: 42px;
+    height: 42px;
+  }
+
+  .search-form {
+    height: 42px;
+  }
+}

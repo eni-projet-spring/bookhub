@@ -1,0 +1,34 @@
+.footer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  gap: 0.5rem;
+
+  padding: 2rem 1rem;
+
+  background-color: var(--color-primary);
+  color: white;
+
+  text-align: center;
+}
+
+.footer__text {
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+}
+
+.footer__credit {
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+
+  opacity: 0.85;
+}
+
+.footer__credit span {
+  font-family: var(--font-heading);
+  font-weight: 600;
+
+  color: var(--color-highlight);
+}

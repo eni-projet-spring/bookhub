@@ -1,0 +1,96 @@
+<section class="ajout-livre">
+  <h1>Ajouter un livre</h1>
+
+  <form [formGroup]="formulaireLivre" (ngSubmit)="ajouterLivre()">
+
+    <div class="champ">
+      <label for="isbn">ISBN *</label>
+      <input
+        id="isbn"
+        type="text"
+        formControlName="isbn"
+        maxlength="13"
+        placeholder="9782070368228"
+      >
+
+      @if (formulaireLivre.controls.isbn.touched
+      && formulaireLivre.controls.isbn.invalid) {
+        <small>L’ISBN doit contenir exactement 13 caractères.</small>
+      }
+    </div>
+
+    <div class="champ">
+      <label for="titre">Titre *</label>
+      <input
+        id="titre"
+        type="text"
+        formControlName="titre"
+        maxlength="100"
+      >
+    </div>
+
+    <div class="champ">
+      <label for="auteur">Auteur *</label>
+      <input
+        id="auteur"
+        type="text"
+        formControlName="auteur"
+        maxlength="100"
+      >
+    </div>
+
+    <div class="champ">
+      <label for="edition">Édition *</label>
+      <input
+        id="edition"
+        type="text"
+        formControlName="edition"
+        maxlength="100"
+      >
+    </div>
+
+    <div class="champ">
+      <label for="description">Description *</label>
+      <textarea
+        id="description"
+        formControlName="description"
+        maxlength="400"
+        rows="5"
+      ></textarea>
+    </div>
+
+    <div class="champ">
+      <label for="couverture">URL de la couverture</label>
+      <input
+        id="couverture"
+        type="url"
+        formControlName="couverture"
+        maxlength="255"
+        placeholder="https://..."
+      >
+    </div>
+
+    <div class="champ">
+      <label for="idCategorie">Catégorie *</label>
+      <select id="idCategorie" formControlName="idCategorie">
+        <option [ngValue]="1">Roman</option>
+        <option [ngValue]="2">Science-fiction</option>
+        <option [ngValue]="3">Policier</option>
+        <option [ngValue]="4">Biographie</option>
+      </select>
+    </div>
+
+    <button type="submit" [disabled]="envoiEnCours">
+      {{ envoiEnCours ? 'Ajout en cours...' : 'Ajouter le livre' }}
+    </button>
+
+  </form>
+
+  @if (messageSucces) {
+    <p class="succes">{{ messageSucces }}</p>
+  }
+
+  @if (messageErreur) {
+    <p class="erreur">{{ messageErreur }}</p>
+  }
+</section>

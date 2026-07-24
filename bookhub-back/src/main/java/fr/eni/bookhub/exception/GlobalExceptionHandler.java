@@ -8,8 +8,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import java.util.Map;
 
 @RestControllerAdvice
-public class GlobalExceptionHandler {
-
+public class GlobalExceptionHandler extends RuntimeException {
     @ExceptionHandler(IdentifiantsInvalidesException.class)
     public ResponseEntity<Map<String, String>> gererIdentifiantsInvalides(
             IdentifiantsInvalidesException exception
@@ -23,4 +22,5 @@ public class GlobalExceptionHandler {
                 .status(HttpStatus.UNAUTHORIZED)
                 .body(erreur);
     }
+
 }

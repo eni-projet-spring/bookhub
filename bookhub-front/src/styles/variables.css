@@ -1,0 +1,22 @@
+:root {
+  /* Primary */
+  --color-primary: #1F3A5F;
+
+  /* Accent */
+  --color-accent: #E53935;
+
+  /* Highlight */
+  --color-highlight: #FBC02D;
+
+  /* Success / Validation */
+  --color-success: #26A69A;
+
+  /* Background */
+  --color-background: #F8F9FA;
+
+  /* Surface / Cards */
+  --color-surface: #E5E7EB;
+
+  /* Text */
+  --color-text: #374151;
+}

@@ -1,0 +1,45 @@
+.ajout-livre {
+  max-width: 650px;
+  margin: 40px auto;
+  padding: 24px;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.champ {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+input,
+textarea,
+select {
+  padding: 10px;
+  font: inherit;
+  border: 1px solid #aaa;
+  border-radius: 4px;
+}
+
+button {
+  padding: 12px;
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+small,
+.erreur {
+  color: #b00020;
+}
+
+.succes {
+  color: #167c2c;
+}
