@@ -1,6 +1,5 @@
 package fr.eni.bookhub.dto;
 
-import fr.eni.bookhub.entity.Role;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -30,17 +29,32 @@ public class InscriptionUtilisateurDto {
     private String email;
 
     @NotBlank(message = "Le mot de passe est obligatoire")
+    @Size(
+            min = 4,
+            max = 25,
+            message = "Le mot de passe doit contenir entre 4 et 25 caractères"
+    )
     private String motDePasse;
+
+    @NotBlank(message = "La confirmation du mot de passe est obligatoire")
+    @NotBlank(message = "Le mot de passe est obligatoire")
+    @Size(
+            min = 4,
+            max = 25,
+            message = "Le mot de passe doit contenir entre 4 et 25 caractères"
+    )
+    private String confirmationMotDePasse;
 
     /**Constructor*/
     public InscriptionUtilisateurDto() {
     }
 
-    public InscriptionUtilisateurDto(String nom, String prenom, String email, String motDePasse) {
+    public InscriptionUtilisateurDto(String nom, String prenom, String email, String motDePasse, String confirmationMotDePasse) {
         this.nom = nom;
         this.prenom = prenom;
         this.email = email;
         this.motDePasse = motDePasse;
+        this.confirmationMotDePasse = confirmationMotDePasse;
     }
 
     /**Getters and setters*/
@@ -76,6 +90,14 @@ public class InscriptionUtilisateurDto {
         this.motDePasse = motDePasse;
     }
 
+    public String getConfirmationMotDePasse() {
+        return confirmationMotDePasse;
+    }
+
+    public void setConfirmationMotDePasse(String confirmationMotDePasse) {
+        this.confirmationMotDePasse = confirmationMotDePasse;
+    }
+
     /**ToString*/
     @Override
     public String toString() {
@@ -83,7 +105,6 @@ public class InscriptionUtilisateurDto {
                 "nom='" + nom + '\'' +
                 ", prenom='" + prenom + '\'' +
                 ", email='" + email + '\'' +
-                ", motDePasse='" + motDePasse + '\'' +
                 '}';
     }
 }
