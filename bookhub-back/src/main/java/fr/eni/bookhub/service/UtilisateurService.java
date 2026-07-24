@@ -1,6 +1,8 @@
 package fr.eni.bookhub.service;
 
+import fr.eni.bookhub.dto.InscriptionUtilisateurDto;
 import fr.eni.bookhub.entity.Utilisateur;
+import jakarta.validation.Valid;
 
 import java.util.Optional;
 
@@ -17,4 +19,5 @@ public interface UtilisateurService {
      * @return l'utilisateur connecté
      */
     Utilisateur connecter(String email, String motDePasse);
+    Utilisateur inscrire(InscriptionUtilisateurDto inscriptionDto);
 }
