@@ -5,6 +5,12 @@ spring:
     password: Pa$$w0rd
     driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
 
+security:
+  jwt:
+    secret: ${JWT_SECRET}
+    expiration: 3600000
+
+
   jpa:
     hibernate:
       ddl-auto: validate

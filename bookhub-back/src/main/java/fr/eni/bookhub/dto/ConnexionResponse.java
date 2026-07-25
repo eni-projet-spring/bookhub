@@ -1,4 +1,13 @@
 package fr.eni.bookhub.dto;
 
-public class ConnexionResponse {
+import fr.eni.bookhub.entity.Role;
+
+public record ConnexionResponse(
+        String token,
+        Integer idUtilisateur,
+        String nom,
+        String prenom,
+        String email,
+        Role role
+) {
 }
