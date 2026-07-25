@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 import { ConnexionRequest } from '../models/connexion-request.model';
+import { ConnexionResponse } from '../models/connexion-response.model';
 import { UtilisateurResponse } from '../models/utilisateur-response.model';
 import { InscriptionRequest } from '../models/inscription-request.model';
 
@@ -14,11 +15,42 @@ export class UtilisateurService {
 
   constructor(private http: HttpClient) {}
 
-  login(connexionRequest: ConnexionRequest): Observable<UtilisateurResponse> {
-    return this.http.post<UtilisateurResponse>(`${this.apiUrl}/login`, connexionRequest);
+  login(connexionRequest: ConnexionRequest): Observable<ConnexionResponse> {
+    return this.http.post<ConnexionResponse>(`${this.apiUrl}/login`, connexionRequest);
   }
 
   inscription(inscriptionRequest: InscriptionRequest): Observable<UtilisateurResponse> {
     return this.http.post<UtilisateurResponse>(`${this.apiUrl}/inscription`, inscriptionRequest);
+  }
+
+  enregistrerConnexion(connexionResponse: ConnexionResponse): void {
+    const { token, ...utilisateur } = connexionResponse;
+
+    localStorage.setItem('token', token);
+
+    localStorage.setItem('utilisateurConnecte', JSON.stringify(utilisateur));
+  }
+
+  obtenirToken(): string | null {
+    return localStorage.getItem('token');
+  }
+
+  obtenirUtilisateurConnecte(): UtilisateurResponse | null {
+    const utilisateur = localStorage.getItem('utilisateurConnecte');
+
+    if (!utilisateur) {
+      return null;
+    }
+
+    return JSON.parse(utilisateur) as UtilisateurResponse;
+  }
+
+  deconnecter(): void {
+    localStorage.removeItem('token');
+    localStorage.removeItem('utilisateurConnecte');
+  }
+
+  estConnecte(): boolean {
+    return this.obtenirToken() !== null;
   }
 }

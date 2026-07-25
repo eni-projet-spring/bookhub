@@ -1,11 +1,13 @@
 <header class="header">
   <div class="header__top">
 
-    <img
-      class="header__logo"
-      src="images/main-logo.png"
-      alt="Logo de la librairie"
-    >
+    <a routerLink="/" aria-label="Retour à l'accueil">
+      <img
+        class="header__logo"
+        src="images/main-logo.png"
+        alt="Logo de la librairie"
+      >
+    </a>
 
     <form class="search-form">
       <input
@@ -18,15 +20,34 @@
       </button>
     </form>
 
-    <button class="account-btn" aria-label="Mon compte">
-      <img src="logos/account.svg" alt="">
-    </button>
+    @if (!estConnecte()) {
+      <a
+        class="account-btn"
+        routerLink="/connexion"
+        aria-label="Se connecter"
+        title="Connexion"
+      >
+        <img src="logos/account.svg" alt="">
+      </a>
+    }
+
+    @if (estConnecte()) {
+      <button
+        type="button"
+        class="account-btn"
+        aria-label="Se déconnecter"
+        title="Déconnexion"
+        (click)="seDeconnecter()"
+      >
+        <img src="logos/account.svg" alt="">
+      </button>
+    }
 
   </div>
 
   <div class="header__bottom">
 
-    <select>
+    <select aria-label="Choisir une catégorie">
       <option>Catégories</option>
       <option>Roman</option>
       <option>Fantasy</option>
@@ -39,8 +60,35 @@
 
     <nav>
       <ul>
-        <li><a href="#">Accueil</a></li>
-        <li><a href="#">Nous contacter</a></li>
+        <li>
+          <a routerLink="/">Accueil</a>
+        </li>
+
+        <li>
+          <a routerLink="/contact">Nous contacter</a>
+        </li>
+
+        @if (!estConnecte()) {
+          <li>
+            <a routerLink="/connexion">Connexion</a>
+          </li>
+
+          <li>
+            <a routerLink="/inscription">Inscription</a>
+          </li>
+        }
+
+        @if (estConnecte()) {
+          <li>
+            <button
+              type="button"
+              class="logout-btn"
+              (click)="seDeconnecter()"
+            >
+              Déconnexion
+            </button>
+          </li>
+        }
       </ul>
     </nav>
 
