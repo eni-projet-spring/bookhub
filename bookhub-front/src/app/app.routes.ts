@@ -4,6 +4,7 @@ import { Connexion } from './features/connexion/connexion';
 import { Inscription } from './features/inscription/inscription';
 
 export const routes: Routes = [
+  // Route permettant d'accéder à la page de connexion.
   {
     path: 'livres/ajouter',
     component: AjoutLivre,
@@ -20,5 +21,9 @@ export const routes: Routes = [
     path: '',
     redirectTo: 'connexion',
     pathMatch: 'full',
+  },
+  {
+    path: '**',
+    redirectTo: 'connexion',
   },
 ];

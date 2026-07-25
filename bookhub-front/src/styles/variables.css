@@ -1,22 +1,33 @@
 :root {
-  /* Primary */
-  --color-primary: #1F3A5F;
-
-  /* Accent */
-  --color-accent: #E53935;
-
-  /* Highlight */
-  --color-highlight: #FBC02D;
-
-  /* Success / Validation */
-  --color-success: #26A69A;
-
-  /* Background */
-  --color-background: #F8F9FA;
-
-  /* Surface / Cards */
-  --color-surface: #E5E7EB;
-
-  /* Text */
+  --color-primary: #1f3a5f;
+  --color-primary-hover: #172f4e;
+  --color-accent: #e53935;
+  --color-accent-hover: #c62828;
+  --color-highlight: #fbc02d;
+  --color-success: #26a69a;
+  --color-warning: #f4a000;
+  --color-danger: #b00020;
+  --color-background: #f8f9fa;
+  --color-surface: #ffffff;
+  --color-surface-muted: #e5e7eb;
+  --color-border: #d1d5db;
   --color-text: #374151;
+  --color-text-muted: #6b7280;
+  --color-white: #ffffff;
+  --color-black: #212121;
+  --color-success-soft: #e8f6f4;
+  --color-warning-soft: #fff4d6;
+  --color-danger-soft: #fdeaea;
+  --color-primary-soft: #edf3f8;
+  --font-heading: "Poppins", "Montserrat", sans-serif;
+  --font-body: "Inter", "Roboto", sans-serif;
+  --space-1: .25rem; --space-2: .5rem; --space-3: .75rem; --space-4: 1rem;
+  --space-5: 1.25rem; --space-6: 1.5rem; --space-8: 2rem; --space-10: 2.5rem;
+  --radius-small: .375rem; --radius-medium: .625rem; --radius-large: 1rem; --radius-pill: 999px;
+  --shadow-small: 0 2px 8px rgb(0 0 0 / 6%);
+  --shadow-card: 0 8px 24px rgb(0 0 0 / 8%);
+  --transition-fast: 180ms ease;
+  --page-max-width: 75rem;
+  --header-height: 4.5rem;
+  --sidebar-width: 14.375rem;
 }
