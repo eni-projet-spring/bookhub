@@ -1,7 +1,11 @@
 <header class="header">
+
   <div class="header__top">
 
-    <a routerLink="/" aria-label="Retour à l'accueil">
+    <a
+      routerLink="/"
+      aria-label="Retour à l'accueil"
+    >
       <img
         class="header__logo"
         src="images/main-logo.png"
@@ -10,28 +14,43 @@
     </a>
 
     <form class="search-form">
+
       <input
         type="search"
         placeholder="Rechercher un livre, un auteur..."
+        aria-label="Rechercher un livre ou un auteur"
       >
 
-      <button type="submit" aria-label="Rechercher">
-        <img src="logos/search.svg" alt="">
+      <button
+        type="submit"
+        aria-label="Rechercher"
+      >
+        <img
+          src="logos/search.svg"
+          alt=""
+        >
       </button>
+
     </form>
 
     @if (!estConnecte()) {
+
       <a
         class="account-btn"
         routerLink="/connexion"
         aria-label="Se connecter"
         title="Connexion"
       >
-        <img src="logos/account.svg" alt="">
+        <img
+          src="logos/account.svg"
+          alt=""
+        >
       </a>
+
     }
 
     @if (estConnecte()) {
+
       <button
         type="button"
         class="account-btn"
@@ -39,8 +58,12 @@
         title="Déconnexion"
         (click)="seDeconnecter()"
       >
-        <img src="logos/account.svg" alt="">
+        <img
+          src="logos/account.svg"
+          alt=""
+        >
       </button>
+
     }
 
   </div>
@@ -48,37 +71,72 @@
   <div class="header__bottom">
 
     <select aria-label="Choisir une catégorie">
-      <option>Catégories</option>
-      <option>Roman</option>
-      <option>Fantasy</option>
-      <option>Science-fiction</option>
-      <option>Policier</option>
-      <option>Manga</option>
-      <option>Histoire</option>
-      <option>Jeunesse</option>
+      <option value="">Catégories</option>
+      <option value="roman">Roman</option>
+      <option value="fantasy">Fantasy</option>
+      <option value="science-fiction">Science-fiction</option>
+      <option value="policier">Policier</option>
+      <option value="manga">Manga</option>
+      <option value="histoire">Histoire</option>
+      <option value="jeunesse">Jeunesse</option>
     </select>
 
-    <nav>
+    <nav aria-label="Navigation principale">
+
       <ul>
+
         <li>
-          <a routerLink="/">Accueil</a>
+          <a
+            routerLink="/"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+          >
+            Accueil
+          </a>
         </li>
 
         <li>
-          <a routerLink="/contact">Nous contacter</a>
+          <a
+            routerLink="/contact"
+            routerLinkActive="active"
+          >
+            Nous contacter
+          </a>
         </li>
 
         @if (!estConnecte()) {
+
           <li>
-            <a routerLink="/connexion">Connexion</a>
+            <a
+              routerLink="/connexion"
+              routerLinkActive="active"
+            >
+              Connexion
+            </a>
           </li>
 
           <li>
-            <a routerLink="/inscription">Inscription</a>
+            <a
+              routerLink="/inscription"
+              routerLinkActive="active"
+            >
+              Inscription
+            </a>
           </li>
+
         }
 
         @if (estConnecte()) {
+
+          <li>
+            <a
+              routerLink="/reservation"
+              routerLinkActive="active"
+            >
+              Réservations
+            </a>
+          </li>
+
           <li>
             <button
               type="button"
@@ -88,9 +146,13 @@
               Déconnexion
             </button>
           </li>
+
         }
+
       </ul>
+
     </nav>
 
   </div>
+
 </header>

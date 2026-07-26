@@ -45,6 +45,12 @@ export class UtilisateurService {
     return JSON.parse(utilisateur) as UtilisateurResponse;
   }
 
+  getIdUtilisateurConnecte(): number | null {
+    const utilisateur = this.obtenirUtilisateurConnecte();
+
+    return utilisateur?.idUtilisateur ?? null;
+  }
+
   deconnecter(): void {
     localStorage.removeItem('token');
     localStorage.removeItem('utilisateurConnecte');

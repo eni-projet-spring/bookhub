@@ -51,7 +51,7 @@ export class Connexion {
 
         this.connexionEnCours = false;
 
-        this.router.navigate(['/']);
+        this.router.navigate(['/livres/ajouter']);
       },
 
       error: (erreur) => {
