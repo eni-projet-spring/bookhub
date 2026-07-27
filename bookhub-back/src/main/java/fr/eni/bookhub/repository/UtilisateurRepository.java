@@ -13,7 +13,7 @@ public interface UtilisateurRepository extends JpaRepository<Utilisateur, Intege
      * Recherche un utilisateur par son email.
      * Maj IgnoreCase = Dupont@ = dupont@
      */
-    Optional<Utilisateur> findByEmailIgnoreCase(String email);
+    Optional<Utilisateur> findByEmail(String email);
 
     /**
      * Vérifie si un email existe déjà.

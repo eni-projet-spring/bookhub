@@ -25,7 +25,7 @@ public class BookHubUserDetailsService implements UserDetailsService {
         String emailNormalise = email.trim();
 
         Utilisateur utilisateur = utilisateurRepository
-                .findByEmailIgnoreCase(emailNormalise)
+                .findByEmail(emailNormalise)
                 .orElseThrow(() ->
                         new UsernameNotFoundException(
                                 "Aucun utilisateur trouvé avec l’email : "

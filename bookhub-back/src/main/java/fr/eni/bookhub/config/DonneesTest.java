@@ -21,7 +21,7 @@ public class DonneesTest {
             String emailTest = "test@bookhub.fr";
 
             if (utilisateurRepository
-                    .findByEmailIgnoreCase(emailTest)
+                    .findByEmail(emailTest)
                     .isEmpty()) {
 
                 Utilisateur utilisateur = new Utilisateur();

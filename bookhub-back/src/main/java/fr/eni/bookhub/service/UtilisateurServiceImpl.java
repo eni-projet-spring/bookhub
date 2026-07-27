@@ -23,14 +23,14 @@ public class UtilisateurServiceImpl implements UtilisateurService {
 
     @Override
     public Optional<Utilisateur> rechercherParEmail(String email) {
-        return utilisateurRepository.findByEmailIgnoreCase(email);
+        return utilisateurRepository.findByEmail(email);
     }
 
     @Override
     public Utilisateur connecter(String email, String motDePasse) {
 
         Utilisateur utilisateur = utilisateurRepository
-                .findByEmailIgnoreCase(email)
+                .findByEmail(email)
                 .orElseThrow(() ->
                         new IdentifiantsInvalidesException(
                                 "Email ou mot de passe incorrect"
