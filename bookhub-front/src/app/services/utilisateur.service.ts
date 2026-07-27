@@ -42,7 +42,12 @@ export class UtilisateurService {
       return null;
     }
 
-    return JSON.parse(utilisateur) as UtilisateurResponse;
+    try {
+      return JSON.parse(utilisateur) as UtilisateurResponse;
+    } catch {
+      this.deconnecter();
+      return null;
+    }
   }
 
   getIdUtilisateurConnecte(): number | null {
@@ -51,12 +56,18 @@ export class UtilisateurService {
     return utilisateur?.idUtilisateur ?? null;
   }
 
-  deconnecter(): void {
-    localStorage.removeItem('token');
-    localStorage.removeItem('utilisateurConnecte');
+  getRole(): 'USER' | 'LIBRARIAN' | 'ADMIN' | null {
+    const utilisateur = this.obtenirUtilisateurConnecte();
+
+    return utilisateur?.role ?? null;
   }
 
   estConnecte(): boolean {
     return this.obtenirToken() !== null;
+  }
+
+  deconnecter(): void {
+    localStorage.removeItem('token');
+    localStorage.removeItem('utilisateurConnecte');
   }
 }

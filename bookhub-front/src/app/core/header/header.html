@@ -128,14 +128,31 @@
 
         @if (estConnecte()) {
 
-          <li>
-            <a
-              routerLink="/reservation"
-              routerLinkActive="active"
-            >
-              Réservations
-            </a>
-          </li>
+          @if (estUtilisateur()) {
+
+            <li>
+              <a
+                routerLink="/mes-reservations"
+                routerLinkActive="active"
+              >
+                Mes réservations
+              </a>
+            </li>
+
+          }
+
+          @if (estBibliothecaire()) {
+
+            <li>
+              <a
+                routerLink="/dashboard-reservations"
+                routerLinkActive="active"
+              >
+                Dashboard bibliothécaire
+              </a>
+            </li>
+
+          }
 
           <li>
             <button

@@ -19,6 +19,16 @@ export class Header {
     return this.utilisateurService.estConnecte();
   }
 
+  estUtilisateur(): boolean {
+    const role = this.utilisateurService.getRole();
+    return role === 'USER' || role === 'ADMIN';
+  }
+
+  estBibliothecaire(): boolean {
+    const role = this.utilisateurService.getRole();
+    return role === 'LIBRARIAN' || role === 'ADMIN';
+  }
+
   seDeconnecter(): void {
     this.utilisateurService.deconnecter();
     this.router.navigate(['/']);

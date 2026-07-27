@@ -26,37 +26,60 @@
     <p>Vous n'avez aucune réservation.</p>
   }
 
-  @for (
-    reservation of mesReservations;
-    track reservation.idReservation
+  @if (
+    !chargementEnCours &&
+    !messageErreur &&
+    mesReservations.length > 0
     ) {
-    <article class="carte-reservation">
 
-      <h2>{{ reservation.titreLivre }}</h2>
+    <div class="liste-reservations">
 
-      <p>ISBN : {{ reservation.isbn }}</p>
+      @for (
+        reservation of mesReservations;
+        track reservation.idReservation
+        ) {
 
-      <p>
-        Statut : {{ reservation.statut }}
-      </p>
+        <article class="carte-reservation">
 
-      @if (reservation.statut === 'EN_ATTENTE') {
-        <p>
-          Rang dans la file d'attente :
-          {{ reservation.positionFileAttente }}
-        </p>
+          <h2>{{ reservation.titreLivre }}</h2>
 
-        <button
-          type="button"
-          (click)="annulerReservation(
-            reservation.idReservation
-          )"
-        >
-          Annuler la réservation
-        </button>
+          <p>
+            ISBN : {{ reservation.isbn }}
+          </p>
+
+          <p>
+            Statut : {{ reservation.statut }}
+          </p>
+
+          @if (reservation.statut === 'EN_ATTENTE') {
+
+            <p>
+              Rang dans la file d'attente :
+              {{ reservation.positionFileAttente }}
+            </p>
+
+            <button
+              type="button"
+              [disabled]="annulationEnCours"
+              (click)="annulerReservation(
+                reservation.idReservation
+              )"
+            >
+              @if (annulationEnCours) {
+                Annulation...
+              } @else {
+                Annuler la réservation
+              }
+            </button>
+
+          }
+
+        </article>
+
       }
 
-    </article>
+    </div>
+
   }
 
 </section>

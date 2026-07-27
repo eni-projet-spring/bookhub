@@ -1,11 +1,13 @@
+import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
+
 import { ReservationResponse } from '../../models/reservation-response';
 import { ReservationService } from '../../services/reservation.service';
 
 @Component({
   selector: 'app-mes-reservations',
   standalone: true,
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './mes-reservations.html',
   styleUrl: './mes-reservations.css',
 })
@@ -13,6 +15,8 @@ export class MesReservations implements OnInit {
   mesReservations: ReservationResponse[] = [];
 
   chargementEnCours = false;
+  annulationEnCours = false;
+
   messageErreur = '';
   messageSucces = '';
 
@@ -45,11 +49,13 @@ export class MesReservations implements OnInit {
   annulerReservation(idReservation: number): void {
     this.messageErreur = '';
     this.messageSucces = '';
+    this.annulationEnCours = true;
 
     this.reservationService.annulerReservation(idReservation).subscribe({
       next: () => {
         this.messageSucces = 'Votre réservation a bien été annulée.';
 
+        this.annulationEnCours = false;
         this.chargerReservations();
       },
 
@@ -57,6 +63,8 @@ export class MesReservations implements OnInit {
         console.error("Erreur lors de l'annulation de la réservation :", erreur);
 
         this.messageErreur = "Impossible d'annuler la réservation.";
+
+        this.annulationEnCours = false;
       },
     });
   }

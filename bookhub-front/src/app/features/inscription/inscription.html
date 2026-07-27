@@ -16,7 +16,9 @@
     >
 
       <div class="form-group">
-        <label class="form-label" for="nom">Nom</label>
+        <label class="form-label" for="nom">
+          Nom
+        </label>
 
         <input
           class="form-control"
@@ -38,7 +40,9 @@
       </div>
 
       <div class="form-group">
-        <label class="form-label" for="prenom">Prénom</label>
+        <label class="form-label" for="prenom">
+          Prénom
+        </label>
 
         <input
           class="form-control"
@@ -149,8 +153,20 @@
         }
       </div>
 
+      @if (messageSucces) {
+        <p
+          class="message-succes inscription__success"
+          role="status"
+        >
+          {{ messageSucces }}
+        </p>
+      }
+
       @if (messageErreur) {
-        <p class="form-error inscription__error">
+        <p
+          class="form-error inscription__error"
+          role="alert"
+        >
           {{ messageErreur }}
         </p>
       }
