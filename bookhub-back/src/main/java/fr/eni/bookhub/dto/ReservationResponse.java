@@ -9,7 +9,7 @@ public class ReservationResponse {
     private Integer idReservation;
     private LocalDateTime dateDemande;
     private StatutReservation statut;
-    private Boolean disponibilite;
+    private String disponibilite;
     private Integer positionFileAttente;
     private Integer idUtilisateur;
     private Integer idLivre;
@@ -23,7 +23,7 @@ public class ReservationResponse {
             Integer idReservation,
             LocalDateTime dateDemande,
             StatutReservation statut,
-            Boolean disponibilite,
+            String disponibilite,
             Integer positionFileAttente,
             Integer idUtilisateur,
             Integer idLivre,
@@ -65,11 +65,11 @@ public class ReservationResponse {
         this.statut = statut;
     }
 
-    public Boolean getDisponibilite() {
+    public String getDisponibilite() {
         return disponibilite;
     }
 
-    public void setDisponibilite(Boolean disponibilite) {
+    public void setDisponibilite(String disponibilite) {
         this.disponibilite = disponibilite;
     }
 
@@ -96,6 +96,7 @@ public class ReservationResponse {
     public void setIdLivre(Integer idLivre) {
         this.idLivre = idLivre;
     }
+
     public String getTitreLivre() {
         return titreLivre;
     }

@@ -16,22 +16,26 @@ public class Reservation {
     @Column(name = "id_reservation")
     private Integer idReservation;
 
-    @Column(name = "date_demande", nullable = false)
+    @Column(name = "dateReservation", nullable = false)
     private LocalDateTime dateDemande;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "statut", nullable = false, length = 20)
+    @Column(name = "statut", nullable = false, length = 15)
     private StatutReservation statut;
 
-    @Column(name = "disponibilite", nullable = false)
-    private Boolean disponibilite;
+    @Column(
+            name = "verificationDisponibilite",
+            nullable = false,
+            length = 15
+    )
+    private String disponibilite;
 
-    @Column(name = "position_file_attente", nullable = false)
+    @Column(name = "positionFileAttente", nullable = false)
     private Integer positionFileAttente;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(
-            name = "id_utilisateur",
+            name = "Utilisateur_id_utilisateur",
             nullable = false,
             foreignKey = @ForeignKey(
                     name = "Reservation_Utilisateur_FK"
@@ -41,7 +45,7 @@ public class Reservation {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(
-            name = "id_livre",
+            name = "Livre_id_livre",
             nullable = false,
             foreignKey = @ForeignKey(
                     name = "Reservation_Livre_FK"
@@ -55,7 +59,7 @@ public class Reservation {
     public Reservation(
             LocalDateTime dateDemande,
             StatutReservation statut,
-            Boolean disponibilite,
+            String disponibilite,
             Integer positionFileAttente,
             Utilisateur utilisateur,
             Livre livre
@@ -92,11 +96,11 @@ public class Reservation {
         this.statut = statut;
     }
 
-    public Boolean getDisponibilite() {
+    public String getDisponibilite() {
         return disponibilite;
     }
 
-    public void setDisponibilite(Boolean disponibilite) {
+    public void setDisponibilite(String disponibilite) {
         this.disponibilite = disponibilite;
     }
 

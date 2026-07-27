@@ -78,7 +78,7 @@ public class ReservationServiceImpl implements ReservationService {
         reservation.setLivre(livre);
         reservation.setDateDemande(LocalDateTime.now());
         reservation.setStatut(StatutReservation.EN_ATTENTE);
-        reservation.setDisponibilite(false);
+        reservation.setDisponibilite("INDISPONIBLE");
         reservation.setPositionFileAttente(positionFileAttente);
 
         return reservationRepository.save(reservation);
@@ -127,7 +127,7 @@ public class ReservationServiceImpl implements ReservationService {
         }
 
         reservation.setStatut(StatutReservation.DISPONIBLE);
-        reservation.setDisponibilite(true);
+        reservation.setDisponibilite("DISPONIBLE");
 
         return reservationRepository.save(reservation);
     }

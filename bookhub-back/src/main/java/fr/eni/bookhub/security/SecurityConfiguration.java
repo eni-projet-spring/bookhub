@@ -41,14 +41,16 @@ public class SecurityConfiguration {
 
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
-                                "/api/utilisateurs/login",
-                                "/api/utilisateurs/inscription"
+                                org.springframework.http.HttpMethod.OPTIONS,
+                                "/**"
                         )
                         .permitAll()
 
                         .requestMatchers(
-                                org.springframework.http.HttpMethod.OPTIONS,
-                                "/**"
+                                org.springframework.http.HttpMethod.POST,
+                                "/api/utilisateurs/login",
+                                "/api/utilisateurs/inscription",
+                                "/api/utilisateurs/inscription/"
                         )
                         .permitAll()
 

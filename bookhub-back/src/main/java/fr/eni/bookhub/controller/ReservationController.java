@@ -106,26 +106,6 @@ public class ReservationController {
     }
 
     /**
-     * Conversion d'une entité Reservation
-     * vers le DTO ReservationResponse.
-     */
-    private ReservationResponse convertirEnResponse(
-            Reservation reservation
-    ) {
-        return new ReservationResponse(
-                reservation.getIdReservation(),
-                reservation.getDateDemande(),
-                reservation.getStatut(),
-                reservation.getDisponibilite(),
-                reservation.getPositionFileAttente(),
-                reservation.getUtilisateur().getIdUtilisateur(),
-                reservation.getLivre().getIdLivre(),
-                reservation.getLivre().getTitre(),
-                reservation.getLivre().getIsbn()
-        );
-    }
-
-    /**
      * Côté lecteur :
      * annule une réservation appartenant
      * à l'utilisateur connecté.
@@ -143,5 +123,25 @@ public class ReservationController {
         );
 
         return ResponseEntity.noContent().build();
+    }
+
+    /**
+     * Conversion d'une entité Reservation
+     * vers le DTO ReservationResponse.
+     */
+    private ReservationResponse convertirEnResponse(
+            Reservation reservation
+    ) {
+        return new ReservationResponse(
+                reservation.getIdReservation(),
+                reservation.getDateDemande(),
+                reservation.getStatut(),
+                reservation.getDisponibilite(),
+                reservation.getPositionFileAttente(),
+                reservation.getUtilisateur().getIdUtilisateur(),
+                reservation.getLivre().getIdLivre(),
+                reservation.getLivre().getTitre(),
+                reservation.getLivre().getIsbn()
+        );
     }
 }

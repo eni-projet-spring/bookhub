@@ -2,18 +2,24 @@ spring:
   datasource:
     url: jdbc:sqlserver://127.0.0.1:1434;databaseName=bookhub;encrypt=false;trustServerCertificate=true
     username: sa
-    password: Pa$$w0rd
+    password: "Pa$$w0rd"
     driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
-
-security:
-  jwt:
-    secret: ${JWT_SECRET}
-    expiration: 3600000
-
 
   jpa:
     hibernate:
-      ddl-auto: validate
+      ddl-auto: update
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+    properties:
+      hibernate:
+        physical_naming_strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
     show-sql: true
+
+security:
+  jwt:
+    secret: ${JWT_SECRET:monSuperSecretPourLeDev12345678901234567890}
+    expiration: 2592000000
+
+logging:
+  level:
+    org.springframework.security: TRACE
