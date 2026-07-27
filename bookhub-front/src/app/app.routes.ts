@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { AjoutLivre } from './features/ajout-livre/ajout-livre';
 import { Connexion } from './features/connexion/connexion';
 import { Inscription } from './features/inscription/inscription';
+import { CatalogComponent } from './features/catalog/catalog';
 
 export const routes: Routes = [
   // Route permettant d'accéder à la page de connexion.
@@ -19,7 +20,7 @@ export const routes: Routes = [
   },
   {
     path: '',
-    redirectTo: 'connexion',
+    component: CatalogComponent,
     pathMatch: 'full',
   },
   {

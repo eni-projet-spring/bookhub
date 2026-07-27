@@ -1,0 +1,31 @@
+<section class="catalog" aria-label="Catalogue de livres">
+  <h1 class="catalog__heading">Notre Catalogue</h1>
+
+  <ng-container *ngIf="books$ | async as books">
+
+    <!-- Book Grid -->
+    <div class="catalog__grid" *ngIf="books.length > 0; else emptyState">
+      <a
+        *ngFor="let book of books"
+        class="catalog__card"
+        [routerLink]="['/livres', book.idLivre]"
+        [attr.aria-label]="'Voir les détails de ' + book.titre"
+      >
+        <img
+          class="catalog__cover"
+          [src]="book.couverture"
+          [alt]="'Couverture de ' + book.titre"
+        />
+        <h2 class="catalog__book-title">{{ book.titre }}</h2>
+        <p class="catalog__author">{{ book.auteur }}</p>
+        <span class="catalog__badge">{{ book.libelleCategorie }}</span>
+      </a>
+    </div>
+
+    <!-- Empty State -->
+    <ng-template #emptyState>
+      <p class="catalog__empty">Aucun livre disponible pour le moment.</p>
+    </ng-template>
+
+  </ng-container>
+</section>
