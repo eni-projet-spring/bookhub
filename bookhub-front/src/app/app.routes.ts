@@ -27,7 +27,7 @@ export const routes: Routes = [
     path: 'mes-reservations',
     component: MesReservations,
   },
-  
+
   {
     path: 'gestion-profil',
     component: GestionProfil,
