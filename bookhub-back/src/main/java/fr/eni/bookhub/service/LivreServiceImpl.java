@@ -72,8 +72,30 @@ public class LivreServiceImpl implements LivreService {
     }
 
     @Override
-    public List<Livre> consulterTousLesLivres() {
-        return livreRepository.findAll();
+    public List<LivreResponseDTO> getAllBooks() {
+        List<Livre> books =  livreRepository.findAll();
+        return books.stream()
+                .map(this::convertToDto)
+                .toList();
+    }
+
+    private LivreResponseDTO convertToDto(Livre book) {
+        LivreResponseDTO dto = new LivreResponseDTO();
+
+        dto.setIdLivre(book.getIdLivre());
+        dto.setIsbn(book.getIsbn());
+        dto.setTitre(book.getTitre());
+        dto.setDescription(book.getDescription());
+        dto.setCouverture(book.getCouverture());
+        dto.setEdition(book.getEdition());
+        dto.setAuteur(book.getAuteur());
+
+        if (book.getCategorie() != null) {
+            dto.setIdCategorie(book.getCategorie().getIdCategorie());
+            dto.setLibelleCategorie(book.getCategorie().getLibelle());
+        }
+
+        return dto;
     }
 
     @Override
