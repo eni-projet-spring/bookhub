@@ -31,7 +31,8 @@ export const routes: Routes = [
   {
     path: 'gestion-profil',
     component: GestionProfil,
-  }
+  },
+
   {
     path: '**',
     redirectTo: 'connexion',

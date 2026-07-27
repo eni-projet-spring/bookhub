@@ -32,20 +32,22 @@
     </div>
 
     <div class="gestion-profil__field">
-      <label class="gestion-profil__label" for="email">Email</label>
+      <label class="gestion-profil__label" for="motDePasse">Nouveau mot de passe</label>
       <input
         class="gestion-profil__input"
-        id="email"
-        type="email"
-        formControlName="email"
-        aria-describedby="email-erreur"
+        id="motDePasse"
+        type="password"
+        formControlName="motDePasse"
+        placeholder="Changer de mot de passe"
+        autocomplete="new-password"
+        aria-describedby="motDePasse-erreur"
       />
       <p
-        *ngIf="formulaireProfil.get('email')?.invalid && formulaireProfil.get('email')?.touched"
-        id="email-erreur"
+        *ngIf="formulaireProfil.get('motDePasse')?.invalid && formulaireProfil.get('motDePasse')?.touched"
+        id="motDePasse-erreur"
         class="gestion-profil__field-error"
       >
-        Email invalide
+        Le mot de passe doit contenir au moins 6 caractères.
       </p>
     </div>
 
