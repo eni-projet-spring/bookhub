@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { UtilisateurService } from '../../services/utilisateur.service';
 
 @Component({
   selector: 'app-connexion',
@@ -13,10 +15,21 @@ export class Connexion {
   connexionEnCours = false;
 
   formulaireConnexion = new FormGroup({
-    email: new FormControl('', [Validators.required, Validators.email]),
+    email: new FormControl('', {
+      nonNullable: true,
+      validators: [Validators.required, Validators.email],
+    }),
 
-    motDePasse: new FormControl('', [Validators.required]),
+    motDePasse: new FormControl('', {
+      nonNullable: true,
+      validators: [Validators.required],
+    }),
   });
+
+  constructor(
+    private utilisateurService: UtilisateurService,
+    private router: Router,
+  ) {}
 
   seConnecter(): void {
     if (this.formulaireConnexion.invalid) {
@@ -28,8 +41,26 @@ export class Connexion {
     this.connexionEnCours = true;
     this.messageErreur = '';
 
-    console.log(this.formulaireConnexion.value);
+    const connexionRequest = this.formulaireConnexion.getRawValue();
 
-    this.connexionEnCours = false;
+    this.utilisateurService.login(connexionRequest).subscribe({
+      next: (connexionResponse) => {
+        console.log('Connexion réussie');
+
+        this.utilisateurService.enregistrerConnexion(connexionResponse);
+
+        this.connexionEnCours = false;
+
+        this.router.navigate(['/livres/ajouter']);
+      },
+
+      error: (erreur) => {
+        console.error('Erreur de connexion :', erreur);
+
+        this.messageErreur = erreur.error?.message ?? 'Email ou mot de passe incorrect.';
+
+        this.connexionEnCours = false;
+      },
+    });
   }
 }

@@ -1,11 +1,16 @@
 <section class="ajout-livre">
-  <h1>Ajouter un livre</h1>
+  <h1 class="page-title">Ajouter un livre</h1>
 
-  <form [formGroup]="formulaireLivre" (ngSubmit)="ajouterLivre()">
+  <form
+    class="ajout-livre__form"
+    [formGroup]="formulaireLivre"
+    (ngSubmit)="ajouterLivre()"
+  >
+    <div class="ajout-livre__field">
+      <label class="form-label" for="isbn">ISBN *</label>
 
-    <div class="champ">
-      <label for="isbn">ISBN *</label>
       <input
+        class="form-control"
         id="isbn"
         type="text"
         formControlName="isbn"
@@ -13,15 +18,21 @@
         placeholder="9782070368228"
       >
 
-      @if (formulaireLivre.controls.isbn.touched
-      && formulaireLivre.controls.isbn.invalid) {
-        <small>L’ISBN doit contenir exactement 13 caractères.</small>
+      @if (
+        formulaireLivre.controls.isbn.touched
+        && formulaireLivre.controls.isbn.invalid
+        ) {
+        <small class="form-error">
+          L’ISBN doit contenir exactement 13 caractères.
+        </small>
       }
     </div>
 
-    <div class="champ">
-      <label for="titre">Titre *</label>
+    <div class="ajout-livre__field">
+      <label class="form-label" for="titre">Titre *</label>
+
       <input
+        class="form-control"
         id="titre"
         type="text"
         formControlName="titre"
@@ -29,9 +40,11 @@
       >
     </div>
 
-    <div class="champ">
-      <label for="auteur">Auteur *</label>
+    <div class="ajout-livre__field">
+      <label class="form-label" for="auteur">Auteur *</label>
+
       <input
+        class="form-control"
         id="auteur"
         type="text"
         formControlName="auteur"
@@ -39,9 +52,11 @@
       >
     </div>
 
-    <div class="champ">
-      <label for="edition">Édition *</label>
+    <div class="ajout-livre__field">
+      <label class="form-label" for="edition">Édition *</label>
+
       <input
+        class="form-control"
         id="edition"
         type="text"
         formControlName="edition"
@@ -49,9 +64,11 @@
       >
     </div>
 
-    <div class="champ">
-      <label for="description">Description *</label>
+    <div class="ajout-livre__field">
+      <label class="form-label" for="description">Description *</label>
+
       <textarea
+        class="form-control"
         id="description"
         formControlName="description"
         maxlength="400"
@@ -59,9 +76,13 @@
       ></textarea>
     </div>
 
-    <div class="champ">
-      <label for="couverture">URL de la couverture</label>
+    <div class="ajout-livre__field">
+      <label class="form-label" for="couverture">
+        URL de la couverture
+      </label>
+
       <input
+        class="form-control"
         id="couverture"
         type="url"
         formControlName="couverture"
@@ -70,9 +91,14 @@
       >
     </div>
 
-    <div class="champ">
-      <label for="idCategorie">Catégorie *</label>
-      <select id="idCategorie" formControlName="idCategorie">
+    <div class="ajout-livre__field">
+      <label class="form-label" for="idCategorie">Catégorie *</label>
+
+      <select
+        class="form-control"
+        id="idCategorie"
+        formControlName="idCategorie"
+      >
         <option [ngValue]="1">Roman</option>
         <option [ngValue]="2">Science-fiction</option>
         <option [ngValue]="3">Policier</option>
@@ -80,17 +106,26 @@
       </select>
     </div>
 
-    <button type="submit" [disabled]="envoiEnCours">
-      {{ envoiEnCours ? 'Ajout en cours...' : 'Ajouter le livre' }}
-    </button>
-
+    <div class="ajout-livre__actions">
+      <button
+        class="btn btn--primary"
+        type="submit"
+        [disabled]="envoiEnCours"
+      >
+        {{ envoiEnCours ? 'Ajout en cours...' : 'Ajouter le livre' }}
+      </button>
+    </div>
   </form>
 
   @if (messageSucces) {
-    <p class="succes">{{ messageSucces }}</p>
+    <p class="form-success" role="status">
+      {{ messageSucces }}
+    </p>
   }
 
   @if (messageErreur) {
-    <p class="erreur">{{ messageErreur }}</p>
+    <p class="form-error" role="alert">
+      {{ messageErreur }}
+    </p>
   }
 </section>

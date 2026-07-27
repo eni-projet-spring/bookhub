@@ -2,6 +2,9 @@ package fr.eni.bookhub.entity;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "Utilisateur")
 public class Utilisateur {
@@ -20,12 +23,15 @@ public class Utilisateur {
     @Column(name = "email", nullable = false, unique = true, length = 100)
     private String email;
 
-    @Column(name = "motDePasse", nullable = false, length = 255)
+    @Column(name = "mot_de_passe", nullable = false, length = 255)
     private String motDePasse;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "role", nullable = false, length = 15)
+    @Column(name = "role", nullable = false, length = 20)
     private Role role;
+
+    @OneToMany(mappedBy = "utilisateur", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Reservation> reservations = new ArrayList<>();
 
     public Utilisateur() {
     }
@@ -90,5 +96,13 @@ public class Utilisateur {
 
     public void setRole(Role role) {
         this.role = role;
+    }
+
+    public List<Reservation> getReservations() {
+        return reservations;
+    }
+
+    public void setReservations(List<Reservation> reservations) {
+        this.reservations = reservations;
     }
 }

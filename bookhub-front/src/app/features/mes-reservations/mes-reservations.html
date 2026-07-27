@@ -1,0 +1,85 @@
+<section class="mes-reservations">
+
+  <h1>Mes réservations</h1>
+
+  @if (chargementEnCours) {
+    <p>Chargement de vos réservations...</p>
+  }
+
+  @if (messageSucces) {
+    <p class="message-succes">
+      {{ messageSucces }}
+    </p>
+  }
+
+  @if (messageErreur) {
+    <p class="message-erreur">
+      {{ messageErreur }}
+    </p>
+  }
+
+  @if (
+    !chargementEnCours &&
+    !messageErreur &&
+    mesReservations.length === 0
+    ) {
+    <p>Vous n'avez aucune réservation.</p>
+  }
+
+  @if (
+    !chargementEnCours &&
+    !messageErreur &&
+    mesReservations.length > 0
+    ) {
+
+    <div class="liste-reservations">
+
+      @for (
+        reservation of mesReservations;
+        track reservation.idReservation
+        ) {
+
+        <article class="carte-reservation">
+
+          <h2>{{ reservation.titreLivre }}</h2>
+
+          <p>
+            ISBN : {{ reservation.isbn }}
+          </p>
+
+          <p>
+            Statut : {{ reservation.statut }}
+          </p>
+
+          @if (reservation.statut === 'EN_ATTENTE') {
+
+            <p>
+              Rang dans la file d'attente :
+              {{ reservation.positionFileAttente }}
+            </p>
+
+            <button
+              type="button"
+              [disabled]="annulationEnCours"
+              (click)="annulerReservation(
+                reservation.idReservation
+              )"
+            >
+              @if (annulationEnCours) {
+                Annulation...
+              } @else {
+                Annuler la réservation
+              }
+            </button>
+
+          }
+
+        </article>
+
+      }
+
+    </div>
+
+  }
+
+</section>

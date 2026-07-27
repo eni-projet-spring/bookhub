@@ -88,4 +88,17 @@ public class LivreServiceImpl implements LivreService {
     public Optional<Livre> rechercherParIsbn(String isbn) {
         return livreRepository.findByIsbn(isbn);
     }
+
+    @Override
+    public void supprimerLivre(Integer id) {
+
+        Livre livre = livreRepository.findById(id)
+                .orElseThrow(() ->
+                        new RuntimeException(
+                                "Livre introuvable avec l'identifiant : " + id
+                        )
+                );
+
+        livreRepository.delete(livre);
+    }
 }
