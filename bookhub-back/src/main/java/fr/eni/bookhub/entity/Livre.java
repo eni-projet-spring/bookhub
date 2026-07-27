@@ -49,7 +49,7 @@ public class Livre {
     @Column(name = "auteur", nullable = false, length = 100)
     private String auteur;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(optional = false)
     @JoinColumn(
             name = "Categorie_id_categorie",
             nullable = false,

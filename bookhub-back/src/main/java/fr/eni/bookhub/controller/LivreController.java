@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping("/api/livres")
 public class LivreController {
@@ -55,5 +56,11 @@ public class LivreController {
         livreService.supprimerLivre(id);
 
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping
+    public ResponseEntity<List<LivreResponseDTO>> getCatalog() {
+        List<LivreResponseDTO> books = livreService.getAllBooks();
+        return ResponseEntity.ok(books);
     }
 }
