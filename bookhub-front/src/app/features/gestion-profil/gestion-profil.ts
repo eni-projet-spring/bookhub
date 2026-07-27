@@ -65,6 +65,10 @@ export class GestionProfil implements OnInit {
   }
 
   supprimer(): void {
+    if (!confirm('Voulez-vous vraiment supprimer votre compte ? Cette action est irréversible.')) {
+      return;
+    }
+
     this.profilService.deleteProfil().subscribe({
       next: () => {
         this.messageSucces = 'Profil supprimé.';

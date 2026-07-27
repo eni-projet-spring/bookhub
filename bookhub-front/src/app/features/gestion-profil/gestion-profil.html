@@ -15,10 +15,13 @@
     Email
     <input type="email" formControlName="email" />
   </label>
+  <p *ngIf="formulaireProfil.get('email')?.invalid && formulaireProfil.get('email')?.touched" class="erreur">
+    Email invalide
+  </p>
 
   <p *ngIf="messageErreur" class="erreur">{{ messageErreur }}</p>
   <p *ngIf="messageSucces" class="succes">{{ messageSucces }}</p>
 
-  <button type="submit">Enregistrer</button>
+  <button type="submit" [disabled]="chargementEnCours">Enregistrer</button>
   <button type="button" (click)="supprimer()">Supprimer mon compte</button>
 </form>
