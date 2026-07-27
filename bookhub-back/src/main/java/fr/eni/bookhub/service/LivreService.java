@@ -16,4 +16,7 @@ public interface LivreService {
     Livre consulterLivreParId(Integer id);
 
     Optional<Livre> rechercherParIsbn(String isbn);
+
+    void supprimerLivre(Integer id);
+
 }

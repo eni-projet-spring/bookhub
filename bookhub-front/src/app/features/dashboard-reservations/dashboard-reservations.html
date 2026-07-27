@@ -1,0 +1,83 @@
+<section class="reservations">
+
+  <h1>Dashboard des réservations</h1>
+
+  <h2>Demandes en attente</h2>
+
+  @if (chargementEnCours) {
+    <p>Chargement des réservations...</p>
+  }
+
+  @if (messageErreur) {
+    <p class="message-erreur">
+      {{ messageErreur }}
+    </p>
+  }
+
+  @if (
+    !chargementEnCours &&
+    !messageErreur &&
+    reservationsEnAttente.length === 0
+    ) {
+    <p>Aucune réservation en attente.</p>
+  }
+
+  @if (
+    !chargementEnCours &&
+    !messageErreur &&
+    reservationsEnAttente.length > 0
+    ) {
+
+    <div class="liste-reservations">
+
+      @for (
+        reservation of reservationsEnAttente;
+        track reservation.idReservation
+        ) {
+
+        <article class="carte-reservation">
+
+          <div class="informations-reservation">
+
+            <h3>
+              {{ reservation.titreLivre }}
+              -
+              {{ reservation.isbn }}
+            </h3>
+
+            <p>
+              #{{ reservation.positionFileAttente }}
+              sur la file d'attente
+            </p>
+
+          </div>
+
+          <div class="actions-reservation">
+
+            <button
+              type="button"
+              class="bouton-confirmer"
+              disabled
+            >
+              Confirmer
+            </button>
+
+            <button
+              type="button"
+              class="bouton-rejeter"
+              disabled
+            >
+              Rejeter
+            </button>
+
+          </div>
+
+        </article>
+
+      }
+
+    </div>
+
+  }
+
+</section>
