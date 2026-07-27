@@ -3,7 +3,7 @@ package fr.eni.bookhub.entity;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "Utilisateur")
+@Table(name = "Utilisateur", schema = "dbo")
 public class Utilisateur {
 
     @Id
@@ -24,7 +24,7 @@ public class Utilisateur {
     private String motDePasse;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "role", nullable = false, length = 15)
+    @Column(name = "role", nullable = false, length = 20)
     private Role role;
 
     public Utilisateur() {

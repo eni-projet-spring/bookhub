@@ -72,6 +72,66 @@ public class LivreServiceImpl implements LivreService {
     }
 
     @Override
+    public LivreResponseDTO modifierLivre(
+            Integer id,
+            LivreRequestDTO dto
+    ) {
+
+        Livre livre = livreRepository.findById(id)
+                .orElseThrow(() ->
+                        new RuntimeException(
+                                "Livre introuvable avec l'identifiant : " + id
+                        )
+                );
+
+        Categorie categorie = categorieRepository
+                .findById(dto.getIdCategorie())
+                .orElseThrow(() ->
+                        new RuntimeException(
+                                "Catégorie introuvable avec l'identifiant : "
+                                        + dto.getIdCategorie()
+                        )
+                );
+
+        livre.setIsbn(dto.getIsbn().trim());
+        livre.setTitre(dto.getTitre().trim());
+        livre.setDescription(dto.getDescription().trim());
+        livre.setCouverture(dto.getCouverture());
+        livre.setEdition(dto.getEdition().trim());
+        livre.setAuteur(dto.getAuteur().trim());
+        livre.setCategorie(categorie);
+
+        Livre livreModifie = livreRepository.save(livre);
+
+        LivreResponseDTO response = new LivreResponseDTO();
+
+        response.setIdLivre(livreModifie.getIdLivre());
+        response.setIsbn(livreModifie.getIsbn());
+        response.setTitre(livreModifie.getTitre());
+        response.setDescription(livreModifie.getDescription());
+        response.setCouverture(livreModifie.getCouverture());
+        response.setEdition(livreModifie.getEdition());
+        response.setAuteur(livreModifie.getAuteur());
+        response.setIdCategorie(categorie.getIdCategorie());
+        response.setLibelleCategorie(categorie.getLibelle());
+
+        return response;
+    }
+
+    @Override
+    public void supprimerLivre(Integer id) {
+
+        Livre livre = livreRepository.findById(id)
+                .orElseThrow(() ->
+                        new RuntimeException(
+                                "Livre introuvable avec l'identifiant : " + id
+                        )
+                );
+
+        livreRepository.delete(livre);
+    }
+
+    @Override
     public List<Livre> consulterTousLesLivres() {
         return livreRepository.findAll();
     }

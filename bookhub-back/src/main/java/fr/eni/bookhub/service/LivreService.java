@@ -8,12 +8,15 @@ import java.util.List;
 import java.util.Optional;
 
 public interface LivreService {
-
     LivreResponseDTO ajouterLivre(LivreRequestDTO dto);
+
+    LivreResponseDTO modifierLivre(Integer id, LivreRequestDTO dto);
+
+    void supprimerLivre(Integer id);
 
     List<Livre> consulterTousLesLivres();
 
     Livre consulterLivreParId(Integer id);
 
     Optional<Livre> rechercherParIsbn(String isbn);
-}
+    }
