@@ -1,80 +1,36 @@
-/* Conteneur principal de la page */
-.connexion-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 80vh;
-  padding: 20px;
-}
-
-/* Carte contenant le formulaire */
-.connexion-card {
+.connexion {
+  display: grid;
+  flex: 1;
+  place-items: center;
   width: 100%;
-  max-width: 420px;
-  padding: 30px;
-  border: 1px solid #dddddd;
-  border-radius: 8px;
-  background-color: white;
+  padding: 3rem 1rem;
 }
 
-/* Titre de la page */
-.connexion-card h1 {
-  margin-bottom: 25px;
+.connexion__card {
+  width: min(26rem, 100%);
+  padding: 2rem;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-medium);
+  box-shadow: var(--shadow-card);
+}
+
+.connexion__title {
+  margin-bottom: 1.75rem;
   text-align: center;
 }
 
-/* Groupe contenant un label, un champ et ses erreurs */
-.form-group {
+.connexion__card form {
   display: flex;
   flex-direction: column;
-  margin-bottom: 20px;
+  gap: 1.25rem;
 }
 
-/* Libellé des champs */
-.form-group label {
-  margin-bottom: 8px;
-  font-weight: bold;
-}
-
-/* Champs du formulaire */
-.form-group input {
-  padding: 10px;
-  border: 1px solid #aaaaaa;
-  border-radius: 4px;
-  font-size: 16px;
-}
-
-/* Apparence du champ sélectionné */
-.form-group input:focus {
-  outline: none;
-  border-color: #333333;
-}
-
-/* Messages d'erreur */
-.message-erreur {
-  margin: 6px 0 0;
-  color: #b00020;
-  font-size: 14px;
-}
-
-/* Message général de connexion */
-.message-connexion {
-  margin-bottom: 15px;
+.connexion__message {
+  margin: 0;
   text-align: center;
 }
 
-/* Bouton de connexion */
-button {
+.connexion__submit {
   width: 100%;
-  padding: 12px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 16px;
-}
-
-/* Bouton désactivé pendant la requête */
-button:disabled {
-  cursor: not-allowed;
-  opacity: 0.6;
 }

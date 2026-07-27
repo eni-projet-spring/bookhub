@@ -15,6 +15,10 @@ export const routes: Routes = [
     component: Inscription,
   },
   {
+    path: 'connexion',
+    component: Connexion,
+  },
+  {
     path: '',
     redirectTo: 'connexion',
     pathMatch: 'full',

@@ -1,7 +1,8 @@
-import { Injectable, Service } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { ConnexionRequest } from '../models/connexion-request.model';
 import { Observable } from 'rxjs';
+
+import { ConnexionRequest } from '../models/connexion-request.model';
 import { UtilisateurResponse } from '../models/utilisateur-response.model';
 import { InscriptionRequest } from '../models/inscription-request.model';
 
@@ -9,7 +10,7 @@ import { InscriptionRequest } from '../models/inscription-request.model';
   providedIn: 'root',
 })
 export class UtilisateurService {
-  private apiUrl = 'http://localhost:8080/api/utilisateurs';
+  private readonly apiUrl = 'http://localhost:8080/api/utilisateurs';
 
   constructor(private http: HttpClient) {}
 
