@@ -11,7 +11,7 @@ public interface LivreService {
 
     LivreResponseDTO ajouterLivre(LivreRequestDTO dto);
 
-    List<Livre> consulterTousLesLivres();
+    List<LivreResponseDTO> getAllBooks();
 
     Livre consulterLivreParId(Integer id);
 

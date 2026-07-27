@@ -8,6 +8,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
+@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping("/api/livres")
 public class LivreController {
@@ -27,5 +30,11 @@ public class LivreController {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(livreAjoute);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<LivreResponseDTO>> getCatalog() {
+        List<LivreResponseDTO> books = livreService.getAllBooks();
+        return ResponseEntity.ok(books);
     }
 }
