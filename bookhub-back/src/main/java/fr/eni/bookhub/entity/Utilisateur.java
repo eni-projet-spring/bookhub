@@ -23,11 +23,11 @@ public class Utilisateur {
     @Column(name = "email", nullable = false, unique = true, length = 100)
     private String email;
 
-    @Column(name = "motDePasse", nullable = false, length = 255)
+    @Column(name = "mot_de_passe", nullable = false, length = 255)
     private String motDePasse;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "role", nullable = false, length = 15)
+    @Column(name = "role", nullable = false, length = 20)
     private Role role;
 
     @OneToMany(mappedBy = "utilisateur", cascade = CascadeType.ALL, orphanRemoval = true)
