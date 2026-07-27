@@ -1,42 +1,45 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 
-import { ReservationResponse } from '../../models/reservation-response';
-import { ReservationService } from '../../services/reservation.service';
+// @ts-ignore
+import { StatistiquesBibliotheque } from '../models/statistiques-bibliotheque.model';
+// @ts-ignore
+import { StatistiquesBibliothequeService } from "../../services/statistiques-bibliotheque.service";
 
 @Component({
-  selector: 'app-reservation',
+  selector: 'app-dashboard-reservations',
   standalone: true,
   imports: [CommonModule],
   templateUrl: './dashboard-reservations.html',
   styleUrl: './dashboard-reservations.css',
 })
 export class DashboardReservations implements OnInit {
-  reservationsEnAttente: ReservationResponse[] = [];
+  private readonly statistiquesService = inject(StatistiquesBibliothequeService);
+
+  statistiques: StatistiquesBibliotheque | null = null;
 
   chargementEnCours = false;
   messageErreur = '';
 
-  constructor(private reservationService: ReservationService) {}
-
   ngOnInit(): void {
-    this.chargerReservationsEnAttente();
+    this.chargerStatistiques();
   }
 
-  chargerReservationsEnAttente(): void {
+  chargerStatistiques(): void {
     this.chargementEnCours = true;
     this.messageErreur = '';
 
-    this.reservationService.listerReservationsEnAttente().subscribe({
-      next: (reservations) => {
-        this.reservationsEnAttente = reservations;
+    // @ts-ignore
+    this.statistiquesService.consulterStatistiques().subscribe({
+      next: (statistiques) => {
+        this.statistiques = statistiques;
         this.chargementEnCours = false;
       },
 
       error: (erreur) => {
-        console.error('Erreur lors du chargement des réservations :', erreur);
+        console.error('Erreur lors du chargement des statistiques', erreur);
 
-        this.messageErreur = 'Impossible de charger les réservations en attente.';
+        this.messageErreur = 'Impossible de charger les statistiques de la bibliothèque.';
 
         this.chargementEnCours = false;
       },
