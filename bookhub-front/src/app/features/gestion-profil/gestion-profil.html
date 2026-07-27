@@ -1,1 +1,24 @@
-<p>gestion-profil works!</p>
+<div *ngIf="chargementEnCours">Chargement...</div>
+
+<form [formGroup]="formulaireProfil" (ngSubmit)="enregistrer()">
+  <label>
+    Nom
+    <input type="text" formControlName="nom" />
+  </label>
+
+  <label>
+    Prénom
+    <input type="text" formControlName="prenom" />
+  </label>
+
+  <label>
+    Email
+    <input type="email" formControlName="email" />
+  </label>
+
+  <p *ngIf="messageErreur" class="erreur">{{ messageErreur }}</p>
+  <p *ngIf="messageSucces" class="succes">{{ messageSucces }}</p>
+
+  <button type="submit">Enregistrer</button>
+  <button type="button" (click)="supprimer()">Supprimer mon compte</button>
+</form>

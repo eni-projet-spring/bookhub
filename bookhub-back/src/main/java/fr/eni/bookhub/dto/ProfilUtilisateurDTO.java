@@ -1,8 +1,6 @@
 package fr.eni.bookhub.dto;
 
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
+import fr.eni.bookhub.entity.Utilisateur;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,11 +10,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 
 public class ProfilUtilisateurDTO {
-    @NotBlank
     private String nom;
-    @Size(min = 1, max = 50)
     private String prenom;
-    @Email
     private String email;
 
+    public static ProfilUtilisateurDTO fromEntity(Utilisateur utilisateur) {
+        return new ProfilUtilisateurDTO(utilisateur.getNom(), utilisateur.getPrenom(), utilisateur.getEmail());
+    }
 }

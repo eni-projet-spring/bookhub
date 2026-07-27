@@ -1,12 +1,11 @@
 package fr.eni.bookhub.controller;
 
-import fr.eni.bookhub.entity.Utilisateur;
+import fr.eni.bookhub.dto.ProfilUtilisateurDTO;
 import fr.eni.bookhub.service.ProfilUtilisateurService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/profil")
@@ -18,10 +17,20 @@ public class ProfilUtilisateurController {
         this.profilUtilisateurService = profilUtilisateurService;
     }
 
-    @GetMapping("/{idUtilisateur}")
-    public ResponseEntity<Utilisateur> getProfilUtilisateur(@PathVariable (name = "idUtilisateur") Integer idUtilisateur) {
-        Utilisateur utilisateur = profilUtilisateurService.getProfilUtilisateurById(idUtilisateur);
-        return ResponseEntity.ok(utilisateur);
+    @GetMapping
+    public ResponseEntity<ProfilUtilisateurDTO> getProfil(Authentication authentication) {
+        return ResponseEntity.ok(profilUtilisateurService.getProfilByEmail(authentication.getName()));
     }
 
+    @PutMapping
+    public ResponseEntity<ProfilUtilisateurDTO> editProfil(
+            Authentication authentication, @RequestBody @Valid ProfilUtilisateurDTO dto) {
+        return ResponseEntity.ok(profilUtilisateurService.editProfil(authentication.getName(), dto));
+    }
+
+    @DeleteMapping
+    public ResponseEntity<Void> deleteProfil(Authentication authentication) {
+        profilUtilisateurService.deleteProfil(authentication.getName());
+        return ResponseEntity.noContent().build();
+    }
 }

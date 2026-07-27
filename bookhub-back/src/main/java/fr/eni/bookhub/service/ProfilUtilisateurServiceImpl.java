@@ -2,52 +2,41 @@ package fr.eni.bookhub.service;
 
 import fr.eni.bookhub.dto.ProfilUtilisateurDTO;
 import fr.eni.bookhub.entity.Utilisateur;
+import fr.eni.bookhub.exception.UtilisateurNotFoundException;
 import fr.eni.bookhub.repository.UtilisateurRepository;
-import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
 public class ProfilUtilisateurServiceImpl implements ProfilUtilisateurService {
-    @NonNull
+
     private final UtilisateurRepository utilisateurRepository;
 
     @Override
-    public Utilisateur getProfilUtilisateurById(Integer idUtilisateur) {
-        Optional<Utilisateur> utilisateurOptional = utilisateurRepository.findById(idUtilisateur);
-        if(utilisateurOptional.isEmpty()) {
-            throw new RuntimeException("Utilisateur non trouvé avec l'ID : " + idUtilisateur);
-        }
-        return utilisateurOptional.get();
+    public ProfilUtilisateurDTO getProfilByEmail(String email) {
+        Utilisateur utilisateur = findByEmailOrThrow(email);
+        return ProfilUtilisateurDTO.fromEntity(utilisateur);
     }
 
     @Override
-    public List<Utilisateur> getAllUtilisateurs() {
-        return utilisateurRepository.findAll();
-    }
-
-    @Override
-    public Utilisateur editUtilisateur(Integer idUtilisateur, ProfilUtilisateurDTO dto) {
-
-        Utilisateur utilisateur = utilisateurRepository.findById(idUtilisateur)
-                .orElseThrow(() -> new RuntimeException(
-                        "Utilisateur non trouvé avec l'ID : " + idUtilisateur));
-
+    public ProfilUtilisateurDTO editProfil(String email, ProfilUtilisateurDTO dto) {
+        Utilisateur utilisateur = findByEmailOrThrow(email);
         utilisateur.setNom(dto.getNom());
         utilisateur.setPrenom(dto.getPrenom());
-        utilisateur.setEmail(dto.getEmail());
-
-        return utilisateurRepository.save(utilisateur);
+        // l'email n'est pas modifiable ici car il sert d'identifiant de connexion
+        return ProfilUtilisateurDTO.fromEntity(utilisateurRepository.save(utilisateur));
     }
 
     @Override
-    public Utilisateur deleteUtilisateurById(Integer idUtilisateur) {
-        return null;
+    public void deleteProfil(String email) {
+        Utilisateur utilisateur = findByEmailOrThrow(email);
+        utilisateurRepository.delete(utilisateur);
     }
 
-
+    private Utilisateur findByEmailOrThrow(String email) {
+        return utilisateurRepository.findByEmail(email)
+                .orElseThrow(() -> new UtilisateurNotFoundException(
+                        "Utilisateur non trouvé : " + email));
+    }
 }
