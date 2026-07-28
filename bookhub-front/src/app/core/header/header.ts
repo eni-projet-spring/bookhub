@@ -10,6 +10,7 @@ import { UtilisateurService } from '../../services/utilisateur.service';
   styleUrl: './header.css',
 })
 export class Header {
+  protected messageSucces: string | undefined;
   constructor(
     private utilisateurService: UtilisateurService,
     private router: Router,

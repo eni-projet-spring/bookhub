@@ -1,146 +1,72 @@
-<header class="header">
-  <div class="header__top">
-    <a
-      routerLink="/"
-      aria-label="Retour à l'accueil"
-    >
-      <img
-        class="header__logo"
-        src="images/main-logo.png"
-        alt="Logo de la librairie"
-      >
-    </a>
-    <form class="search-form">
+<section class="gestion-profil">
+  <h1 class="gestion-profil__title">Mon profil</h1>
+  <p *ngIf="chargementEnCours" class="gestion-profil__loading" role="status">
+    Chargement...
+  </p>
+  <form
+    class="gestion-profil__form"
+    [formGroup]="formulaireProfil"
+    (ngSubmit)="enregistrer()"
+    novalidate
+  >
+    <div class="gestion-profil__field">
+      <label class="gestion-profil__label" for="nom">Nom</label>
       <input
-        type="search"
-        placeholder="Rechercher un livre, un auteur..."
-        aria-label="Rechercher un livre ou un auteur"
+        class="gestion-profil__input"
+        id="nom"
+        type="text"
+        formControlName="nom"
+      />
+    </div>
+    <div class="gestion-profil__field">
+      <label class="gestion-profil__label" for="prenom">Prénom</label>
+      <input
+        class="gestion-profil__input"
+        id="prenom"
+        type="text"
+        formControlName="prenom"
+      />
+    </div>
+    <div class="gestion-profil__field">
+      <label class="gestion-profil__label" for="motDePasse">Nouveau mot de passe (optionnel)</label>
+      <input
+        class="gestion-profil__input"
+        id="motDePasse"
+        type="password"
+        formControlName="motDePasse"
+        placeholder="Changer de mot de passe"
+        autocomplete="new-password"
+        aria-describedby="motDePasse-erreur"
+      />
+      <p
+        *ngIf="formulaireProfil.get('motDePasse')?.invalid && formulaireProfil.get('motDePasse')?.touched"
+        id="motDePasse-erreur"
+        class="gestion-profil__field-error"
       >
+        Le mot de passe doit contenir au moins 6 caractères.
+      </p>
+    </div>
+    <p *ngIf="messageErreur" class="gestion-profil__message gestion-profil__message--error" role="alert">
+      {{ messageErreur }}
+    </p>
+    <p *ngIf="messageSucces" class="gestion-profil__message gestion-profil__message--success" role="status">
+      {{ messageSucces }}
+    </p>
+    <div class="gestion-profil__actions">
       <button
+        class="gestion-profil__button gestion-profil__button--primary"
         type="submit"
-        aria-label="Rechercher"
+        [disabled]="chargementEnCours"
       >
-        <img
-          src="logos/search.svg"
-          alt=""
-        >
+        Enregistrer
       </button>
-    </form>
-    @if (!estConnecte()) {
-      <a
-        class="account-btn"
-        routerLink="/connexion"
-        aria-label="Se connecter"
-        title="Connexion"
+      <button
+        class="gestion-profil__button gestion-profil__button--danger"
+        type="button"
+        (click)="supprimer()"
       >
-        <img
-          src="logos/account.svg"
-          alt=""
-        >
-      </a>
-    }
-    @if (estConnecte()) {
-      <a
-        class="account-btn"
-        routerLink="/gestion-profil"
-        aria-label="Mon profil"
-        title="Mon profil"
-      >
-        <img
-          src="logos/account.svg"
-          alt=""
-        >
-      </a>
-    }
-  </div>
-  <div class="header__bottom">
-    <select aria-label="Choisir une catégorie">
-      <option value="">Catégories</option>
-      <option value="roman">Roman</option>
-      <option value="fantasy">Fantasy</option>
-      <option value="science-fiction">Science-fiction</option>
-      <option value="policier">Policier</option>
-      <option value="manga">Manga</option>
-      <option value="histoire">Histoire</option>
-      <option value="jeunesse">Jeunesse</option>
-    </select>
-    <nav aria-label="Navigation principale">
-      <ul>
-        <li>
-          <a
-            routerLink="/"
-            routerLinkActive="active"
-            [routerLinkActiveOptions]="{ exact: true }"
-          >
-            Accueil
-          </a>
-        </li>
-        <li>
-          <a
-            routerLink="/contact"
-            routerLinkActive="active"
-          >
-            Nous contacter
-          </a>
-        </li>
-        @if (!estConnecte()) {
-          <li>
-            <a
-              routerLink="/connexion"
-              routerLinkActive="active"
-            >
-              Connexion
-            </a>
-          </li>
-          <li>
-            <a
-              routerLink="/inscription"
-              routerLinkActive="active"
-            >
-              Inscription
-            </a>
-          </li>
-        }
-        @if (estConnecte()) {
-          @if (estUtilisateur()) {
-            <li>
-              <a
-                routerLink="/mes-reservations"
-                routerLinkActive="active"
-              >
-                Mes réservations
-              </a>
-            </li>
-          }
-          @if (estBibliothecaire()) {
-            <li>
-              <a
-                routerLink="/dashboard-reservations"
-                routerLinkActive="active"
-              >
-                Dashboard bibliothécaire
-              </a>
-            </li>
-          }
-          <li>
-            <a
-              routerLink="/gestion-profil"
-              routerLinkActive="active"
-            >
-              Mon profil
-            </a>
-          </li>
-          <li>
-            <button
-              type="button"
-              class="logout-btn"
-              (click)="seDeconnecter()"
-            >
-              Déconnexion
-            </button>
-          </li>
-        }
-      </ul>
-    </nav>
-  </div>
-</header>
+        Supprimer mon compte
+      </button>
+    </div>
+  </form>
+</section>
