@@ -4,7 +4,7 @@ import { Connexion } from './features/connexion/connexion';
 import { Inscription } from './features/inscription/inscription';
 import { CatalogComponent } from './features/catalog/catalog';
 import { GestionProfil} from './features/gestion-profil/gestion-profil';
-import { DashboardReservations } from './features/dashboard-reservations/dashboard-reservations';
+import { DashboardBibliothecaire } from './features/dashboard-bibliothecaire/dashboard-bibliothecaire';
 import { MesReservations } from './features/mes-reservations/mes-reservations';
 
 export const routes: Routes = [
@@ -22,7 +22,7 @@ export const routes: Routes = [
   },
   {
     path: 'dashboard-bibliothecaire',
-    component: DashboardReservations,
+    component: DashboardBibliothecaire,
   },
   {
     path: 'mes-reservations',
