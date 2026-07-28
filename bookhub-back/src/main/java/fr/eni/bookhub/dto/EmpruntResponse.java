@@ -1,13 +1,26 @@
 package fr.eni.bookhub.dto;
 
+import fr.eni.bookhub.entity.StatutEmprunt;
+
 import java.time.LocalDateTime;
 
-public record EmpruntEnRetardResponse(
+public record EmpruntResponse(
+
         Integer idEmprunt,
-        String nomUtilisateur,
-        String prenomUtilisateur,
+
         String titreLivre,
+
+        String isbn,
+
+        String nomUtilisateur,
+
+        LocalDateTime dateDebut,
+
         LocalDateTime dateFinPrevue,
-        long nombreJoursRetard
+
+        LocalDateTime dateRetour,
+
+        StatutEmprunt statut
+
 ) {
 }
