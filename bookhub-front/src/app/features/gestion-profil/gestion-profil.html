@@ -51,6 +51,24 @@
       </p>
     </div>
 
+    <div class="gestion-profil__field">
+      <label class="gestion-profil__label" for="motDePasse">Nouveau mot de passe (optionnel)</label>
+      <input
+        class="gestion-profil__input"
+        id="motDePasse"
+        type="password"
+        formControlName="motDePasse"
+        aria-describedby="motDePasse-erreur"
+      />
+      <p
+        *ngIf="formulaireProfil.get('motDePasse')?.invalid && formulaireProfil.get('motDePasse')?.touched"
+        id="motDePasse-erreur"
+        class="gestion-profil__field-error"
+      >
+        Le mot de passe doit contenir au moins 6 caractères.
+      </p>
+    </div>
+
     <p *ngIf="messageErreur" class="gestion-profil__message gestion-profil__message--error" role="alert">
       {{ messageErreur }}
     </p>
