@@ -9,6 +9,10 @@ import java.util.List;
 public interface ReservationRepository
         extends JpaRepository<Reservation, Integer> {
 
+    long countByStatut(
+            StatutReservation statut
+    );
+
     int countByLivreIdLivreAndStatut(
             Integer idLivre,
             StatutReservation statut

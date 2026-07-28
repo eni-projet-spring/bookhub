@@ -4,31 +4,37 @@ import fr.eni.bookhub.entity.Emprunt;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
-public interface EmpruntRepository extends JpaRepository<Emprunt, Long> {
+public interface EmpruntRepository
+        extends JpaRepository<Emprunt, Integer> {
 
-    long countByDateRetourReelleIsNull();
+    long countByDateRetourIsNull();
 
-    long countByDateRetourReelleIsNullAndDateRetourPrevueBefore(
-            LocalDate date
+    long countByDateRetourIsNullAndDateFinPrevueBefore(
+            LocalDateTime date
     );
 
-    List<Emprunt> findByDateRetourReelleIsNullAndDateRetourPrevueBeforeOrderByDateRetourPrevueAsc(
-            LocalDate date
+    List<Emprunt>
+    findByDateRetourIsNullAndDateFinPrevueBeforeOrderByDateFinPrevueAsc(
+            LocalDateTime date
     );
 
     @Query("""
-            SELECT e.livre.idLivre,
-                   e.livre.titre,
-                   e.livre.auteur,
-                   COUNT(e)
+            SELECT
+                l.idLivre,
+                l.titre,
+                l.auteur,
+                COUNT(e.idEmprunt)
             FROM Emprunt e
-            GROUP BY e.livre.idLivre,
-                     e.livre.titre,
-                     e.livre.auteur
-            ORDER BY COUNT(e) DESC
+            JOIN e.exemplaire ex
+            JOIN ex.livre l
+            GROUP BY
+                l.idLivre,
+                l.titre,
+                l.auteur
+            ORDER BY COUNT(e.idEmprunt) DESC
             """)
     List<Object[]> rechercherLivresLesPlusEmpruntes();
 }

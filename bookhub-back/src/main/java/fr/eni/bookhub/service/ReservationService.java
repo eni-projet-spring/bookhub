@@ -24,4 +24,6 @@ public interface ReservationService {
             String email
     );
 
+    Reservation rejeterReservation(Integer idReservation);
+
 }

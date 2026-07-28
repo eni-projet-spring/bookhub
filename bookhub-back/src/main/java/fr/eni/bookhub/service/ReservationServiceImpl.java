@@ -37,28 +37,24 @@ public class ReservationServiceImpl implements ReservationService {
             String email,
             Integer idLivre
     ) {
-
         Utilisateur utilisateur = utilisateurRepository
                 .findByEmail(email)
                 .orElseThrow(() -> new EntityNotFoundException(
-                        "Utilisateur introuvable avec l'email : "
-                                + email
+                        "Utilisateur introuvable avec l'email : " + email
                 ));
 
         Livre livre = livreRepository
                 .findById(idLivre)
                 .orElseThrow(() -> new EntityNotFoundException(
-                        "Livre introuvable avec l'identifiant : "
-                                + idLivre
+                        "Livre introuvable avec l'identifiant : " + idLivre
                 ));
 
-        boolean reservationExistante =
-                reservationRepository
-                        .existsByUtilisateurIdUtilisateurAndLivreIdLivreAndStatut(
-                                utilisateur.getIdUtilisateur(),
-                                idLivre,
-                                StatutReservation.EN_ATTENTE
-                        );
+        boolean reservationExistante = reservationRepository
+                .existsByUtilisateurIdUtilisateurAndLivreIdLivreAndStatut(
+                        utilisateur.getIdUtilisateur(),
+                        idLivre,
+                        StatutReservation.EN_ATTENTE
+                );
 
         if (reservationExistante) {
             throw new IllegalStateException(
@@ -66,8 +62,8 @@ public class ReservationServiceImpl implements ReservationService {
             );
         }
 
-        int positionFileAttente =
-                reservationRepository.countByLivreIdLivreAndStatut(
+        int positionFileAttente = reservationRepository
+                .countByLivreIdLivreAndStatut(
                         idLivre,
                         StatutReservation.EN_ATTENTE
                 ) + 1;
@@ -92,6 +88,7 @@ public class ReservationServiceImpl implements ReservationService {
                         StatutReservation.EN_ATTENTE
                 );
     }
+
     @Override
     @Transactional(readOnly = true)
     public List<Reservation> listerReservationsUtilisateurParEmail(
@@ -100,7 +97,7 @@ public class ReservationServiceImpl implements ReservationService {
         Utilisateur utilisateur = utilisateurRepository
                 .findByEmail(email)
                 .orElseThrow(() -> new EntityNotFoundException(
-                        "Utilisateur introuvable."
+                        "Utilisateur introuvable avec l'email : " + email
                 ));
 
         return reservationRepository
@@ -112,13 +109,7 @@ public class ReservationServiceImpl implements ReservationService {
     @Override
     @Transactional
     public Reservation confirmerReservation(Integer idReservation) {
-
-        Reservation reservation = reservationRepository
-                .findById(idReservation)
-                .orElseThrow(() -> new EntityNotFoundException(
-                        "Réservation introuvable avec l'identifiant : "
-                                + idReservation
-                ));
+        Reservation reservation = rechercherReservation(idReservation);
 
         if (reservation.getStatut() != StatutReservation.EN_ATTENTE) {
             throw new IllegalStateException(
@@ -126,34 +117,71 @@ public class ReservationServiceImpl implements ReservationService {
             );
         }
 
+        Integer idLivre = reservation
+                .getLivre()
+                .getIdLivre();
+
         reservation.setStatut(StatutReservation.DISPONIBLE);
         reservation.setDisponibilite("DISPONIBLE");
+        reservation.setPositionFileAttente(null);
 
-        return reservationRepository.save(reservation);
+        Reservation reservationConfirmee =
+                reservationRepository.save(reservation);
+
+        reservationRepository.flush();
+
+        renumeroterFileAttente(idLivre);
+
+        return reservationConfirmee;
     }
+
+    @Override
+    @Transactional
+    public Reservation rejeterReservation(Integer idReservation) {
+        Reservation reservation = rechercherReservation(idReservation);
+
+        if (reservation.getStatut() != StatutReservation.EN_ATTENTE) {
+            throw new IllegalStateException(
+                    "Seule une réservation en attente peut être rejetée."
+            );
+        }
+
+        Integer idLivre = reservation
+                .getLivre()
+                .getIdLivre();
+
+        reservation.setStatut(StatutReservation.ANNULEE);
+        reservation.setDisponibilite("INDISPONIBLE");
+        reservation.setPositionFileAttente(null);
+
+        Reservation reservationRejetee =
+                reservationRepository.save(reservation);
+
+        reservationRepository.flush();
+
+        renumeroterFileAttente(idLivre);
+
+        return reservationRejetee;
+    }
+
     @Override
     @Transactional
     public void annulerReservationParEmail(
             Integer idReservation,
             String email
     ) {
-        Reservation reservation = reservationRepository
-                .findById(idReservation)
-                .orElseThrow(() -> new EntityNotFoundException(
-                        "Réservation introuvable avec l'identifiant : "
-                                + idReservation
-                ));
+        Reservation reservation = rechercherReservation(idReservation);
 
-        // Vérifie que la réservation appartient au lecteur connecté
-        if (!reservation.getUtilisateur()
+        if (!reservation
+                .getUtilisateur()
                 .getEmail()
                 .equalsIgnoreCase(email)) {
+
             throw new IllegalStateException(
                     "Vous ne pouvez pas annuler la réservation d'un autre utilisateur."
             );
         }
 
-        // Seule une réservation encore dans la file peut être annulée
         if (reservation.getStatut() != StatutReservation.EN_ATTENTE) {
             throw new IllegalStateException(
                     "Seule une réservation en attente peut être annulée."
@@ -165,20 +193,31 @@ public class ReservationServiceImpl implements ReservationService {
                 .getIdLivre();
 
         reservationRepository.delete(reservation);
-
-        // Force la suppression avant de relire la file d'attente
         reservationRepository.flush();
 
-        List<Reservation> fileAttente =
-                reservationRepository
-                        .findByLivreIdLivreAndStatutOrderByDateDemandeAsc(
-                                idLivre,
-                                StatutReservation.EN_ATTENTE
-                        );
+        renumeroterFileAttente(idLivre);
+    }
+
+    private Reservation rechercherReservation(Integer idReservation) {
+        return reservationRepository
+                .findById(idReservation)
+                .orElseThrow(() -> new EntityNotFoundException(
+                        "Réservation introuvable avec l'identifiant : "
+                                + idReservation
+                ));
+    }
+
+    private void renumeroterFileAttente(Integer idLivre) {
+        List<Reservation> fileAttente = reservationRepository
+                .findByLivreIdLivreAndStatutOrderByDateDemandeAsc(
+                        idLivre,
+                        StatutReservation.EN_ATTENTE
+                );
 
         for (int index = 0; index < fileAttente.size(); index++) {
-            Reservation reservationRestante = fileAttente.get(index);
-            reservationRestante.setPositionFileAttente(index + 1);
+            Reservation reservation = fileAttente.get(index);
+
+            reservation.setPositionFileAttente(index + 1);
         }
 
         reservationRepository.saveAll(fileAttente);

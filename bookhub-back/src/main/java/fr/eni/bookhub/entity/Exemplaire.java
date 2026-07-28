@@ -3,72 +3,72 @@ package fr.eni.bookhub.entity;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "EXEMPLAIRE")
+@Table(name = "Exemplaire")
 public class Exemplaire {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_exemplaire")
-    private Long idExemplaire;
+    private Integer idExemplaire;
 
-    @Column(name = "code_exemplaire", nullable = false, unique = true)
-    private String codeExemplaire;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "statut", length = 10)
+    private StatutExemplaire statut;
 
-    @Column(name = "disponible", nullable = false)
-    private Boolean disponible = true;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "etatPhysique", length = 15)
+    private EtatPhysique etatPhysique;
 
-    @Column(name = "etat")
-    private String etat;
-
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "id_livre", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "Livre_id_livre")
     private Livre livre;
 
     public Exemplaire() {
     }
 
     public Exemplaire(
-            String codeExemplaire,
-            Boolean disponible,
-            String etat,
+            StatutExemplaire statut,
+            EtatPhysique etatPhysique,
             Livre livre
     ) {
-        this.codeExemplaire = codeExemplaire;
-        this.disponible = disponible;
-        this.etat = etat;
+        this.statut = statut;
+        this.etatPhysique = etatPhysique;
         this.livre = livre;
     }
 
-    public Long getIdExemplaire() {
+    @PrePersist
+    public void avantCreation() {
+        if (statut == null) {
+            statut = StatutExemplaire.DISPONIBLE;
+        }
+
+        if (etatPhysique == null) {
+            etatPhysique = EtatPhysique.NEUF;
+        }
+    }
+
+    public Integer getIdExemplaire() {
         return idExemplaire;
     }
 
-    public void setIdExemplaire(Long idExemplaire) {
+    public void setIdExemplaire(Integer idExemplaire) {
         this.idExemplaire = idExemplaire;
     }
 
-    public String getCodeExemplaire() {
-        return codeExemplaire;
+    public StatutExemplaire getStatut() {
+        return statut;
     }
 
-    public void setCodeExemplaire(String codeExemplaire) {
-        this.codeExemplaire = codeExemplaire;
+    public void setStatut(StatutExemplaire statut) {
+        this.statut = statut;
     }
 
-    public Boolean getDisponible() {
-        return disponible;
+    public EtatPhysique getEtatPhysique() {
+        return etatPhysique;
     }
 
-    public void setDisponible(Boolean disponible) {
-        this.disponible = disponible;
-    }
-
-    public String getEtat() {
-        return etat;
-    }
-
-    public void setEtat(String etat) {
-        this.etat = etat;
+    public void setEtatPhysique(EtatPhysique etatPhysique) {
+        this.etatPhysique = etatPhysique;
     }
 
     public Livre getLivre() {

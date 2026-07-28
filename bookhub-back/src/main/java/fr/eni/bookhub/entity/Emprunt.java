@@ -1,80 +1,110 @@
 package fr.eni.bookhub.entity;
 
+import fr.eni.bookhub.converter.StatutEmpruntConverter;
 import jakarta.persistence.*;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "EMPRUNT")
+@Table(name = "Emprunt")
 public class Emprunt {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_emprunt")
-    private Long idEmprunt;
+    private Integer idEmprunt;
 
-    @Column(name = "date_emprunt", nullable = false)
-    private LocalDate dateEmprunt;
+    @Column(name = "dateDebut", nullable = false)
+    private LocalDateTime dateDebut;
 
-    @Column(name = "date_retour_prevue", nullable = false)
-    private LocalDate dateRetourPrevue;
+    @Column(name = "dateFinPrevue", nullable = false)
+    private LocalDateTime dateFinPrevue;
 
-    @Column(name = "date_retour_reelle")
-    private LocalDate dateRetourReelle;
+    @Column(name = "dateRetour")
+    private LocalDateTime dateRetour;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "id_utilisateur", nullable = false)
+    @Convert(converter = StatutEmpruntConverter.class)
+    @Column(name = "statut", nullable = false, length = 10)
+    private StatutEmprunt statut;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "Utilisateur_id_utilisateur")
     private Utilisateur utilisateur;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "id_exemplaire", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "Exemplaire_id_exemplaire")
     private Exemplaire exemplaire;
 
     public Emprunt() {
     }
 
     public Emprunt(
-            LocalDate dateEmprunt,
-            LocalDate dateRetourPrevue,
+            LocalDateTime dateDebut,
+            LocalDateTime dateFinPrevue,
+            StatutEmprunt statut,
             Utilisateur utilisateur,
             Exemplaire exemplaire
     ) {
-        this.dateEmprunt = dateEmprunt;
-        this.dateRetourPrevue = dateRetourPrevue;
+        this.dateDebut = dateDebut;
+        this.dateFinPrevue = dateFinPrevue;
+        this.statut = statut;
         this.utilisateur = utilisateur;
         this.exemplaire = exemplaire;
     }
 
-    public Long getIdEmprunt() {
+    @PrePersist
+    public void avantCreation() {
+        if (dateDebut == null) {
+            dateDebut = LocalDateTime.now();
+        }
+
+        if (dateFinPrevue == null) {
+            dateFinPrevue = dateDebut.plusDays(21);
+        }
+
+        if (statut == null) {
+            statut = StatutEmprunt.EN_COURS;
+        }
+    }
+
+    public Integer getIdEmprunt() {
         return idEmprunt;
     }
 
-    public void setIdEmprunt(Long idEmprunt) {
+    public void setIdEmprunt(Integer idEmprunt) {
         this.idEmprunt = idEmprunt;
     }
 
-    public LocalDate getDateEmprunt() {
-        return dateEmprunt;
+    public LocalDateTime getDateDebut() {
+        return dateDebut;
     }
 
-    public void setDateEmprunt(LocalDate dateEmprunt) {
-        this.dateEmprunt = dateEmprunt;
+    public void setDateDebut(LocalDateTime dateDebut) {
+        this.dateDebut = dateDebut;
     }
 
-    public LocalDate getDateRetourPrevue() {
-        return dateRetourPrevue;
+    public LocalDateTime getDateFinPrevue() {
+        return dateFinPrevue;
     }
 
-    public void setDateRetourPrevue(LocalDate dateRetourPrevue) {
-        this.dateRetourPrevue = dateRetourPrevue;
+    public void setDateFinPrevue(LocalDateTime dateFinPrevue) {
+        this.dateFinPrevue = dateFinPrevue;
     }
 
-    public LocalDate getDateRetourReelle() {
-        return dateRetourReelle;
+    public LocalDateTime getDateRetour() {
+        return dateRetour;
     }
 
-    public void setDateRetourReelle(LocalDate dateRetourReelle) {
-        this.dateRetourReelle = dateRetourReelle;
+    public void setDateRetour(LocalDateTime dateRetour) {
+        this.dateRetour = dateRetour;
+    }
+
+    public StatutEmprunt getStatut() {
+        return statut;
+    }
+
+    public void setStatut(StatutEmprunt statut) {
+        this.statut = statut;
     }
 
     public Utilisateur getUtilisateur() {
@@ -91,17 +121,5 @@ public class Emprunt {
 
     public void setExemplaire(Exemplaire exemplaire) {
         this.exemplaire = exemplaire;
-    }
-
-    @Transient
-    public boolean estEnCours() {
-        return dateRetourReelle == null;
-    }
-
-    @Transient
-    public boolean estEnRetard() {
-        return dateRetourReelle == null
-                && dateRetourPrevue != null
-                && dateRetourPrevue.isBefore(LocalDate.now());
     }
 }

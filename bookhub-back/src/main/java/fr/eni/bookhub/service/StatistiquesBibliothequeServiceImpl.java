@@ -9,7 +9,7 @@ import fr.eni.bookhub.repository.EmpruntRepository;
 import fr.eni.bookhub.repository.ReservationRepository;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 
@@ -31,22 +31,22 @@ public class StatistiquesBibliothequeServiceImpl
     @Override
     public StatistiquesBibliothequeResponse consulterStatistiques() {
 
-        LocalDate aujourdHui = LocalDate.now();
+        LocalDateTime maintenant = LocalDateTime.now();
 
         long nombreEmpruntsEnCours =
-                empruntRepository.countByDateRetourReelleIsNull();
+                empruntRepository.countByDateRetourIsNull();
 
         long nombreEmpruntsTotal =
                 empruntRepository.count();
 
         long nombreEmpruntsEnRetard =
                 empruntRepository
-                        .countByDateRetourReelleIsNullAndDateRetourPrevueBefore(
-                                aujourdHui
+                        .countByDateRetourIsNullAndDateFinPrevueBefore(
+                                maintenant
                         );
 
         long nombreReservationsEnAttente =
-                reservationRepositorygit add ..countByStatut(
+                reservationRepository.countByStatut(
                         StatutReservation.EN_ATTENTE
                 );
 
@@ -56,23 +56,25 @@ public class StatistiquesBibliothequeServiceImpl
                         .stream()
                         .limit(5)
                         .map(resultat -> new LivrePopulaireResponse(
-                                (Long) resultat[0],
+                                ((Number) resultat[0]).longValue(),
                                 (String) resultat[1],
                                 (String) resultat[2],
-                                (Long) resultat[3]
+                                ((Number) resultat[3]).longValue()
                         ))
                         .toList();
 
         List<EmpruntEnRetardResponse> empruntsEnRetard =
                 empruntRepository
-                        .findByDateRetourReelleIsNullAndDateRetourPrevueBeforeOrderByDateRetourPrevueAsc(
-                                aujourdHui
+                        .findByDateRetourIsNullAndDateFinPrevueBeforeOrderByDateFinPrevueAsc(
+                                maintenant
                         )
                         .stream()
-                        .map(emprunt -> convertirEnEmpruntEnRetard(
-                                emprunt,
-                                aujourdHui
-                        ))
+                        .map(emprunt ->
+                                convertirEnEmpruntEnRetard(
+                                        emprunt,
+                                        maintenant
+                                )
+                        )
                         .toList();
 
         return new StatistiquesBibliothequeResponse(
@@ -87,11 +89,12 @@ public class StatistiquesBibliothequeServiceImpl
 
     private EmpruntEnRetardResponse convertirEnEmpruntEnRetard(
             Emprunt emprunt,
-            LocalDate aujourdHui
+            LocalDateTime maintenant
     ) {
+
         long nombreJoursRetard = ChronoUnit.DAYS.between(
-                emprunt.getDateRetourPrevue(),
-                aujourdHui
+                emprunt.getDateFinPrevue(),
+                maintenant
         );
 
         return new EmpruntEnRetardResponse(
@@ -99,7 +102,7 @@ public class StatistiquesBibliothequeServiceImpl
                 emprunt.getUtilisateur().getNom(),
                 emprunt.getUtilisateur().getPrenom(),
                 emprunt.getExemplaire().getLivre().getTitre(),
-                emprunt.getDateRetourPrevue(),
+                emprunt.getDateFinPrevue(),
                 nombreJoursRetard
         );
     }
