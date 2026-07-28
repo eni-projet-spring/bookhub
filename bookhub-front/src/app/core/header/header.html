@@ -2,15 +2,15 @@
 
   <div class="header__top">
 
-    <a
-      routerLink="/"
-      aria-label="Retour à l'accueil"
+
+    routerLink="/"
+    aria-label="Retour à l'accueil"
     >
-      <img
-        class="header__logo"
-        src="images/main-logo.png"
-        alt="Logo de la librairie"
-      >
+    <img
+      class="header__logo"
+      src="images/main-logo.png"
+      alt="Logo de la librairie"
+    >
     </a>
 
     <form class="search-form">
@@ -35,34 +35,33 @@
 
     @if (!estConnecte()) {
 
-      <a
-        class="account-btn"
+
+      class="account-btn"
         routerLink="/connexion"
         aria-label="Se connecter"
         title="Connexion"
-      >
-        <img
-          src="logos/account.svg"
-          alt=""
         >
+      <img
+        src="logos/account.svg"
+        alt=""
+      >
       </a>
 
     }
 
     @if (estConnecte()) {
 
-      <button
-        type="button"
-        class="account-btn"
-        aria-label="Se déconnecter"
-        title="Déconnexion"
-        (click)="seDeconnecter()"
-      >
-        <img
-          src="logos/account.svg"
-          alt=""
+
+      class="account-btn"
+        routerLink="/gestion-profil"
+        aria-label="Mon profil"
+        title="Mon profil"
         >
-      </button>
+      <img
+        src="logos/account.svg"
+        alt=""
+      >
+      </a>
 
     }
 
@@ -86,41 +85,41 @@
       <ul>
 
         <li>
-          <a
-            routerLink="/"
-            routerLinkActive="active"
-            [routerLinkActiveOptions]="{ exact: true }"
+
+          routerLink="/"
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: true }"
           >
-            Accueil
+          Accueil
           </a>
         </li>
 
         <li>
-          <a
-            routerLink="/contact"
-            routerLinkActive="active"
+
+          routerLink="/contact"
+          routerLinkActive="active"
           >
-            Nous contacter
+          Nous contacter
           </a>
         </li>
 
         @if (!estConnecte()) {
 
           <li>
-            <a
-              routerLink="/connexion"
-              routerLinkActive="active"
+
+            routerLink="/connexion"
+            routerLinkActive="active"
             >
-              Connexion
+            Connexion
             </a>
           </li>
 
           <li>
-            <a
-              routerLink="/inscription"
-              routerLinkActive="active"
+
+            routerLink="/inscription"
+            routerLinkActive="active"
             >
-              Inscription
+            Inscription
             </a>
           </li>
 
@@ -131,11 +130,11 @@
           @if (estUtilisateur()) {
 
             <li>
-              <a
-                routerLink="/mes-reservations"
-                routerLinkActive="active"
+
+              routerLink="/mes-reservations"
+              routerLinkActive="active"
               >
-                Mes réservations
+              Mes réservations
               </a>
             </li>
 
@@ -144,15 +143,24 @@
           @if (estBibliothecaire()) {
 
             <li>
-              <a
-                routerLink="/dashboard-reservations"
-                routerLinkActive="active"
+
+              routerLink="/dashboard-reservations"
+              routerLinkActive="active"
               >
-                Dashboard bibliothécaire
+              Dashboard bibliothécaire
               </a>
             </li>
 
           }
+
+          <li>
+
+            routerLink="/gestion-profil"
+            routerLinkActive="active"
+            >
+            Mon profil
+            </a>
+          </li>
 
           <li>
             <button
@@ -166,8 +174,6 @@
 
         }
 
-        <li><a routerLink="/">Accueil</a></li>
-        <li><a href="#">Nous contacter</a></li>
       </ul>
 
     </nav>
