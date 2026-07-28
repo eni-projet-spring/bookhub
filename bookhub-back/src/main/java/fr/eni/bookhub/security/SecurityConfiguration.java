@@ -75,7 +75,7 @@ public class SecurityConfiguration {
 
     /**
      * Transforme le claim JWT "role" en autorité Spring Security.
-     *
+     * <p>
      * Exemple :
      * role = "LIBRARIAN"
      * devient :
@@ -157,7 +157,6 @@ public class SecurityConfiguration {
 
         return source;
     }
-
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();

@@ -1,0 +1,89 @@
+.page-formulaire {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 3rem 1.5rem;
+}
+
+.page-formulaire h1 {
+  color: #17375e;
+}
+
+.formulaire {
+  display: grid;
+  gap: 1.25rem;
+  padding: 2rem;
+  border-radius: 12px;
+  background-color: white;
+  box-shadow: 0 8px 24px rgb(0 0 0 / 8%);
+}
+
+.champ {
+  display: grid;
+  gap: 0.45rem;
+}
+
+.champ label {
+  color: #20344e;
+  font-weight: 700;
+}
+
+.champ input,
+.champ textarea,
+.champ select {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #c9d0d8;
+  border-radius: 6px;
+  box-sizing: border-box;
+  font: inherit;
+}
+
+.champ input:focus,
+.champ textarea:focus,
+.champ select:focus {
+  border-color: #213f66;
+  outline: 2px solid rgb(33 63 102 / 15%);
+}
+
+.champ small {
+  color: #a52222;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.8rem;
+  margin-top: 1rem;
+}
+
+.bouton {
+  padding: 0.75rem 1.1rem;
+  border: 0;
+  border-radius: 6px;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.bouton-annuler {
+  background-color: #e7ebef;
+  color: #20344e;
+}
+
+.bouton-enregistrer {
+  background-color: #f5b51b;
+  color: #172a42;
+}
+
+.bouton:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.message-erreur {
+  padding: 1rem;
+  border-radius: 6px;
+  background-color: #fdeaea;
+  color: #9a2222;
+}

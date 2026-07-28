@@ -1,10 +1,17 @@
-<section class="catalog" aria-label="Catalogue de livres">
-  <h1 class="catalog__heading">Notre Catalogue</h1>
+<section
+  class="catalog"
+  aria-label="Catalogue de livres"
+>
+  <h1 class="catalog__heading">
+    Notre Catalogue
+  </h1>
 
   <ng-container *ngIf="books$ | async as books">
 
-    <!-- Book Grid -->
-    <div class="catalog__grid" *ngIf="books.length > 0; else emptyState">
+    <div
+      class="catalog__grid"
+      *ngIf="books.length > 0; else emptyState"
+    >
       <a
         *ngFor="let book of books"
         class="catalog__card"
@@ -16,15 +23,29 @@
           [src]="book.couverture"
           [alt]="'Couverture de ' + book.titre"
         />
-        <h2 class="catalog__book-title">{{ book.titre }}</h2>
-        <p class="catalog__author">{{ book.auteur }}</p>
-        <span class="catalog__badge">{{ book.libelleCategorie }}</span>
+
+        <h2 class="catalog__book-title">
+          {{ book.titre }}
+        </h2>
+
+        <p class="catalog__author">
+          {{ book.auteur }}
+        </p>
+
+        <span class="catalog__badge">
+          {{ book.libelleCategorie }}
+        </span>
+
+        <span class="bouton-detail">
+          Voir le détail
+        </span>
       </a>
     </div>
 
-    <!-- Empty State -->
     <ng-template #emptyState>
-      <p class="catalog__empty">Aucun livre disponible pour le moment.</p>
+      <p class="catalog__empty">
+        Aucun livre disponible pour le moment.
+      </p>
     </ng-template>
 
   </ng-container>

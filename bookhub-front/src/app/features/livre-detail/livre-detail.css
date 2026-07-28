@@ -1,0 +1,152 @@
+.page-detail {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 3rem 1.5rem;
+}
+
+.fiche-livre {
+  display: grid;
+  grid-template-columns: minmax(240px, 340px) 1fr;
+  gap: 3rem;
+  padding: 2rem;
+  border-radius: 14px;
+  background-color: white;
+  box-shadow: 0 8px 24px rgb(0 0 0 / 8%);
+}
+
+.zone-couverture {
+  display: flex;
+  justify-content: center;
+}
+
+.couverture {
+  display: block;
+  width: 100%;
+  max-width: 320px;
+  aspect-ratio: 2 / 3;
+  border-radius: 10px;
+  object-fit: cover;
+  box-shadow: 0 8px 20px rgb(0 0 0 / 18%);
+}
+
+.informations h1 {
+  margin: 0.75rem 0 0.25rem;
+  color: #17375e;
+  font-size: 2.25rem;
+}
+
+.auteur {
+  margin-top: 0;
+  color: #5f6874;
+  font-size: 1.15rem;
+}
+
+.categorie {
+  display: inline-block;
+  padding: 0.4rem 0.75rem;
+  border-radius: 999px;
+  background-color: #213f66;
+  color: white;
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.metadonnees {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(120px, 1fr));
+  gap: 1rem;
+  margin: 2rem 0;
+}
+
+.metadonnees div {
+  padding: 1rem;
+  border-radius: 8px;
+  background-color: #f4f6f8;
+}
+
+.metadonnees dt {
+  margin-bottom: 0.3rem;
+  color: #667080;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.metadonnees dd {
+  margin: 0;
+  color: #172a42;
+  font-weight: 700;
+}
+
+.description h2 {
+  color: #17375e;
+}
+
+.description p {
+  line-height: 1.7;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  margin-top: 2rem;
+}
+
+.bouton {
+  min-height: 42px;
+  padding: 0.7rem 1.1rem;
+  border: 0;
+  border-radius: 6px;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.bouton-retour {
+  background-color: #e9edf2;
+  color: #20344e;
+}
+
+.bouton-modifier {
+  background-color: #f5b51b;
+  color: #172a42;
+}
+
+.bouton-supprimer {
+  background-color: #b83232;
+  color: white;
+}
+
+.bouton:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.message,
+.message-erreur {
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 1rem;
+  border-radius: 8px;
+}
+
+.message {
+  background-color: #eef3f8;
+}
+
+.message-erreur {
+  background-color: #fdeaea;
+  color: #9a2222;
+}
+
+@media (max-width: 760px) {
+  .fiche-livre {
+    grid-template-columns: 1fr;
+  }
+
+  .metadonnees {
+    grid-template-columns: 1fr;
+  }
+}
