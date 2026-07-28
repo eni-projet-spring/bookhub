@@ -1,4 +1,5 @@
-import { EmpruntEnRetard, LivrePopulaire } from './livre-populaire';
+import { LivrePopulaire } from './livre-populaire';
+import { EmpruntEnRetard } from './emprunt-en-retard';
 
 export interface StatistiquesBibliotheque {
   nombreEmpruntsEnCours: number;

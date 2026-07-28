@@ -15,9 +15,9 @@
       type="button"
       class="bouton-actualiser"
       (click)="actualiserDashboard()"
-      [disabled]="chargementEnCours"
+      [disabled]="chargementEnCours || chargementReservationsEnCours"
     >
-      @if (chargementEnCours) {
+      @if (chargementEnCours || chargementReservationsEnCours) {
         Chargement...
       } @else {
         Actualiser
@@ -40,9 +40,7 @@
 
   @if (statistiques) {
 
-    <!-- =====================================================
-         CARTES DES STATISTIQUES
-         ===================================================== -->
+    <!-- CARTES DES STATISTIQUES -->
 
     <section class="statistiques">
 
@@ -99,10 +97,7 @@
 
     </section>
 
-
-    <!-- =====================================================
-         LIVRES POPULAIRES
-         ===================================================== -->
+    <!-- LIVRES POPULAIRES -->
 
     <section class="section-dashboard">
 
@@ -173,10 +168,7 @@
 
     </section>
 
-
-    <!-- =====================================================
-         EMPRUNTS EN RETARD
-         ===================================================== -->
+    <!-- EMPRUNTS EN RETARD -->
 
     <section class="section-dashboard">
 
@@ -265,10 +257,7 @@
 
   }
 
-
-  <!-- =====================================================
-       RÉSERVATIONS EN ATTENTE
-       ===================================================== -->
+  <!-- RÉSERVATIONS EN ATTENTE -->
 
   <section class="section-dashboard reservations">
 
@@ -336,27 +325,31 @@
               </p>
 
               <p>
+                Identifiant utilisateur :
+                <strong>
+                  {{ reservation.idUtilisateur }}
+                </strong>
+              </p>
+
+              <p>
                 Position dans la file :
                 <strong>
                   {{ reservation.positionFileAttente }}
                 </strong>
               </p>
 
-              @if (reservation.nomUtilisateur) {
+              <p>
+                Statut :
+                <strong>
+                  {{ reservation.statut }}
+                </strong>
+              </p>
 
-                <p>
-                  Lecteur :
-                  {{ reservation.prenomUtilisateur }}
-                  {{ reservation.nomUtilisateur }}
-                </p>
-
-              }
-
-              @if (reservation.dateReservation) {
+              @if (reservation.dateDemande) {
 
                 <p>
                   Réservé le :
-                  {{ reservation.dateReservation | date: 'dd/MM/yyyy à HH:mm' }}
+                  {{ reservation.dateDemande | date: 'dd/MM/yyyy à HH:mm' }}
                 </p>
 
               }

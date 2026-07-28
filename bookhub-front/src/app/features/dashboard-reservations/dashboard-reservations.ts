@@ -1,11 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
 
-// @ts-ignore
-import { StatistiquesBibliotheque } from '../models/statistiques-bibliotheque.model';
-// @ts-ignore
-import { StatistiquesBibliothequeService } from "../../services/statistiques-bibliotheque.service";
-
+import { StatistiquesBibliotheque } from '../../models/statistiques-bibliotheque';
+import { StatistiquesBibliothequeService } from '../../services/statistiques-bibliotheque.service';
+import { ReservationResponse } from '../../models/reservation-response';
 @Component({
   selector: 'app-dashboard-reservations',
   standalone: true,
@@ -21,15 +19,21 @@ export class DashboardReservations implements OnInit {
   chargementEnCours = false;
   messageErreur = '';
 
+  reservationsEnAttente: ReservationResponse[] = [];
+
+  chargementReservationsEnCours = false;
+  messageErreurReservations = '';
+  traitementEnCours = false;
+
   ngOnInit(): void {
     this.chargerStatistiques();
+    this.actualiserDashboard();
   }
 
   chargerStatistiques(): void {
     this.chargementEnCours = true;
     this.messageErreur = '';
 
-    // @ts-ignore
     this.statistiquesService.consulterStatistiques().subscribe({
       next: (statistiques) => {
         this.statistiques = statistiques;
@@ -44,5 +48,23 @@ export class DashboardReservations implements OnInit {
         this.chargementEnCours = false;
       },
     });
+  }
+
+  actualiserDashboard(): void {
+    this.chargementReservationsEnCours = true;
+    this.messageErreurReservations = '';
+
+    // À remplacer ensuite par l’appel au ReservationService.
+    this.reservationsEnAttente = [];
+
+    this.chargementReservationsEnCours = false;
+  }
+
+  confirmerReservation(idReservation: number): void {
+    console.log('Confirmation de la réservation', idReservation);
+  }
+
+  rejeterReservation(idReservation: number): void {
+    console.log('Rejet de la réservation', idReservation);
   }
 }
