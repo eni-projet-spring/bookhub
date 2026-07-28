@@ -36,6 +36,7 @@ export class LivreService {
   }
 
   getAllBooks(): Observable<LivreResponse[]> {
-    return this.http.get<LivreResponse[]>(this.apiUrl);
+    const params = searchTerm ? { search: searchTerm } : {};
+    return this.http.get<LivreResponse[]>(this.apiUrl, { params });
   }
 }
