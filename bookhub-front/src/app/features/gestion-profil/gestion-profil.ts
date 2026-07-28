@@ -19,7 +19,8 @@ export class GestionProfil implements OnInit {
   formulaireProfil = new FormGroup({
     nom: new FormControl('', [Validators.required]),
     prenom: new FormControl('', [Validators.required]),
-    email: new FormControl('', [Validators.required, Validators.email]),
+    email: new FormControl({ value: '', disabled: true }, [Validators.required, Validators.email]),
+    motDePasse: new FormControl('', [Validators.minLength(6)]),
   });
 
   constructor(private profilService: ProfilService) {}
@@ -52,11 +53,18 @@ export class GestionProfil implements OnInit {
     this.messageErreur = '';
     this.messageSucces = '';
 
-    const dto = this.formulaireProfil.value as ProfilUtilisateurDTO;
+    const valeurs = this.formulaireProfil.getRawValue();
+    const dto: ProfilUtilisateurDTO = {
+      nom: valeurs.nom!,
+      prenom: valeurs.prenom!,
+      email: valeurs.email!,
+      motDePasse: valeurs.motDePasse ? valeurs.motDePasse : undefined,
+    };
 
     this.profilService.editProfil(dto).subscribe({
       next: () => {
         this.messageSucces = 'Profil mis à jour avec succès.';
+        this.formulaireProfil.patchValue({ motDePasse: '' });
       },
       error: () => {
         this.messageErreur = 'Une erreur est survenue lors de la mise à jour.';
