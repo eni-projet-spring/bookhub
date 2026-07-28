@@ -65,8 +65,122 @@
         type="button"
         (click)="supprimer()"
       >
+<<<<<<< HEAD
         Supprimer mon compte
       </button>
     </div>
   </form>
 </section>
+=======
+        <img
+          src="logos/account.svg"
+          alt=""
+        >
+      </a>
+    }
+    @if (estConnecte()) {
+      <a
+        class="account-btn"
+        routerLink="/gestion-profil"
+        aria-label="Mon profil"
+        title="Mon profil"
+      >
+        <img
+          src="logos/account.svg"
+          alt=""
+        >
+      </a>
+    }
+  </div>
+  <div class="header__bottom">
+    <select aria-label="Choisir une catégorie">
+      <option value="">Catégories</option>
+      <option value="roman">Roman</option>
+      <option value="fantasy">Fantasy</option>
+      <option value="science-fiction">Science-fiction</option>
+      <option value="policier">Policier</option>
+      <option value="manga">Manga</option>
+      <option value="histoire">Histoire</option>
+      <option value="jeunesse">Jeunesse</option>
+    </select>
+    <nav aria-label="Navigation principale">
+      <ul>
+        <li>
+          <a
+            routerLink="/"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+          >
+            Accueil
+          </a>
+        </li>
+        <li>
+          <a
+            routerLink="/contact"
+            routerLinkActive="active"
+          >
+            Nous contacter
+          </a>
+        </li>
+        @if (!estConnecte()) {
+          <li>
+            <a
+              routerLink="/connexion"
+              routerLinkActive="active"
+            >
+              Connexion
+            </a>
+          </li>
+          <li>
+            <a
+              routerLink="/inscription"
+              routerLinkActive="active"
+            >
+              Inscription
+            </a>
+          </li>
+        }
+        @if (estConnecte()) {
+          @if (estUtilisateur()) {
+            <li>
+              <a
+                routerLink="/mes-reservations"
+                routerLinkActive="active"
+              >
+                Mes réservations
+              </a>
+            </li>
+          }
+          @if (estBibliothecaire()) {
+            <li>
+              <a
+                routerLink="/dashboard-bibliothecaire"
+                routerLinkActive="active"
+              >
+                Dashboard bibliothécaire
+              </a>
+            </li>
+          }
+          <li>
+            <a
+              routerLink="/gestion-profil"
+              routerLinkActive="active"
+            >
+              Mon profil
+            </a>
+          </li>
+          <li>
+            <button
+              type="button"
+              class="logout-btn"
+              (click)="seDeconnecter()"
+            >
+              Déconnexion
+            </button>
+          </li>
+        }
+      </ul>
+    </nav>
+  </div>
+</header>
+>>>>>>> 10ed6eb96fb9012d1ab30200edc138efd27188ed
