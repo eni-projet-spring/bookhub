@@ -2,7 +2,6 @@ package fr.eni.bookhub.controller;
 
 import fr.eni.bookhub.dto.LivreRequestDTO;
 import fr.eni.bookhub.dto.LivreResponseDTO;
-import fr.eni.bookhub.entity.Livre;
 import fr.eni.bookhub.service.LivreService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -11,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping("/api/livres")
 public class LivreController {
@@ -33,19 +33,30 @@ public class LivreController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Livre>> consulterTousLesLivres() {
+    public ResponseEntity<List<LivreResponseDTO>> getAllBooks() {
         return ResponseEntity.ok(
-                livreService.consulterTousLesLivres()
+                livreService.getAllBooks()
         );
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Livre> consulterLivreParId(
+    public ResponseEntity<LivreResponseDTO> getBook(
             @PathVariable Integer id
     ) {
         return ResponseEntity.ok(
-                livreService.consulterLivreParId(id)
+                livreService.getBook(id)
         );
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<LivreResponseDTO> modifierLivre(
+            @PathVariable Integer id,
+            @Valid @RequestBody LivreRequestDTO dto
+    ) {
+        LivreResponseDTO livreModifie =
+                livreService.modifierLivre(id, dto);
+
+        return ResponseEntity.ok(livreModifie);
     }
 
     @DeleteMapping("/{id}")

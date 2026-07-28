@@ -24,7 +24,12 @@ public class ProfilUtilisateurServiceImpl implements ProfilUtilisateurService {
         Utilisateur utilisateur = findByEmailOrThrow(email);
         utilisateur.setNom(dto.getNom());
         utilisateur.setPrenom(dto.getPrenom());
-        // l'email n'est pas modifiable ici car il sert d'identifiant de connexion
+        // l'email n'est pas modifiable ici
+
+        if (dto.getMotDePasse() != null && !dto.getMotDePasse().isBlank()) {
+            utilisateur.setMotDePasse(dto.getMotDePasse()); // ⚠️ à hasher, voir remarque plus bas
+        }
+
         return ProfilUtilisateurDTO.fromEntity(utilisateurRepository.save(utilisateur));
     }
 

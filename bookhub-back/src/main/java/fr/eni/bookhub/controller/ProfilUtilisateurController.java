@@ -19,18 +19,19 @@ public class ProfilUtilisateurController {
 
     @GetMapping
     public ResponseEntity<ProfilUtilisateurDTO> getProfil(Authentication authentication) {
-        return ResponseEntity.ok(profilUtilisateurService.getProfilByEmail(authentication.getName()));
+        String email = "test@bookhub.fr"; // temporaire, en attendant le vrai login
+        return ResponseEntity.ok(profilUtilisateurService.getProfilByEmail(email));
     }
 
     @PutMapping
     public ResponseEntity<ProfilUtilisateurDTO> editProfil(
             Authentication authentication, @RequestBody @Valid ProfilUtilisateurDTO dto) {
-        return ResponseEntity.ok(profilUtilisateurService.editProfil(authentication.getName(), dto));
+        return ResponseEntity.ok(profilUtilisateurService.editProfil("test@bookhub.fr", dto));
     }
 
     @DeleteMapping
     public ResponseEntity<Void> deleteProfil(Authentication authentication) {
-        profilUtilisateurService.deleteProfil(authentication.getName());
+        profilUtilisateurService.deleteProfil("test@bookhub.fr");
         return ResponseEntity.noContent().build();
     }
 }

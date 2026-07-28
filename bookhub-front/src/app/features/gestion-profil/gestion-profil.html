@@ -1,24 +1,95 @@
-<div *ngIf="chargementEnCours">Chargement...</div>
+<section class="gestion-profil">
+  <h1 class="gestion-profil__title">Mon profil</h1>
 
-<form [formGroup]="formulaireProfil" (ngSubmit)="enregistrer()">
-  <label>
-    Nom
-    <input type="text" formControlName="nom" />
-  </label>
+  <p *ngIf="chargementEnCours" class="gestion-profil__loading" role="status">
+  </p>
 
-  <label>
-    Prénom
-    <input type="text" formControlName="prenom" />
-  </label>
+  <form
+    class="gestion-profil__form"
+    [formGroup]="formulaireProfil"
+    (ngSubmit)="enregistrer()"
+    novalidate
+  >
+    <div class="gestion-profil__field">
+      <label class="gestion-profil__label" for="nom">Nom</label>
+      <input
+        class="gestion-profil__input"
+        id="nom"
+        type="text"
+        formControlName="nom"
+      />
+    </div>
 
-  <label>
-    Email
-    <input type="email" formControlName="email" />
-  </label>
+    <div class="gestion-profil__field">
+      <label class="gestion-profil__label" for="prenom">Prénom</label>
+      <input
+        class="gestion-profil__input"
+        id="prenom"
+        type="text"
+        formControlName="prenom"
+      />
+    </div>
 
-  <p *ngIf="messageErreur" class="erreur">{{ messageErreur }}</p>
-  <p *ngIf="messageSucces" class="succes">{{ messageSucces }}</p>
+    <div class="gestion-profil__field">
+      <label class="gestion-profil__label" for="motDePasse">Nouveau mot de passe</label>
+      <input
+        class="gestion-profil__input"
+        id="motDePasse"
+        type="password"
+        formControlName="motDePasse"
+        placeholder="Changer de mot de passe"
+        autocomplete="new-password"
+        aria-describedby="motDePasse-erreur"
+      />
+      <p
+        *ngIf="formulaireProfil.get('motDePasse')?.invalid && formulaireProfil.get('motDePasse')?.touched"
+        id="motDePasse-erreur"
+        class="gestion-profil__field-error"
+      >
+        Le mot de passe doit contenir au moins 6 caractères.
+      </p>
+    </div>
 
-  <button type="submit">Enregistrer</button>
-  <button type="button" (click)="supprimer()">Supprimer mon compte</button>
-</form>
+    <div class="gestion-profil__field">
+      <label class="gestion-profil__label" for="motDePasse">Nouveau mot de passe (optionnel)</label>
+      <input
+        class="gestion-profil__input"
+        id="motDePasse"
+        type="password"
+        formControlName="motDePasse"
+        aria-describedby="motDePasse-erreur"
+      />
+      <p
+        *ngIf="formulaireProfil.get('motDePasse')?.invalid && formulaireProfil.get('motDePasse')?.touched"
+        id="motDePasse-erreur"
+        class="gestion-profil__field-error"
+      >
+        Le mot de passe doit contenir au moins 6 caractères.
+      </p>
+    </div>
+
+    <p *ngIf="messageErreur" class="gestion-profil__message gestion-profil__message--error" role="alert">
+      {{ messageErreur }}
+    </p>
+    <p *ngIf="messageSucces" class="gestion-profil__message gestion-profil__message--success" role="status">
+      {{ messageSucces }}
+    </p>
+
+    <div class="gestion-profil__actions">
+      <button
+        class="gestion-profil__button gestion-profil__button--primary"
+        type="submit"
+        [disabled]="chargementEnCours"
+      >
+        Enregistrer
+      </button>
+      <button
+        class="gestion-profil__button gestion-profil__button--danger"
+        type="button"
+        (click)="supprimer()"
+      >
+        Supprimer mon compte
+      </button>
+    </div>
+  </form>
+</section>

@@ -11,12 +11,13 @@ public interface LivreService {
 
     LivreResponseDTO ajouterLivre(LivreRequestDTO dto);
 
-    List<Livre> consulterTousLesLivres();
+    List<LivreResponseDTO> getAllBooks();
 
-    Livre consulterLivreParId(Integer id);
+    LivreResponseDTO getBook(Integer id);
+
+    LivreResponseDTO modifierLivre(Integer id, LivreRequestDTO dto);
 
     Optional<Livre> rechercherParIsbn(String isbn);
 
     void supprimerLivre(Integer id);
-
 }
