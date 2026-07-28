@@ -7,7 +7,7 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
     properties:
@@ -17,7 +17,7 @@ spring:
 
 security:
   jwt:
-    secret: ${JWT_SECRET:monSuperSecretPourLeDev12345678901234567890}
+    secret: "monSuperSecretPourLeDev12345678901234567890"
     expiration: 2592000000
 
 logging:
