@@ -8,8 +8,8 @@ import { ReservationResponse } from '../../models/reservation-response';
   selector: 'app-dashboard-reservations',
   standalone: true,
   imports: [CommonModule],
-  templateUrl: './dashboard-reservations.html',
-  styleUrl: './dashboard-reservations.css',
+  templateUrl: './dashboard-bibliothecaire.html',
+  styleUrl: './dashboard-bibliothecaire.css',
 })
 export class DashboardReservations implements OnInit {
   private readonly statistiquesService = inject(StatistiquesBibliothequeService);
