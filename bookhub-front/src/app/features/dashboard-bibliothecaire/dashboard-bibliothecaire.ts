@@ -5,13 +5,13 @@ import { StatistiquesBibliotheque } from '../../models/statistiques-bibliotheque
 import { StatistiquesBibliothequeService } from '../../services/statistiques-bibliotheque.service';
 import { ReservationResponse } from '../../models/reservation-response';
 @Component({
-  selector: 'app-dashboard-reservations',
+  selector: 'app-dashboard-bibliothecaire',
   standalone: true,
   imports: [CommonModule],
   templateUrl: './dashboard-bibliothecaire.html',
   styleUrl: './dashboard-bibliothecaire.css',
 })
-export class DashboardReservations implements OnInit {
+export class DashboardBibliothecaire implements OnInit {
   private readonly statistiquesService = inject(StatistiquesBibliothequeService);
 
   statistiques: StatistiquesBibliotheque | null = null;
