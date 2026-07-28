@@ -144,4 +144,16 @@ public class ReservationController {
                 reservation.getLivre().getIsbn()
         );
     }
+    @PatchMapping("/{idReservation}/rejeter")
+    @PreAuthorize("hasAnyRole('LIBRARIAN', 'ADMIN')")
+    public ResponseEntity<ReservationResponse> rejeterReservation(
+            @PathVariable Integer idReservation
+    ) {
+        Reservation reservation =
+                reservationService.rejeterReservation(idReservation);
+
+        return ResponseEntity.ok(
+                convertirEnResponse(reservation)
+        );
+    }
 }

@@ -1,45 +1,70 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 
+import { StatistiquesBibliotheque } from '../../models/statistiques-bibliotheque';
+import { StatistiquesBibliothequeService } from '../../services/statistiques-bibliotheque.service';
 import { ReservationResponse } from '../../models/reservation-response';
-import { ReservationService } from '../../services/reservation.service';
-
 @Component({
-  selector: 'app-reservation',
+  selector: 'app-dashboard-reservations',
   standalone: true,
   imports: [CommonModule],
   templateUrl: './dashboard-reservations.html',
   styleUrl: './dashboard-reservations.css',
 })
 export class DashboardReservations implements OnInit {
-  reservationsEnAttente: ReservationResponse[] = [];
+  private readonly statistiquesService = inject(StatistiquesBibliothequeService);
+
+  statistiques: StatistiquesBibliotheque | null = null;
 
   chargementEnCours = false;
   messageErreur = '';
 
-  constructor(private reservationService: ReservationService) {}
+  reservationsEnAttente: ReservationResponse[] = [];
+
+  chargementReservationsEnCours = false;
+  messageErreurReservations = '';
+  traitementEnCours = false;
 
   ngOnInit(): void {
-    this.chargerReservationsEnAttente();
+    this.chargerStatistiques();
+    this.actualiserDashboard();
   }
 
-  chargerReservationsEnAttente(): void {
+  chargerStatistiques(): void {
     this.chargementEnCours = true;
     this.messageErreur = '';
 
-    this.reservationService.listerReservationsEnAttente().subscribe({
-      next: (reservations) => {
-        this.reservationsEnAttente = reservations;
+    this.statistiquesService.consulterStatistiques().subscribe({
+      next: (statistiques) => {
+        this.statistiques = statistiques;
         this.chargementEnCours = false;
       },
 
       error: (erreur) => {
-        console.error('Erreur lors du chargement des réservations :', erreur);
+        console.error('Erreur lors du chargement des statistiques', erreur);
 
-        this.messageErreur = 'Impossible de charger les réservations en attente.';
+        this.messageErreur = 'Impossible de charger les statistiques de la bibliothèque.';
 
         this.chargementEnCours = false;
       },
     });
+  }
+
+  actualiserDashboard(): void {
+    this.chargementReservationsEnCours = true;
+    this.messageErreurReservations = '';
+
+    // À remplacer ensuite par l’appel au ReservationService.
+    this.reservationsEnAttente = [];
+
+    this.chargementReservationsEnCours = false;
+  }
+
+  confirmerReservation(idReservation: number): void {
+    console.log('Confirmation de la réservation', idReservation);
+  }
+
+  rejeterReservation(idReservation: number): void {
+    console.log('Rejet de la réservation', idReservation);
   }
 }
