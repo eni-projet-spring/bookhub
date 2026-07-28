@@ -1,0 +1,61 @@
+<section class="emprunts-retard">
+  <h1>Emprunts en retard</h1>
+
+  @if (chargementEnCours) {
+    <p>Chargement en cours...</p>
+  }
+
+  @if (messageErreur) {
+    <p class="message-erreur">
+      {{ messageErreur }}
+    </p>
+  }
+
+  @if (
+    !chargementEnCours &&
+    !messageErreur &&
+    empruntsEnRetard.length === 0
+    ) {
+    <p>Aucun emprunt en retard.</p>
+  }
+
+  @if (empruntsEnRetard.length > 0) {
+    <table>
+      <thead>
+      <tr>
+        <th>Utilisateur</th>
+        <th>Livre</th>
+        <th>Date de retour prévue</th>
+        <th>Retard</th>
+      </tr>
+      </thead>
+
+      <tbody>
+        @for (
+          emprunt of empruntsEnRetard;
+          track emprunt.idEmprunt
+          ) {
+          <tr>
+            <td>
+              {{ emprunt.prenomUtilisateur }}
+              {{ emprunt.nomUtilisateur }}
+            </td>
+
+            <td>
+              {{ emprunt.titreLivre }}
+            </td>
+
+            <td>
+              {{ emprunt.dateFinPrevue | date: 'dd/MM/yyyy HH:mm' }}
+            </td>
+
+            <td>
+              {{ emprunt.nombreJoursRetard }}
+              jour(s)
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  }
+</section>

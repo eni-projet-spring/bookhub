@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
+import { RouterLink } from '@angular/router';
 
 import { StatistiquesBibliotheque } from '../../models/statistiques-bibliotheque';
 import { StatistiquesBibliothequeService } from '../../services/statistiques-bibliotheque.service';
@@ -7,7 +8,7 @@ import { ReservationResponse } from '../../models/reservation-response';
 @Component({
   selector: 'app-dashboard-bibliothecaire',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterLink],
   templateUrl: './dashboard-bibliothecaire.html',
   styleUrl: './dashboard-bibliothecaire.css',
 })
