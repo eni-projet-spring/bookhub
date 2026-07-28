@@ -1,26 +1,21 @@
 <header class="header">
-
   <div class="header__top">
-
-
-    routerLink="/"
-    aria-label="Retour à l'accueil"
+    <a
+      routerLink="/"
+      aria-label="Retour à l'accueil"
     >
-    <img
-      class="header__logo"
-      src="images/main-logo.png"
-      alt="Logo de la librairie"
-    >
+      <img
+        class="header__logo"
+        src="images/main-logo.png"
+        alt="Logo de la librairie"
+      >
     </a>
-
     <form class="search-form">
-
       <input
         type="search"
         placeholder="Rechercher un livre, un auteur..."
         aria-label="Rechercher un livre ou un auteur"
       >
-
       <button
         type="submit"
         aria-label="Rechercher"
@@ -30,45 +25,35 @@
           alt=""
         >
       </button>
-
     </form>
-
     @if (!estConnecte()) {
-
-
-      class="account-btn"
+      <a
+        class="account-btn"
         routerLink="/connexion"
         aria-label="Se connecter"
         title="Connexion"
-        >
-      <img
-        src="logos/account.svg"
-        alt=""
       >
+        <img
+          src="logos/account.svg"
+          alt=""
+        >
       </a>
-
     }
-
     @if (estConnecte()) {
-
-
-      class="account-btn"
+      <a
+        class="account-btn"
         routerLink="/gestion-profil"
         aria-label="Mon profil"
         title="Mon profil"
-        >
-      <img
-        src="logos/account.svg"
-        alt=""
       >
+        <img
+          src="logos/account.svg"
+          alt=""
+        >
       </a>
-
     }
-
   </div>
-
   <div class="header__bottom">
-
     <select aria-label="Choisir une catégorie">
       <option value="">Catégories</option>
       <option value="roman">Roman</option>
@@ -79,89 +64,72 @@
       <option value="histoire">Histoire</option>
       <option value="jeunesse">Jeunesse</option>
     </select>
-
     <nav aria-label="Navigation principale">
-
       <ul>
-
         <li>
-
-          routerLink="/"
-          routerLinkActive="active"
-          [routerLinkActiveOptions]="{ exact: true }"
+          <a
+            routerLink="/"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
           >
-          Accueil
+            Accueil
           </a>
         </li>
-
         <li>
-
-          routerLink="/contact"
-          routerLinkActive="active"
+          <a
+            routerLink="/contact"
+            routerLinkActive="active"
           >
-          Nous contacter
+            Nous contacter
           </a>
         </li>
-
         @if (!estConnecte()) {
-
           <li>
-
-            routerLink="/connexion"
-            routerLinkActive="active"
+            <a
+              routerLink="/connexion"
+              routerLinkActive="active"
             >
-            Connexion
+              Connexion
             </a>
           </li>
-
           <li>
-
-            routerLink="/inscription"
-            routerLinkActive="active"
+            <a
+              routerLink="/inscription"
+              routerLinkActive="active"
             >
-            Inscription
+              Inscription
             </a>
           </li>
-
         }
-
         @if (estConnecte()) {
-
           @if (estUtilisateur()) {
-
             <li>
-
-              routerLink="/mes-reservations"
-              routerLinkActive="active"
+              <a
+                routerLink="/mes-reservations"
+                routerLinkActive="active"
               >
-              Mes réservations
+                Mes réservations
               </a>
             </li>
-
           }
-
           @if (estBibliothecaire()) {
-
             <li>
-
-              routerLink="/dashboard-reservations"
-              routerLinkActive="active"
+              <a
+                routerLink="/dashboard-reservations"
+                routerLinkActive="active"
               >
-              Dashboard bibliothécaire
+                Dashboard bibliothécaire
               </a>
             </li>
-
           }
-
           <li>
-
-            routerLink="/gestion-profil"
-            routerLinkActive="active"
+            <a
+              routerLink="/gestion-profil"
+              routerLinkActive="active"
             >
-            Mon profil
+              Mon profil
             </a>
           </li>
-
           <li>
             <button
               type="button"
@@ -171,13 +139,8 @@
               Déconnexion
             </button>
           </li>
-
         }
-
       </ul>
-
     </nav>
-
   </div>
-
 </header>
