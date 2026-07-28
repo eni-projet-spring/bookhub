@@ -21,7 +21,7 @@ export const routes: Routes = [
     component: Connexion,
   },
   {
-    path: 'dashboard-reservations',
+    path: 'dashboard-bibliothecaire',
     component: DashboardReservations,
   },
   {
