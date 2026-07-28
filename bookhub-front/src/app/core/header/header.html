@@ -1,77 +1,38 @@
-<section class="gestion-profil">
-  <h1 class="gestion-profil__title">Mon profil</h1>
-  <p *ngIf="chargementEnCours" class="gestion-profil__loading" role="status">
-    Chargement...
-  </p>
-  <form
-    class="gestion-profil__form"
-    [formGroup]="formulaireProfil"
-    (ngSubmit)="enregistrer()"
-    novalidate
-  >
-    <div class="gestion-profil__field">
-      <label class="gestion-profil__label" for="nom">Nom</label>
-      <input
-        class="gestion-profil__input"
-        id="nom"
-        type="text"
-        formControlName="nom"
-      />
-    </div>
-    <div class="gestion-profil__field">
-      <label class="gestion-profil__label" for="prenom">Prénom</label>
-      <input
-        class="gestion-profil__input"
-        id="prenom"
-        type="text"
-        formControlName="prenom"
-      />
-    </div>
-    <div class="gestion-profil__field">
-      <label class="gestion-profil__label" for="motDePasse">Nouveau mot de passe (optionnel)</label>
-      <input
-        class="gestion-profil__input"
-        id="motDePasse"
-        type="password"
-        formControlName="motDePasse"
-        placeholder="Changer de mot de passe"
-        autocomplete="new-password"
-        aria-describedby="motDePasse-erreur"
-      />
-      <p
-        *ngIf="formulaireProfil.get('motDePasse')?.invalid && formulaireProfil.get('motDePasse')?.touched"
-        id="motDePasse-erreur"
-        class="gestion-profil__field-error"
+<header class="header">
+  <div class="header__top">
+    <a
+      routerLink="/"
+      aria-label="Retour à l'accueil"
+    >
+      <img
+        class="header__logo"
+        src="images/main-logo.png"
+        alt="Logo de la librairie"
       >
-        Le mot de passe doit contenir au moins 6 caractères.
-      </p>
-    </div>
-    <p *ngIf="messageErreur" class="gestion-profil__message gestion-profil__message--error" role="alert">
-      {{ messageErreur }}
-    </p>
-    <p *ngIf="messageSucces" class="gestion-profil__message gestion-profil__message--success" role="status">
-      {{ messageSucces }}
-    </p>
-    <div class="gestion-profil__actions">
+    </a>
+    <form class="search-form">
+      <input
+        type="search"
+        placeholder="Rechercher un livre, un auteur..."
+        aria-label="Rechercher un livre ou un auteur"
+      >
       <button
-        class="gestion-profil__button gestion-profil__button--primary"
         type="submit"
-        [disabled]="chargementEnCours"
+        aria-label="Rechercher"
       >
-        Enregistrer
+        <img
+          src="logos/search.svg"
+          alt=""
+        >
       </button>
-      <button
-        class="gestion-profil__button gestion-profil__button--danger"
-        type="button"
-        (click)="supprimer()"
+    </form>
+    @if (!estConnecte()) {
+      <a
+        class="account-btn"
+        routerLink="/connexion"
+        aria-label="Se connecter"
+        title="Connexion"
       >
-<<<<<<< HEAD
-        Supprimer mon compte
-      </button>
-    </div>
-  </form>
-</section>
-=======
         <img
           src="logos/account.svg"
           alt=""
@@ -183,4 +144,3 @@
     </nav>
   </div>
 </header>
->>>>>>> 10ed6eb96fb9012d1ab30200edc138efd27188ed
