@@ -9,12 +9,14 @@ import fr.eni.bookhub.entity.StatutReservation;
 import fr.eni.bookhub.repository.EmpruntRepository;
 import fr.eni.bookhub.repository.ReservationRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 @Service
+@Transactional(readOnly = true)
 public class StatistiquesBibliothequeServiceImpl
         implements StatistiquesBibliothequeService {
 
@@ -30,7 +32,7 @@ public class StatistiquesBibliothequeServiceImpl
     }
 
     @Override
-    public StatistiquesBibliothequeResponse obtenirStatistiques() {
+    public StatistiquesBibliothequeResponse consulterStatistiques() {
 
         LocalDateTime maintenant = LocalDateTime.now();
 
@@ -48,18 +50,19 @@ public class StatistiquesBibliothequeServiceImpl
 
         long nombreReservationsEnAttente =
                 reservationRepository.countByStatut(
-                        "EN ATTENTE"
+                        StatutReservation.EN_ATTENTE
                 );
 
         List<LivrePopulaireResponse> livresPopulaires =
                 empruntRepository
                         .rechercherLivresLesPlusEmpruntes()
                         .stream()
+                        .limit(5)
                         .map(resultat -> new LivrePopulaireResponse(
-                                (Integer) resultat[0],
+                                ((Number) resultat[0]).longValue(),
                                 (String) resultat[1],
                                 (String) resultat[2],
-                                (Long) resultat[3]
+                                ((Number) resultat[3]).longValue()
                         ))
                         .toList();
 
@@ -91,7 +94,6 @@ public class StatistiquesBibliothequeServiceImpl
             Emprunt emprunt,
             LocalDateTime maintenant
     ) {
-
         long nombreJoursRetard = ChronoUnit.DAYS.between(
                 emprunt.getDateFinPrevue(),
                 maintenant
@@ -99,29 +101,15 @@ public class StatistiquesBibliothequeServiceImpl
 
         return new EmpruntResponse(
                 emprunt.getIdEmprunt(),
-
-                emprunt.getUtilisateur().getIdUtilisateur(),
                 emprunt.getUtilisateur().getNom(),
                 emprunt.getUtilisateur().getPrenom(),
-
-                emprunt.getExemplaire()
-                        .getLivre()
-                        .getIdLivre(),
-
-                emprunt.getExemplaire()
-                        .getLivre()
-                        .getTitre(),
-
-                emprunt.getExemplaire()
-                        .getLivre()
-                        .getIsbn(),
-
+                emprunt.getExemplaire().getLivre().getTitre(),
+                emprunt.getExemplaire().getLivre().getIsbn(),
                 emprunt.getDateDebut(),
                 emprunt.getDateFinPrevue(),
                 emprunt.getDateRetour(),
-                emprunt.getStatut(),
-
-                Math.toIntExact(nombreJoursRetard)
+                StatutEmprunt.EN_RETARD,
+                nombreJoursRetard
         );
     }
 }
