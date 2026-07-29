@@ -36,5 +36,9 @@ public interface EmpruntRepository
                 l.auteur
             ORDER BY COUNT(e.idEmprunt) DESC
             """)
+
     List<Object[]> rechercherLivresLesPlusEmpruntes();
+    List<Emprunt> findByUtilisateurEmailOrderByDateDebutDesc(
+            String email
+    );
 }

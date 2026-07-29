@@ -8,6 +8,6 @@ public record StatistiquesBibliothequeResponse(
         long nombreEmpruntsEnRetard,
         long nombreReservationsEnAttente,
         List<LivrePopulaireResponse> livresPopulaires,
-        List<EmpruntEnRetardResponse> empruntsEnRetard
+        List<EmpruntResponse> empruntsEnRetard
 ) {
 }

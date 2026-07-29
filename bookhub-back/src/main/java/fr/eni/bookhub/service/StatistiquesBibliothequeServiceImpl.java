@@ -1,9 +1,10 @@
 package fr.eni.bookhub.service;
 
-import fr.eni.bookhub.dto.EmpruntEnRetardResponse;
+import fr.eni.bookhub.dto.EmpruntResponse;
 import fr.eni.bookhub.dto.LivrePopulaireResponse;
 import fr.eni.bookhub.dto.StatistiquesBibliothequeResponse;
 import fr.eni.bookhub.entity.Emprunt;
+import fr.eni.bookhub.entity.StatutEmprunt;
 import fr.eni.bookhub.entity.StatutReservation;
 import fr.eni.bookhub.repository.EmpruntRepository;
 import fr.eni.bookhub.repository.ReservationRepository;
@@ -63,7 +64,7 @@ public class StatistiquesBibliothequeServiceImpl
                         ))
                         .toList();
 
-        List<EmpruntEnRetardResponse> empruntsEnRetard =
+        List<EmpruntResponse> empruntsEnRetard =
                 empruntRepository
                         .findByDateRetourIsNullAndDateFinPrevueBeforeOrderByDateFinPrevueAsc(
                                 maintenant
@@ -87,7 +88,7 @@ public class StatistiquesBibliothequeServiceImpl
         );
     }
 
-    private EmpruntEnRetardResponse convertirEnEmpruntEnRetard(
+    private EmpruntResponse convertirEnEmpruntEnRetard(
             Emprunt emprunt,
             LocalDateTime maintenant
     ) {
@@ -97,12 +98,16 @@ public class StatistiquesBibliothequeServiceImpl
                 maintenant
         );
 
-        return new EmpruntEnRetardResponse(
+        return new EmpruntResponse(
                 emprunt.getIdEmprunt(),
                 emprunt.getUtilisateur().getNom(),
                 emprunt.getUtilisateur().getPrenom(),
                 emprunt.getExemplaire().getLivre().getTitre(),
+                emprunt.getExemplaire().getLivre().getIsbn(),
+                emprunt.getDateDebut(),
                 emprunt.getDateFinPrevue(),
+                emprunt.getDateRetour(),
+                StatutEmprunt.EN_RETARD,
                 nombreJoursRetard
         );
     }
