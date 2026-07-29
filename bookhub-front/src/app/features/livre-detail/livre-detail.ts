@@ -4,6 +4,7 @@ import { ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 
 import { LivreResponse, LivreService } from '../../services/livre';
+import { ReservationService } from '../../services/reservation.service';
 
 @Component({
   selector: 'app-livre-detail',
@@ -16,13 +17,19 @@ export class LivreDetail implements OnInit {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly livreService = inject(LivreService);
+  private readonly reservationService = inject(ReservationService);
   private readonly changeDetectorRef = inject(ChangeDetectorRef);
 
   livre?: LivreResponse;
 
   chargement = true;
   erreur = '';
+
   suppressionEnCours = false;
+  reservationEnCours = false;
+
+  messageReservation = '';
+  erreurReservation = '';
 
   estConnecte = false;
   roleUtilisateur: string | null = null;
@@ -34,6 +41,10 @@ export class LivreDetail implements OnInit {
 
   get peutGererLivre(): boolean {
     return this.roleUtilisateur === 'ADMIN' || this.roleUtilisateur === 'LIBRARIAN';
+  }
+
+  get peutReserverLivre(): boolean {
+    return this.estConnecte && this.roleUtilisateur === 'USER';
   }
 
   private initialiserUtilisateur(): void {
@@ -48,6 +59,13 @@ export class LivreDetail implements OnInit {
 
     try {
       const payloadBase64 = token.split('.')[1];
+
+      if (!payloadBase64) {
+        this.estConnecte = false;
+        this.roleUtilisateur = null;
+        return;
+      }
+
       const payload = JSON.parse(atob(payloadBase64));
 
       if (typeof payload.role === 'string') {
@@ -66,10 +84,15 @@ export class LivreDetail implements OnInit {
         this.roleUtilisateur = this.nettoyerRole(
           typeof autorite === 'string' ? autorite : autorite.authority,
         );
+
+        return;
       }
+
+      this.roleUtilisateur = null;
     } catch (error) {
       console.error('Impossible de lire le rôle contenu dans le JWT', error);
 
+      this.estConnecte = false;
       this.roleUtilisateur = null;
     }
   }
@@ -80,10 +103,12 @@ export class LivreDetail implements OnInit {
 
   private chargerLivre(): void {
     const parametreId = this.route.snapshot.paramMap.get('id');
+
     const idLivre = Number(parametreId);
 
     if (!Number.isInteger(idLivre) || idLivre <= 0) {
       this.erreur = 'Identifiant du livre invalide.';
+
       this.chargement = false;
       this.changeDetectorRef.markForCheck();
       return;
@@ -121,6 +146,50 @@ export class LivreDetail implements OnInit {
     });
   }
 
+  reserverLivre(): void {
+    if (!this.livre || !this.peutReserverLivre || this.reservationEnCours) {
+      return;
+    }
+
+    this.reservationEnCours = true;
+    this.messageReservation = '';
+    this.erreurReservation = '';
+
+    this.reservationService.reserverLivre(this.livre.idLivre).subscribe({
+      next: () => {
+        this.messageReservation = 'Votre réservation a bien été enregistrée.';
+
+        this.reservationEnCours = false;
+        this.changeDetectorRef.markForCheck();
+      },
+
+      error: (error: HttpErrorResponse) => {
+        console.error('Erreur lors de la réservation du livre :', error);
+
+        if (error.status === 400) {
+          this.erreurReservation =
+            error.error?.message ?? 'La réservation ne peut pas être effectuée.';
+        } else if (error.status === 401) {
+          this.erreurReservation = 'Vous devez vous connecter pour réserver ce livre.';
+        } else if (error.status === 403) {
+          this.erreurReservation = 'Vous n’êtes pas autorisé à réserver ce livre.';
+        } else if (error.status === 404) {
+          this.erreurReservation = 'Le livre demandé est introuvable.';
+        } else if (error.status === 409) {
+          this.erreurReservation = error.error?.message ?? 'Vous avez déjà réservé ce livre.';
+        } else if (error.status === 0) {
+          this.erreurReservation = 'Impossible de contacter le serveur BookHub.';
+        } else {
+          this.erreurReservation =
+            error.error?.message ?? 'La réservation n’a pas pu être enregistrée.';
+        }
+
+        this.reservationEnCours = false;
+        this.changeDetectorRef.markForCheck();
+      },
+    });
+  }
+
   supprimerLivre(): void {
     if (!this.livre || !this.peutGererLivre || this.suppressionEnCours) {
       return;
@@ -149,8 +218,8 @@ export class LivreDetail implements OnInit {
           'Le livre ne peut pas être supprimé. Il possède peut-être encore des exemplaires, emprunts ou réservations.';
 
         this.suppressionEnCours = false;
+        this.changeDetectorRef.markForCheck();
       },
     });
   }
 }
-
