@@ -34,4 +34,8 @@ export class LivreService {
   ajouterLivre(livre: LivreRequest): Observable<LivreResponse> {
     return this.http.post<LivreResponse>(this.apiUrl, livre);
   }
+
+  getAllBooks(): Observable<LivreResponse[]> {
+    return this.http.get<LivreResponse[]>(this.apiUrl);
+  }
 }
