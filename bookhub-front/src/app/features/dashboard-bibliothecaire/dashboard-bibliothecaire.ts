@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
+import { RouterLink } from '@angular/router';
 
 import { StatistiquesBibliotheque } from '../../models/statistiques-bibliotheque';
 import { StatistiquesBibliothequeService } from '../../services/statistiques-bibliotheque.service';

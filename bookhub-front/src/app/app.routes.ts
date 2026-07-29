@@ -6,6 +6,7 @@ import { CatalogComponent } from './features/catalog/catalog';
 import { GestionProfil} from './features/gestion-profil/gestion-profil';
 import { DashboardBibliothecaire } from './features/dashboard-bibliothecaire/dashboard-bibliothecaire';
 import { MesReservations } from './features/mes-reservations/mes-reservations';
+import { Emprunt } from './features/emprunt/emprunt';
 import { LivreDetail } from './features/livre-detail/livre-detail';
 import { ModifierLivre } from './features/modifier-livre/modifier-livre';
 
@@ -50,5 +51,9 @@ export const routes: Routes = [
   {
     path: '**',
     redirectTo: '',
+  },
+  {
+    path: 'emprunts',
+    component: Emprunt,
   },
 ];

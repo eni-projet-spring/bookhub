@@ -1,5 +1,5 @@
 import { LivrePopulaire } from './livre-populaire';
-import { EmpruntEnRetard } from './emprunt-en-retard';
+import { EmpruntResponse } from './emprunt-response';
 
 export interface StatistiquesBibliotheque {
   nombreEmpruntsEnCours: number;
@@ -7,5 +7,5 @@ export interface StatistiquesBibliotheque {
   nombreEmpruntsEnRetard: number;
   nombreReservationsEnAttente: number;
   livresPopulaires: LivrePopulaire[];
-  empruntsEnRetard: EmpruntEnRetard[];
+  empruntsEnRetard: EmpruntResponse[];
 }

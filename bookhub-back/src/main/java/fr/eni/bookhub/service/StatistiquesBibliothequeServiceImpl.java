@@ -1,19 +1,22 @@
 package fr.eni.bookhub.service;
 
-import fr.eni.bookhub.dto.EmpruntEnRetardResponse;
+import fr.eni.bookhub.dto.EmpruntResponse;
 import fr.eni.bookhub.dto.LivrePopulaireResponse;
 import fr.eni.bookhub.dto.StatistiquesBibliothequeResponse;
 import fr.eni.bookhub.entity.Emprunt;
+import fr.eni.bookhub.entity.StatutEmprunt;
 import fr.eni.bookhub.entity.StatutReservation;
 import fr.eni.bookhub.repository.EmpruntRepository;
 import fr.eni.bookhub.repository.ReservationRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 @Service
+@Transactional(readOnly = true)
 public class StatistiquesBibliothequeServiceImpl
         implements StatistiquesBibliothequeService {
 
@@ -63,14 +66,14 @@ public class StatistiquesBibliothequeServiceImpl
                         ))
                         .toList();
 
-        List<EmpruntEnRetardResponse> empruntsEnRetard =
+        List<EmpruntResponse> empruntsEnRetard =
                 empruntRepository
                         .findByDateRetourIsNullAndDateFinPrevueBeforeOrderByDateFinPrevueAsc(
                                 maintenant
                         )
                         .stream()
                         .map(emprunt ->
-                                convertirEnEmpruntEnRetard(
+                                convertirEnEmpruntResponse(
                                         emprunt,
                                         maintenant
                                 )
@@ -87,22 +90,25 @@ public class StatistiquesBibliothequeServiceImpl
         );
     }
 
-    private EmpruntEnRetardResponse convertirEnEmpruntEnRetard(
+    private EmpruntResponse convertirEnEmpruntResponse(
             Emprunt emprunt,
             LocalDateTime maintenant
     ) {
-
         long nombreJoursRetard = ChronoUnit.DAYS.between(
                 emprunt.getDateFinPrevue(),
                 maintenant
         );
 
-        return new EmpruntEnRetardResponse(
+        return new EmpruntResponse(
                 emprunt.getIdEmprunt(),
                 emprunt.getUtilisateur().getNom(),
                 emprunt.getUtilisateur().getPrenom(),
                 emprunt.getExemplaire().getLivre().getTitre(),
+                emprunt.getExemplaire().getLivre().getIsbn(),
+                emprunt.getDateDebut(),
                 emprunt.getDateFinPrevue(),
+                emprunt.getDateRetour(),
+                StatutEmprunt.EN_RETARD,
                 nombreJoursRetard
         );
     }
