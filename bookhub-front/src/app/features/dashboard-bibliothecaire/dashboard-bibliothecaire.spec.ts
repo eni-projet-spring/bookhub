@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { provideRouter } from '@angular/router';
 import { DashboardBibliothecaire } from './dashboard-bibliothecaire';
 
 describe('DashboardBibliothecaire', () => {
@@ -9,6 +9,7 @@ describe('DashboardBibliothecaire', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [DashboardBibliothecaire],
+      providers: [provideRouter([])],
     }).compileComponents();
 
     fixture = TestBed.createComponent(DashboardBibliothecaire);

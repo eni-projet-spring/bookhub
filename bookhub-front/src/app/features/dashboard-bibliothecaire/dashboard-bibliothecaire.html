@@ -41,7 +41,7 @@
         Utilisateurs
       </a>
 
-      <a class="sidebar-nav__link" routerLink="/dashboard/livres">
+      <a class="sidebar-nav__link" routerLink="/livres/ajouter">
         <svg class="sidebar-nav__icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <path d="M2 4h6a3 3 0 0 1 3 3v13a2.5 2.5 0 0 0-2.5-2.5H2z"></path>
           <path d="M22 4h-6a3 3 0 0 0-3 3v13a2.5 2.5 0 0 1 2.5-2.5H22z"></path>
@@ -119,10 +119,16 @@
 
         <!-- CADRE 2 : LIVRES POPULAIRES -->
         <section class="section-dashboard">
-          <div class="section-titre">
+        <div class="section-titre section-titre--avec-action">
+          <div>
             <h2>Livres les plus populaires</h2>
             <p>Classement des livres les plus empruntés.</p>
           </div>
+
+          <a class="btn btn--primary" routerLink="/livres/ajouter">
+            + Ajouter un livre
+          </a>
+        </div>
 
           @if (statistiques.livresPopulaires.length === 0) {
             <p class="message-vide">Aucun emprunt enregistré pour le moment.</p>
