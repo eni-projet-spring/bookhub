@@ -28,7 +28,7 @@ export interface LivreRequest {
   description: string;
   couverture: string;
   idCategorie: number;
-  libelleCategorie: string;
+
 }
 
 @Injectable({
