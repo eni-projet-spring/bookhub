@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 export interface LivreRequest {
@@ -35,8 +35,16 @@ export class LivreService {
     return this.http.post<LivreResponse>(this.apiUrl, livre);
   }
 
-  getAllBooks(): Observable<LivreResponse[]> {
-    const params = searchTerm ? { search: searchTerm } : {};
+  getAllBooks(searchTerm?: string): Observable<LivreResponse[]> {
+    // Create a new, strictly typed HttpParams object
+    let params = new HttpParams();
+
+    // If a search term exists, append it to the params
+    if (searchTerm) {
+      params = params.set('search', searchTerm);
+    }
+
+    // Now TypeScript knows exactly what 'params' is, and the red errors will vanish
     return this.http.get<LivreResponse[]>(this.apiUrl, { params });
   }
 }

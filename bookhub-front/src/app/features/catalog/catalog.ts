@@ -9,8 +9,8 @@ import { ActivatedRoute } from '@angular/router';
   selector: 'app-catalog',
   standalone: true,
   imports: [CommonModule, RouterLink],
-  templateUrl: './catalog.component.html',
-  styleUrl: './catalog.component.css',
+  templateUrl: './catalog.html',
+  styleUrl: './catalog.css',
 })
 export class CatalogComponent implements OnInit {
   private readonly livreService = inject(LivreService);
