@@ -32,13 +32,6 @@ public class LivreController {
                 .body(livreAjoute);
     }
 
-    @GetMapping
-    public ResponseEntity<List<LivreResponseDTO>> getAllBooks() {
-        return ResponseEntity.ok(
-                livreService.getAllBooks()
-        );
-    }
-
     @GetMapping("/{id}")
     public ResponseEntity<LivreResponseDTO> getBook(
             @PathVariable Integer id
@@ -66,5 +59,13 @@ public class LivreController {
         livreService.supprimerLivre(id);
 
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping
+    public ResponseEntity<List<LivreResponseDTO>> getCatalog(
+            @RequestParam(name = "search", required = false) String search
+    ) {
+        List<LivreResponseDTO> books = livreService.getBooks(search);
+        return ResponseEntity.ok(books);
     }
 }

@@ -54,7 +54,14 @@ public class SecurityConfiguration {
                                 "/api/utilisateurs/inscription/"
                         )
                         .permitAll()
-
+                        .requestMatchers(
+                                org.springframework.http.HttpMethod.GET,
+                                "/api/livres",
+                                "/api/livres/**",
+                                "/api/categories",
+                                "/api/categories/**"
+                        )
+                        .permitAll()
                         .anyRequest()
                         .authenticated()
                 )
