@@ -21,6 +21,14 @@ public interface EmpruntRepository
             LocalDateTime date
     );
 
+    /**
+     * Récupère tous les emprunts d'un lecteur,
+     * du plus récent au plus ancien.
+     */
+    List<Emprunt> findByUtilisateurIdUtilisateurOrderByDateDebutDesc(
+            Integer idUtilisateur
+    );
+
     @Query("""
             SELECT
                 l.idLivre,

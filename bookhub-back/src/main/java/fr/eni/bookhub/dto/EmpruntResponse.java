@@ -5,10 +5,13 @@ import fr.eni.bookhub.entity.StatutEmprunt;
 import java.time.LocalDateTime;
 
 public record EmpruntResponse(
+
         Integer idEmprunt,
-        String nomUtilisateur,
-        String prenomUtilisateur,
+
         String titreLivre,
+
+        String nomUtilisateur,
+  
         String isbn,
         LocalDateTime dateDebut,
         LocalDateTime dateFinPrevue,

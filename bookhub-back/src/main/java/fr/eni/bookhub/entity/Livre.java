@@ -63,4 +63,11 @@ public class Livre {
             orphanRemoval = true
     )
     private List<Reservation> reservations = new ArrayList<>();
+
+    @OneToMany(
+            mappedBy = "livre",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    private List<Exemplaire> exemplaires = new ArrayList<>();
 }

@@ -30,7 +30,7 @@ public class StatistiquesBibliothequeServiceImpl
     }
 
     @Override
-    public StatistiquesBibliothequeResponse consulterStatistiques() {
+    public StatistiquesBibliothequeResponse obtenirStatistiques() {
 
         LocalDateTime maintenant = LocalDateTime.now();
 
@@ -48,19 +48,18 @@ public class StatistiquesBibliothequeServiceImpl
 
         long nombreReservationsEnAttente =
                 reservationRepository.countByStatut(
-                        StatutReservation.EN_ATTENTE
+                        "EN ATTENTE"
                 );
 
         List<LivrePopulaireResponse> livresPopulaires =
                 empruntRepository
                         .rechercherLivresLesPlusEmpruntes()
                         .stream()
-                        .limit(5)
                         .map(resultat -> new LivrePopulaireResponse(
-                                ((Number) resultat[0]).longValue(),
+                                (Integer) resultat[0],
                                 (String) resultat[1],
                                 (String) resultat[2],
-                                ((Number) resultat[3]).longValue()
+                                (Long) resultat[3]
                         ))
                         .toList();
 
@@ -71,7 +70,7 @@ public class StatistiquesBibliothequeServiceImpl
                         )
                         .stream()
                         .map(emprunt ->
-                                convertirEnEmpruntEnRetard(
+                                convertirEnEmpruntResponse(
                                         emprunt,
                                         maintenant
                                 )
@@ -88,7 +87,7 @@ public class StatistiquesBibliothequeServiceImpl
         );
     }
 
-    private EmpruntResponse convertirEnEmpruntEnRetard(
+    private EmpruntResponse convertirEnEmpruntResponse(
             Emprunt emprunt,
             LocalDateTime maintenant
     ) {
@@ -100,15 +99,29 @@ public class StatistiquesBibliothequeServiceImpl
 
         return new EmpruntResponse(
                 emprunt.getIdEmprunt(),
+
+                emprunt.getUtilisateur().getIdUtilisateur(),
                 emprunt.getUtilisateur().getNom(),
                 emprunt.getUtilisateur().getPrenom(),
-                emprunt.getExemplaire().getLivre().getTitre(),
-                emprunt.getExemplaire().getLivre().getIsbn(),
+
+                emprunt.getExemplaire()
+                        .getLivre()
+                        .getIdLivre(),
+
+                emprunt.getExemplaire()
+                        .getLivre()
+                        .getTitre(),
+
+                emprunt.getExemplaire()
+                        .getLivre()
+                        .getIsbn(),
+
                 emprunt.getDateDebut(),
                 emprunt.getDateFinPrevue(),
                 emprunt.getDateRetour(),
-                StatutEmprunt.EN_RETARD,
-                nombreJoursRetard
+                emprunt.getStatut(),
+
+                Math.toIntExact(nombreJoursRetard)
         );
     }
 }

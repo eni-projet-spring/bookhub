@@ -28,11 +28,11 @@ public class Emprunt {
     private StatutEmprunt statut;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "Utilisateur_id_utilisateur")
+    @JoinColumn(name = "Utilisateur_id_utilisateur", nullable = false)
     private Utilisateur utilisateur;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "Exemplaire_id_exemplaire")
+    @JoinColumn(name = "Exemplaire_id_exemplaire", nullable = false)
     private Exemplaire exemplaire;
 
     public Emprunt() {
