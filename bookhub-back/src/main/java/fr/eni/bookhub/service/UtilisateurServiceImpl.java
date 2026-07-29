@@ -5,7 +5,7 @@ import fr.eni.bookhub.entity.Role;
 import fr.eni.bookhub.entity.Utilisateur;
 import fr.eni.bookhub.exception.IdentifiantsInvalidesException;
 import fr.eni.bookhub.repository.UtilisateurRepository;
-import jakarta.validation.Valid;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -14,11 +14,14 @@ import java.util.Optional;
 public class UtilisateurServiceImpl implements UtilisateurService {
 
     private final UtilisateurRepository utilisateurRepository;
+    private final PasswordEncoder passwordEncoder;
 
     public UtilisateurServiceImpl(
-            UtilisateurRepository utilisateurRepository
+            UtilisateurRepository utilisateurRepository,
+            PasswordEncoder passwordEncoder
     ) {
         this.utilisateurRepository = utilisateurRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -30,14 +33,17 @@ public class UtilisateurServiceImpl implements UtilisateurService {
     public Utilisateur connecter(String email, String motDePasse) {
 
         Utilisateur utilisateur = utilisateurRepository
-                .findByEmail(email)
+                .findByEmail(email.trim().toLowerCase())
                 .orElseThrow(() ->
                         new IdentifiantsInvalidesException(
                                 "Email ou mot de passe incorrect"
                         )
                 );
 
-        if (!utilisateur.getMotDePasse().equals(motDePasse)) {
+        if (!passwordEncoder.matches(
+                motDePasse,
+                utilisateur.getMotDePasse()
+        )) {
             throw new IdentifiantsInvalidesException(
                     "Email ou mot de passe incorrect"
             );
@@ -46,14 +52,10 @@ public class UtilisateurServiceImpl implements UtilisateurService {
         return utilisateur;
     }
 
-    //Vérification de l'email
-    // Vérification des mots de passe
-    // Création de l'utilisateur
-    // Encodage du mot de passe
-    // Attribution du rôle
-    // Sauvegarde
     @Override
-    public Utilisateur inscrire(InscriptionUtilisateurDto inscriptionDto) {
+    public Utilisateur inscrire(
+            InscriptionUtilisateurDto inscriptionDto
+    ) {
 
         if (!inscriptionDto.getMotDePasse()
                 .equals(inscriptionDto.getConfirmationMotDePasse())) {
@@ -63,7 +65,12 @@ public class UtilisateurServiceImpl implements UtilisateurService {
             );
         }
 
-        if (utilisateurRepository.existsByEmail(inscriptionDto.getEmail())) {
+        String email = inscriptionDto
+                .getEmail()
+                .trim()
+                .toLowerCase();
+
+        if (utilisateurRepository.existsByEmail(email)) {
             throw new IdentifiantsInvalidesException(
                     "Cette adresse email est déjà utilisée"
             );
@@ -71,12 +78,22 @@ public class UtilisateurServiceImpl implements UtilisateurService {
 
         Utilisateur utilisateur = new Utilisateur();
 
-        utilisateur.setNom(inscriptionDto.getNom().trim());
-        utilisateur.setPrenom(inscriptionDto.getPrenom().trim());
-        utilisateur.setEmail(
-                inscriptionDto.getEmail().trim().toLowerCase()
+        utilisateur.setNom(
+                inscriptionDto.getNom().trim()
         );
-        utilisateur.setMotDePasse(inscriptionDto.getMotDePasse());
+
+        utilisateur.setPrenom(
+                inscriptionDto.getPrenom().trim()
+        );
+
+        utilisateur.setEmail(email);
+
+        utilisateur.setMotDePasse(
+                passwordEncoder.encode(
+                        inscriptionDto.getMotDePasse()
+                )
+        );
+
         utilisateur.setRole(Role.USER);
 
         return utilisateurRepository.save(utilisateur);

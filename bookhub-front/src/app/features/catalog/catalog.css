@@ -109,3 +109,18 @@
   background-color: var(--color-surface);
   border-radius: 12px;
 }
+.bouton-detail {
+  display: block;
+  width: fit-content;
+  margin-top: 1rem;
+  padding: 0.65rem 1rem;
+  border-radius: 6px;
+  background-color: #213f66;
+  color: white;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.bouton-detail:hover {
+  background-color: #172f4e;
+}

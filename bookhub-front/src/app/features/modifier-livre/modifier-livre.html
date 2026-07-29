@@ -1,0 +1,140 @@
+<main class="page-formulaire">
+
+  <h1>Modifier le livre</h1>
+
+  @if (chargement) {
+    <p>Chargement...</p>
+  }
+
+  @if (erreur) {
+    <p class="message-erreur">
+      {{ erreur }}
+    </p>
+  }
+
+  @if (!chargement) {
+    <form
+      class="formulaire"
+      [formGroup]="formulaire"
+      (ngSubmit)="enregistrer()">
+
+      <div class="champ">
+        <label for="isbn">
+          ISBN
+        </label>
+
+        <input
+          id="isbn"
+          type="text"
+          maxlength="13"
+          formControlName="isbn">
+
+        @if (
+          formulaire.controls.isbn.invalid &&
+          formulaire.controls.isbn.touched
+          ) {
+          <small>
+            L’ISBN doit contenir exactement 13 chiffres.
+          </small>
+        }
+      </div>
+
+      <div class="champ">
+        <label for="titre">
+          Titre
+        </label>
+
+        <input
+          id="titre"
+          type="text"
+          formControlName="titre">
+      </div>
+
+      <div class="champ">
+        <label for="auteur">
+          Auteur
+        </label>
+
+        <input
+          id="auteur"
+          type="text"
+          formControlName="auteur">
+      </div>
+
+      <div class="champ">
+        <label for="edition">
+          Édition
+        </label>
+
+        <input
+          id="edition"
+          type="text"
+          formControlName="edition">
+      </div>
+
+      <div class="champ">
+        <label for="description">
+          Description
+        </label>
+
+        <textarea
+          id="description"
+          rows="6"
+          formControlName="description">
+        </textarea>
+      </div>
+
+      <div class="champ">
+        <label for="couverture">
+          Chemin de la couverture
+        </label>
+
+        <input
+          id="couverture"
+          type="text"
+          placeholder="/couvertures/dune.jpg"
+          formControlName="couverture">
+      </div>
+
+      <div class="champ">
+        <label for="idCategorie">
+          Identifiant de la catégorie
+        </label>
+
+        <input
+          id="idCategorie"
+          type="number"
+          min="1"
+          formControlName="idCategorie">
+      </div>
+
+      <div class="actions">
+
+        <a
+          class="bouton bouton-annuler"
+          [routerLink]="[
+            '/livres',
+            idLivre
+          ]">
+          Annuler
+        </a>
+
+        <button
+          type="submit"
+          class="bouton bouton-enregistrer"
+          [disabled]="enregistrement">
+
+          @if (enregistrement) {
+            Enregistrement...
+          } @else {
+            Enregistrer
+          }
+
+        </button>
+
+      </div>
+
+    </form>
+  }
+
+</main>

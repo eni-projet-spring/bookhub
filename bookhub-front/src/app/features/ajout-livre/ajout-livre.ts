@@ -1,7 +1,9 @@
-import { Component, inject } from '@angular/core';
+import { HttpErrorResponse } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
+import { Component, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { LivreService } from '../../services/livre';
+
+import { LivreResponse, LivreService } from '../../services/livre';
 
 @Component({
   selector: 'app-ajout-livre',
@@ -40,8 +42,9 @@ export class AjoutLivre {
     this.envoiEnCours = true;
 
     this.livreService.ajouterLivre(this.formulaireLivre.getRawValue()).subscribe({
-      next: (livre) => {
+      next: (livre: LivreResponse) => {
         this.messageSucces = `Le livre « ${livre.titre} » a bien été ajouté.`;
+
         this.formulaireLivre.reset({
           isbn: '',
           titre: '',
@@ -51,11 +54,15 @@ export class AjoutLivre {
           auteur: '',
           idCategorie: 1,
         });
+
         this.envoiEnCours = false;
       },
-      error: (erreur) => {
+
+      error: (erreur: HttpErrorResponse) => {
         console.error(erreur);
+
         this.messageErreur = erreur.error?.message ?? 'Impossible d’ajouter le livre.';
+
         this.envoiEnCours = false;
       },
     });
