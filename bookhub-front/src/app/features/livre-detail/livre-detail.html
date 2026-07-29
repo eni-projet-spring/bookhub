@@ -1,40 +1,25 @@
 <main class="page-detail">
 
   @if (chargement) {
-    <p class="message">
-      Chargement du livre...
-    </p>
-  }
-
-  @if (erreur) {
-    <p class="message-erreur">
-      {{ erreur }}
-    </p>
-  }
-
-  @if (livre) {
+    <p class="message">Chargement du livre...</p>
+  } @else if (erreur) {
+    <p class="message-erreur">{{ erreur }}</p>
+  } @else if (livre) {
     <article class="fiche-livre">
 
       <div class="zone-couverture">
-
         <img
           class="couverture"
           [src]="livre.couverture"
-          [alt]="'Couverture de ' + livre.titre">
-
+          [alt]="'Couverture de ' + livre.titre"
+        >
       </div>
 
       <div class="informations">
 
-        @if (
-          livre.categorie?.libelle ||
-          livre.libelleCategorie
-          ) {
+        @if (livre.libelleCategorie) {
           <span class="categorie">
-            {{
-              livre.categorie?.libelle
-              || livre.libelleCategorie
-            }}
+            {{ livre.libelleCategorie }}
           </span>
         }
 
@@ -45,7 +30,6 @@
         </p>
 
         <dl class="metadonnees">
-
           <div>
             <dt>ISBN</dt>
             <dd>{{ livre.isbn }}</dd>
@@ -55,33 +39,26 @@
             <dt>Édition</dt>
             <dd>{{ livre.edition }}</dd>
           </div>
-
         </dl>
 
         <section class="description">
           <h2>Description</h2>
-
-          <p>
-            {{ livre.description }}
-          </p>
+          <p>{{ livre.description }}</p>
         </section>
 
         <div class="actions">
-
           <a
             class="bouton bouton-retour"
-            routerLink="/">
+            routerLink="/"
+          >
             Retour au catalogue
           </a>
 
           @if (peutGererLivre) {
             <a
               class="bouton bouton-modifier"
-              [routerLink]="[
-                '/livres',
-                livre.idLivre,
-                'modifier'
-              ]">
+              [routerLink]="['/livres', livre.idLivre, 'modifier']"
+            >
               Modifier
             </a>
 
@@ -89,21 +66,18 @@
               type="button"
               class="bouton bouton-supprimer"
               [disabled]="suppressionEnCours"
-              (click)="supprimerLivre()">
-
+              (click)="supprimerLivre()"
+            >
               @if (suppressionEnCours) {
                 Suppression...
               } @else {
                 Supprimer
               }
-
             </button>
           }
-
         </div>
 
       </div>
-
     </article>
   }
 

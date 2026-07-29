@@ -39,8 +39,8 @@ public class SecurityConfiguration {
                                 SessionCreationPolicy.STATELESS
                         )
                 )
-
                 .authorizeHttpRequests(auth -> auth
+
                         .requestMatchers(
                                 org.springframework.http.HttpMethod.OPTIONS,
                                 "/**"
@@ -54,6 +54,32 @@ public class SecurityConfiguration {
                                 "/api/utilisateurs/inscription/"
                         )
                         .permitAll()
+
+                        .requestMatchers(
+                                org.springframework.http.HttpMethod.GET,
+                                "/api/livres",
+                                "/api/livres/**"
+                        )
+                        .permitAll()
+
+                        .requestMatchers(
+                                org.springframework.http.HttpMethod.POST,
+                                "/api/livres",
+                                "/api/livres/**"
+                        )
+                        .hasAnyRole("ADMIN", "LIBRARIAN")
+
+                        .requestMatchers(
+                                org.springframework.http.HttpMethod.PUT,
+                                "/api/livres/**"
+                        )
+                        .hasAnyRole("ADMIN", "LIBRARIAN")
+
+                        .requestMatchers(
+                                org.springframework.http.HttpMethod.DELETE,
+                                "/api/livres/**"
+                        )
+                        .hasAnyRole("ADMIN", "LIBRARIAN")
 
                         .anyRequest()
                         .authenticated()
