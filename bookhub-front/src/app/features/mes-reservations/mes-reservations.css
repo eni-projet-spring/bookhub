@@ -1,0 +1,118 @@
+.mes-reservations {
+  max-width: 1100px;
+  margin: 2rem auto;
+  padding: 0 1rem 3rem;
+}
+
+.mes-reservations h1 {
+  margin-bottom: 2rem;
+  text-align: center;
+  font-size: 2rem;
+  color: #1f2937;
+}
+
+.liste-reservations {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+.carte-reservation {
+  padding: 1.5rem;
+  background-color: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.carte-reservation:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.12);
+}
+
+.carte-reservation h2 {
+  margin: 0 0 1rem;
+  font-size: 1.3rem;
+  color: #1f2937;
+}
+
+.carte-reservation p {
+  margin: 0.6rem 0;
+  color: #4b5563;
+  line-height: 1.5;
+}
+
+.carte-reservation button {
+  width: 100%;
+  margin-top: 1rem;
+  padding: 0.75rem 1rem;
+  border: none;
+  border-radius: 8px;
+  background-color: #dc2626;
+  color: #ffffff;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.carte-reservation button:hover:not(:disabled) {
+  background-color: #b91c1c;
+  transform: translateY(-1px);
+}
+
+.carte-reservation button:disabled {
+  background-color: #9ca3af;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.message-succes,
+.message-erreur {
+  max-width: 700px;
+  margin: 1rem auto 1.5rem;
+  padding: 1rem;
+  border-radius: 8px;
+  text-align: center;
+  font-weight: 600;
+}
+
+.message-succes {
+  background-color: #dcfce7;
+  border: 1px solid #86efac;
+  color: #166534;
+}
+
+.message-erreur {
+  background-color: #fee2e2;
+  border: 1px solid #fca5a5;
+  color: #991b1b;
+}
+
+.mes-reservations > p {
+  text-align: center;
+  color: #4b5563;
+}
+
+@media (max-width: 600px) {
+  .mes-reservations {
+    margin-top: 1rem;
+  }
+
+  .mes-reservations h1 {
+    font-size: 1.6rem;
+  }
+
+  .liste-reservations {
+    grid-template-columns: 1fr;
+  }
+
+  .carte-reservation {
+    padding: 1.2rem;
+  }
+}

@@ -44,8 +44,10 @@ export class Connexion {
     const connexionRequest = this.formulaireConnexion.getRawValue();
 
     this.utilisateurService.login(connexionRequest).subscribe({
-      next: (utilisateur) => {
-        console.log('Connexion réussie :', utilisateur);
+      next: (connexionResponse) => {
+        console.log('Connexion réussie');
+
+        this.utilisateurService.enregistrerConnexion(connexionResponse);
 
         this.connexionEnCours = false;
 

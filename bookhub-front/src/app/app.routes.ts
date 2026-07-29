@@ -2,10 +2,12 @@ import { Routes } from '@angular/router';
 import { AjoutLivre } from './features/ajout-livre/ajout-livre';
 import { Connexion } from './features/connexion/connexion';
 import { Inscription } from './features/inscription/inscription';
+import { CatalogComponent } from './features/catalog/catalog';
 import { GestionProfil} from './features/gestion-profil/gestion-profil';
+import { DashboardBibliothecaire } from './features/dashboard-bibliothecaire/dashboard-bibliothecaire';
+import { MesReservations } from './features/mes-reservations/mes-reservations';
 
 export const routes: Routes = [
-  // Route permettant d'accéder à la page de connexion.
   {
     path: 'livres/ajouter',
     component: AjoutLivre,
@@ -19,13 +21,25 @@ export const routes: Routes = [
     component: Connexion,
   },
   {
-    path: '',
-    redirectTo: 'connexion',
-    pathMatch: 'full',
+    path: 'dashboard-bibliothecaire',
+    component: DashboardBibliothecaire,
+  },
+  {
+    path: 'mes-reservations',
+    component: MesReservations,
   },
 
   {
     path: 'gestion-profil',
     component: GestionProfil,
-  }
+  },
+  {
+    path: '',
+    component: CatalogComponent,
+    pathMatch: 'full',
+  },
+  {
+    path: '**',
+    redirectTo: 'connexion',
+  },
 ];

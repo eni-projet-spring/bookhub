@@ -37,7 +37,6 @@ public class InscriptionUtilisateurDto {
     private String motDePasse;
 
     @NotBlank(message = "La confirmation du mot de passe est obligatoire")
-    @NotBlank(message = "Le mot de passe est obligatoire")
     @Size(
             min = 4,
             max = 25,

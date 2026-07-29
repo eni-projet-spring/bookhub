@@ -1,0 +1,391 @@
+<section class="dashboard-bibliothecaire">
+
+  <header class="dashboard-header">
+
+    <div>
+      <h1>Dashboard bibliothécaire</h1>
+
+      <p>
+        Suivi des emprunts, des retards, des livres populaires
+        et des réservations.
+      </p>
+    </div>
+
+    <button
+      type="button"
+      class="bouton-actualiser"
+      (click)="actualiserDashboard()"
+      [disabled]="chargementEnCours || chargementReservationsEnCours"
+    >
+      @if (chargementEnCours || chargementReservationsEnCours) {
+        Chargement...
+      } @else {
+        Actualiser
+      }
+    </button>
+
+  </header>
+
+  @if (messageErreur) {
+    <p class="message-erreur">
+      {{ messageErreur }}
+    </p>
+  }
+
+  @if (chargementEnCours && !statistiques) {
+    <p class="message-chargement">
+      Chargement du dashboard...
+    </p>
+  }
+
+  @if (statistiques) {
+
+    <!-- CARTES DES STATISTIQUES -->
+
+    <section class="statistiques">
+
+      <article class="carte-statistique">
+
+        <span class="titre-statistique">
+          Emprunts en cours
+        </span>
+
+        <strong>
+          {{ statistiques.nombreEmpruntsEnCours }}
+        </strong>
+
+      </article>
+
+      <article class="carte-statistique">
+
+        <span class="titre-statistique">
+          Total des emprunts
+        </span>
+
+        <strong>
+          {{ statistiques.nombreEmpruntsTotal }}
+        </strong>
+
+      </article>
+
+      <article
+        class="carte-statistique"
+        [class.carte-alerte]="statistiques.nombreEmpruntsEnRetard > 0"
+      >
+
+        <span class="titre-statistique">
+          Emprunts en retard
+        </span>
+
+        <strong>
+          {{ statistiques.nombreEmpruntsEnRetard }}
+        </strong>
+
+      </article>
+
+      <article class="carte-statistique">
+
+        <span class="titre-statistique">
+          Réservations en attente
+        </span>
+
+        <strong>
+          {{ statistiques.nombreReservationsEnAttente }}
+        </strong>
+
+      </article>
+
+    </section>
+
+    <!-- LIVRES POPULAIRES -->
+
+    <section class="section-dashboard">
+
+      <div class="section-titre">
+
+        <h2>Livres les plus populaires</h2>
+
+        <p>
+          Classement des livres les plus empruntés.
+        </p>
+
+      </div>
+
+      @if (statistiques.livresPopulaires.length === 0) {
+
+        <p class="message-vide">
+          Aucun emprunt enregistré pour le moment.
+        </p>
+
+      } @else {
+
+        <div class="tableau-conteneur">
+
+          <table>
+
+            <thead>
+            <tr>
+              <th>Livre</th>
+              <th>Auteur</th>
+              <th>Nombre d’emprunts</th>
+            </tr>
+            </thead>
+
+            <tbody>
+
+              @for (
+                livre of statistiques.livresPopulaires;
+                track livre.idLivre
+                ) {
+
+                <tr>
+
+                  <td>
+                    {{ livre.titre }}
+                  </td>
+
+                  <td>
+                    {{ livre.auteur }}
+                  </td>
+
+                  <td>
+                    <span class="badge-nombre">
+                      {{ livre.nombreEmprunts }}
+                    </span>
+                  </td>
+
+                </tr>
+
+              }
+
+            </tbody>
+
+          </table>
+
+        </div>
+
+      }
+
+    </section>
+
+    <!-- EMPRUNTS EN RETARD -->
+
+    <section class="section-dashboard">
+
+      <div class="section-titre">
+
+        <h2>Emprunts en retard</h2>
+
+        <p>
+          Emprunts dont la date de retour prévue est dépassée.
+        </p>
+
+      </div>
+
+      @if (statistiques.empruntsEnRetard.length === 0) {
+
+        <p class="message-vide message-succes">
+          Aucun emprunt en retard.
+        </p>
+
+      } @else {
+
+        <div class="tableau-conteneur">
+
+          <table>
+
+            <thead>
+            <tr>
+              <th>Lecteur</th>
+              <th>Livre</th>
+              <th>Date de retour prévue</th>
+              <th>Retard</th>
+            </tr>
+            </thead>
+
+            <tbody>
+
+              @for (
+                emprunt of statistiques.empruntsEnRetard;
+                track emprunt.idEmprunt
+                ) {
+
+                <tr>
+
+                  <td>
+                    {{ emprunt.prenomUtilisateur }}
+                    {{ emprunt.nomUtilisateur }}
+                  </td>
+
+                  <td>
+                    {{ emprunt.titreLivre }}
+                  </td>
+
+                  <td>
+                    {{ emprunt.dateFinPrevue | date: 'dd/MM/yyyy' }}
+                  </td>
+
+                  <td>
+
+                    <span class="badge-retard">
+
+                      {{ emprunt.nombreJoursRetard }}
+
+                      @if (emprunt.nombreJoursRetard > 1) {
+                        jours
+                      } @else {
+                        jour
+                      }
+
+                    </span>
+
+                  </td>
+
+                </tr>
+
+              }
+
+            </tbody>
+
+          </table>
+
+        </div>
+
+      }
+
+    </section>
+
+  }
+
+  <!-- RÉSERVATIONS EN ATTENTE -->
+
+  <section class="section-dashboard reservations">
+
+    <div class="section-titre">
+
+      <h2>Demandes de réservation en attente</h2>
+
+      <p>
+        Réservations à traiter par le bibliothécaire.
+      </p>
+
+    </div>
+
+    @if (chargementReservationsEnCours) {
+
+      <p class="message-chargement">
+        Chargement des réservations...
+      </p>
+
+    }
+
+    @if (messageErreurReservations) {
+
+      <p class="message-erreur">
+        {{ messageErreurReservations }}
+      </p>
+
+    }
+
+    @if (
+      !chargementReservationsEnCours &&
+      !messageErreurReservations &&
+      reservationsEnAttente.length === 0
+      ) {
+
+      <p class="message-vide">
+        Aucune réservation en attente.
+      </p>
+
+    }
+
+    @if (
+      !chargementReservationsEnCours &&
+      !messageErreurReservations &&
+      reservationsEnAttente.length > 0
+      ) {
+
+      <div class="liste-reservations">
+
+        @for (
+          reservation of reservationsEnAttente;
+          track reservation.idReservation
+          ) {
+
+          <article class="carte-reservation">
+
+            <div class="informations-reservation">
+
+              <h3>
+                {{ reservation.titreLivre }}
+              </h3>
+
+              <p class="isbn">
+                ISBN : {{ reservation.isbn }}
+              </p>
+
+              <p>
+                Identifiant utilisateur :
+                <strong>
+                  {{ reservation.idUtilisateur }}
+                </strong>
+              </p>
+
+              <p>
+                Position dans la file :
+                <strong>
+                  {{ reservation.positionFileAttente }}
+                </strong>
+              </p>
+
+              <p>
+                Statut :
+                <strong>
+                  {{ reservation.statut }}
+                </strong>
+              </p>
+
+              @if (reservation.dateDemande) {
+
+                <p>
+                  Réservé le :
+                  {{ reservation.dateDemande | date: 'dd/MM/yyyy à HH:mm' }}
+                </p>
+
+              }
+
+            </div>
+
+            <div class="actions-reservation">
+
+              <button
+                type="button"
+                class="bouton-confirmer"
+                (click)="confirmerReservation(reservation.idReservation)"
+                [disabled]="traitementEnCours"
+              >
+                Confirmer
+              </button>
+
+              <button
+                type="button"
+                class="bouton-rejeter"
+                (click)="rejeterReservation(reservation.idReservation)"
+                [disabled]="traitementEnCours"
+              >
+                Rejeter
+              </button>
+
+            </div>
+
+          </article>
+
+        }
+
+      </div>
+
+    }
+
+  </section>
+
+</section>
