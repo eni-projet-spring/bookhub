@@ -14,12 +14,12 @@
   @if (
     !chargementEnCours &&
     !messageErreur &&
-    empruntsEnRetard.length === 0
+    emprunts.length === 0
     ) {
     <p>Aucun emprunt en retard.</p>
   }
 
-  @if (empruntsEnRetard.length > 0) {
+  @if (emprunts.length > 0) {
     <table>
       <thead>
       <tr>
@@ -32,7 +32,7 @@
 
       <tbody>
         @for (
-          emprunt of empruntsEnRetard;
+          emprunt of emprunts;
           track emprunt.idEmprunt
           ) {
           <tr>

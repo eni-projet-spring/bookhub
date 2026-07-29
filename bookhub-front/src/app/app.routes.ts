@@ -7,11 +7,14 @@ import { GestionProfil} from './features/gestion-profil/gestion-profil';
 import { DashboardBibliothecaire } from './features/dashboard-bibliothecaire/dashboard-bibliothecaire';
 import { MesReservations } from './features/mes-reservations/mes-reservations';
 import { Emprunt } from './features/emprunt/emprunt';
+import { LivreDetail } from './features/livre-detail/livre-detail';
+import { ModifierLivre } from './features/modifier-livre/modifier-livre';
 
 export const routes: Routes = [
   {
-    path: 'livres/ajouter',
-    component: AjoutLivre,
+    path: '',
+    component: CatalogComponent,
+    pathMatch: 'full',
   },
   {
     path: 'inscription',
@@ -29,19 +32,25 @@ export const routes: Routes = [
     path: 'mes-reservations',
     component: MesReservations,
   },
-
+  {
+    path: 'livres/ajouter',
+    component: AjoutLivre,
+  },
+  {
+    path: 'livres/:id/modifier',
+    component: ModifierLivre,
+  },
   {
     path: 'gestion-profil',
     component: GestionProfil,
   },
   {
-    path: '',
-    component: CatalogComponent,
-    pathMatch: 'full',
+    path: 'livres/:id',
+    component: LivreDetail,
   },
   {
     path: '**',
-    redirectTo: 'connexion',
+    redirectTo: '',
   },
   {
     path: 'emprunts',

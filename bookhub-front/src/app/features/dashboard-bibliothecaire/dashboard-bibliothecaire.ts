@@ -8,7 +8,7 @@ import { ReservationResponse } from '../../models/reservation-response';
 @Component({
   selector: 'app-dashboard-bibliothecaire',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule],
   templateUrl: './dashboard-bibliothecaire.html',
   styleUrl: './dashboard-bibliothecaire.css',
 })

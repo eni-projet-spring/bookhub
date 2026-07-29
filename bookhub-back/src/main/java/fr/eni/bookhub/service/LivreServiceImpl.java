@@ -6,6 +6,7 @@ import fr.eni.bookhub.entity.Categorie;
 import fr.eni.bookhub.entity.Livre;
 import fr.eni.bookhub.repository.CategorieRepository;
 import fr.eni.bookhub.repository.LivreRepository;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -73,15 +74,6 @@ public class LivreServiceImpl implements LivreService {
     }
 
     @Override
-    public List<LivreResponseDTO> getAllBooks() {
-        List<Livre> books = livreRepository.findAll();
-
-        return books.stream()
-                .map(this::convertToDto)
-                .toList();
-    }
-
-    @Override
     public LivreResponseDTO getBook(Integer id) {
 
         Livre livre = livreRepository.findById(id)
@@ -92,6 +84,35 @@ public class LivreServiceImpl implements LivreService {
                 );
 
         return convertToDto(livre);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<LivreResponseDTO> getBooks(String searchTerm) {
+        // 1. If empty, return everything
+        if (searchTerm == null || searchTerm.trim().isEmpty()) {
+            return livreRepository.findAll().stream()
+                    .map(this::convertToDto)
+                    .toList();
+        }
+
+        String cleanTerm = searchTerm.trim();
+        Integer searchId = -1; // Default dummy ID
+
+        // 2. Safely try to parse the search term into an Integer for the ID search
+        try {
+            searchId = Integer.parseInt(cleanTerm);
+        } catch (NumberFormatException e) {
+            // The user typed letters (e.g., "Harry Potter"), so it's not a valid ID.
+            // searchId remains -1, which safely won't match any real book IDs.
+        }
+
+        // 3. Execute the safe search
+        List<Livre> books = livreRepository.searchBooks(cleanTerm, searchId);
+
+        return books.stream()
+                .map(this::convertToDto)
+                .toList();
     }
 
     private LivreResponseDTO convertToDto(Livre book) {
