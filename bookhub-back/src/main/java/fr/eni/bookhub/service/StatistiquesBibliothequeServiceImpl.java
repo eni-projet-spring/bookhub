@@ -4,6 +4,8 @@ import fr.eni.bookhub.dto.EmpruntResponse;
 import fr.eni.bookhub.dto.LivrePopulaireResponse;
 import fr.eni.bookhub.dto.StatistiquesBibliothequeResponse;
 import fr.eni.bookhub.entity.Emprunt;
+import fr.eni.bookhub.entity.StatutEmprunt;
+import fr.eni.bookhub.entity.StatutReservation;
 import fr.eni.bookhub.repository.EmpruntRepository;
 import fr.eni.bookhub.repository.ReservationRepository;
 import org.springframework.stereotype.Service;

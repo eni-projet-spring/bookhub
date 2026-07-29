@@ -10,17 +10,13 @@ public record EmpruntResponse(
 
         String titreLivre,
 
-        String isbn,
-
         String nomUtilisateur,
-
+  
+        String isbn,
         LocalDateTime dateDebut,
-
         LocalDateTime dateFinPrevue,
-
         LocalDateTime dateRetour,
-
-        StatutEmprunt statut
-
+        StatutEmprunt statut,
+        long nombreJoursRetard
 ) {
 }
