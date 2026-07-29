@@ -10,20 +10,18 @@
         alt="Logo de la librairie"
       >
     </a>
-    <form class="search-form">
+
+    <form class="search-form" (ngSubmit)="onSearch(searchInput.value)">
       <input
+        #searchInput
         type="search"
+        name="search"
         placeholder="Rechercher un livre, un auteur..."
         aria-label="Rechercher un livre ou un auteur"
       >
-      <button
-        type="submit"
-        aria-label="Rechercher"
-      >
-        <img
-          src="logos/search.svg"
-          alt=""
-        >
+
+      <button type="submit" aria-label="Rechercher">
+        <img src="logos/search.svg" alt="">
       </button>
     </form>
     @if (!estConnecte()) {
