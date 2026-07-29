@@ -1,9 +1,13 @@
 <main class="page-detail">
 
   @if (chargement) {
-    <p class="message">Chargement du livre...</p>
+    <p class="message">
+      Chargement du livre...
+    </p>
   } @else if (erreur) {
-    <p class="message-erreur">{{ erreur }}</p>
+    <p class="message-erreur">
+      {{ erreur }}
+    </p>
   } @else if (livre) {
     <article class="fiche-livre">
 
@@ -23,7 +27,9 @@
           </span>
         }
 
-        <h1>{{ livre.titre }}</h1>
+        <h1>
+          {{ livre.titre }}
+        </h1>
 
         <p class="auteur">
           {{ livre.auteur }}
@@ -43,10 +49,26 @@
 
         <section class="description">
           <h2>Description</h2>
-          <p>{{ livre.description }}</p>
+
+          <p>
+            {{ livre.description }}
+          </p>
         </section>
 
+        @if (messageReservation) {
+          <p class="message-succes">
+            {{ messageReservation }}
+          </p>
+        }
+
+        @if (erreurReservation) {
+          <p class="message-erreur">
+            {{ erreurReservation }}
+          </p>
+        }
+
         <div class="actions">
+
           <a
             class="bouton bouton-retour"
             routerLink="/"
@@ -54,10 +76,29 @@
             Retour au catalogue
           </a>
 
+          @if (peutReserverLivre) {
+            <button
+              type="button"
+              class="bouton bouton-reserver"
+              [disabled]="reservationEnCours"
+              (click)="reserverLivre()"
+            >
+              @if (reservationEnCours) {
+                Réservation...
+              } @else {
+                Réserver ce livre
+              }
+            </button>
+          }
+
           @if (peutGererLivre) {
             <a
               class="bouton bouton-modifier"
-              [routerLink]="['/livres', livre.idLivre, 'modifier']"
+              [routerLink]="[
+                '/livres',
+                livre.idLivre,
+                'modifier'
+              ]"
             >
               Modifier
             </a>
@@ -75,9 +116,11 @@
               }
             </button>
           }
+
         </div>
 
       </div>
+
     </article>
   }
 
