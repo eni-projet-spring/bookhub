@@ -18,4 +18,11 @@ export class EmpruntService {
   consulterMesEmprunts(): Observable<EmpruntResponse[]> {
     return this.http.get<EmpruntResponse[]>(`${this.apiUrl}/mes-emprunts`);
   }
+
+  enregistrerRetour(idEmprunt: number): Observable<void> {
+    return this.http.patch<void>(
+      `${this.apiUrl}/${idEmprunt}/retour`,
+      {},
+    );
+  }
 }

@@ -114,6 +114,15 @@
             </li>
           }
 
+          @if (estAdministrateur()) {
+            <a
+              routerLink="/admin/utilisateurs"
+              routerLinkActive="active"
+            >
+              Utilisateurs
+            </a>
+          }
+
           <li>
             <button
               type="button"

@@ -68,4 +68,8 @@ export class UtilisateurService {
     localStorage.removeItem('token');
     localStorage.removeItem('utilisateurConnecte');
   }
+
+  listerUtilisateurs(): Observable<UtilisateurResponse[]> {
+    return this.http.get<UtilisateurResponse[]>(this.apiUrl);
+  }
 }

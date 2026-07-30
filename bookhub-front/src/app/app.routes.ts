@@ -18,6 +18,9 @@ import { MesEmprunts } from './features/dashboard-lecteur/mes-emprunts/mes-empru
 
 import { bibliothecaireGuard } from './guards/bibliothecaire-guard';
 import { utilisateurGuard } from './guards/utilisateur-guard';
+import { ListeEmpruntsRetard } from './features/liste-emprunts-retard/liste-emprunts-retard';
+import { ListeUtilisateurs } from './features/liste-utilisateurs/liste-utilisateurs';
+import { administrateurGuard } from './guards/administrateur-guard';
 
 export const routes: Routes = [
   {
@@ -45,7 +48,16 @@ export const routes: Routes = [
     component: ListesReservations,
     canActivate: [bibliothecaireGuard],
   },
-
+  {
+    path: 'emprunts-retard',
+    component: ListeEmpruntsRetard,
+    canActivate: [bibliothecaireGuard],
+  },
+  {
+    path: 'admin/utilisateurs',
+    component: ListeUtilisateurs,
+    canActivate: [administrateurGuard],
+  },
   // Mes réservations (lecteur)
   {
     path: 'mes-reservations',

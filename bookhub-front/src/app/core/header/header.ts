@@ -31,6 +31,10 @@ export class Header {
     return role === 'LIBRARIAN' || role === 'ADMIN';
   }
 
+  estAdministrateur(): boolean {
+    return this.utilisateurService.getRole() === 'ADMIN';
+  }
+
   seDeconnecter(): void {
     this.utilisateurService.deconnecter();
     this.router.navigate(['/']);
