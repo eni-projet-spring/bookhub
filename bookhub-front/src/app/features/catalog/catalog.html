@@ -20,8 +20,9 @@
       >
         <img
           class="catalog__cover"
-          [src]="book.couverture"
+          [src]="getCoverImageUrl(book.couverture)"
           [alt]="'Couverture de ' + book.titre"
+          loading="lazy"
         />
 
         <h2 class="catalog__book-title">

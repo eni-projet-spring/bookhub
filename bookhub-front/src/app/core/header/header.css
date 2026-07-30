@@ -160,7 +160,7 @@
 .header__bottom ul {
   display: flex;
   gap: 2rem;
-
+  align-items: center;
   list-style: none;
 }
 
