@@ -49,4 +49,14 @@ public interface EmpruntRepository
     List<Emprunt> findByUtilisateurEmailOrderByDateDebutDesc(
             String email
     );
+
+    /**
+     * méthode pour vérifier que l’utilisateur a bien rendu
+     * au moins un exemplaire du livre
+     */
+    boolean existsByUtilisateurIdUtilisateurAndExemplaireLivreIdLivreAndDateRetourIsNotNull(
+            Integer idUtilisateur,
+            Integer idLivre
+    );
+
 }

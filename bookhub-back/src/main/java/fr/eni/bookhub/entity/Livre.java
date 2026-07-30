@@ -70,4 +70,11 @@ public class Livre {
             orphanRemoval = true
     )
     private List<Exemplaire> exemplaires = new ArrayList<>();
+
+    @OneToMany(
+            mappedBy = "livre",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    private List<Commentaire> commentaires = new ArrayList<>();
 }

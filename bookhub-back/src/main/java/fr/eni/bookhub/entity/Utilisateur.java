@@ -33,6 +33,11 @@ public class Utilisateur {
     @OneToMany(mappedBy = "utilisateur", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Reservation> reservations = new ArrayList<>();
 
+    @OneToMany(mappedBy = "utilisateur",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    private List<Commentaire> commentaires = new ArrayList<>();
     public Utilisateur() {
     }
 
@@ -104,5 +109,13 @@ public class Utilisateur {
 
     public void setReservations(List<Reservation> reservations) {
         this.reservations = reservations;
+    }
+
+    public List<Commentaire> getCommentaires() {
+        return commentaires;
+    }
+
+    public void setCommentaires(List<Commentaire> commentaires) {
+        this.commentaires = commentaires;
     }
 }

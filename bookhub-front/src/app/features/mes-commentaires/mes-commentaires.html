@@ -2,6 +2,7 @@
   <header class="my-comments__header">
     <div>
       <h1>Mes commentaires</h1>
+
       <p>
         Consultez les avis que vous avez publiés sur les livres lus.
       </p>
@@ -9,63 +10,65 @@
 
     <div class="comments-count">
       <span>Avis publiés</span>
-      <strong>2</strong>
+      <strong>{{ commentaires.length }}</strong>
     </div>
   </header>
 
-  <div class="comments-list">
-    <article class="comment-card">
-      <header class="comment-card__header">
-        <div>
-          <h2>Dune</h2>
-          <p>Frank Herbert</p>
-        </div>
+  @if (chargement) {
+    <p class="comments-message">
+      Chargement de vos commentaires...
+    </p>
+  } @else if (messageErreur) {
+    <p class="comments-message comments-message--error">
+      {{ messageErreur }}
+    </p>
+  } @else if (commentaires.length === 0) {
+    <p class="comments-message">
+      Vous n’avez encore publié aucun commentaire.
+    </p>
+  } @else {
+    <div class="comments-list">
+      @for (
+        commentaire of commentaires;
+        track commentaire.idCommentaire
+        ) {
+        <article class="comment-card">
+          <header class="comment-card__header">
+            <div>
+              <h2>{{ commentaire.titreLivre }}</h2>
+              <p>{{ commentaire.auteur }}</p>
+            </div>
 
-        <span class="comment-card__date">
-          28 juillet 2026
-        </span>
-      </header>
+            <span class="comment-card__date">
+  {{ commentaire.datePublication | date: 'dd/MM/yyyy' }}
+</span>
+          </header>
 
-      <div class="comment-card__rating" aria-label="Note : 5 sur 5">
-        <span aria-hidden="true">★★★★★</span>
-        <strong>5/5</strong>
-      </div>
+          <div
+            class="comment-card__rating"
+            [attr.aria-label]="
+              'Note : ' + commentaire.note + ' sur 5'
+            "
+          >
+            <span aria-hidden="true">
+              {{ afficherEtoiles(commentaire.note) }}
+            </span>
 
-      <p class="comment-card__text">
-        Un excellent roman de science-fiction, très immersif et riche
-        dans la construction de son univers.
-      </p>
+            <strong>{{ commentaire.note }}/5</strong>
+          </div>
 
-      <button type="button">
-        Modifier mon avis
-      </button>
-    </article>
+          <p class="comment-card__text">
+            {{ commentaire.texte }}
+          </p>
 
-    <article class="comment-card">
-      <header class="comment-card__header">
-        <div>
-          <h2>1984</h2>
-          <p>George Orwell</p>
-        </div>
-
-        <span class="comment-card__date">
-          24 juillet 2026
-        </span>
-      </header>
-
-      <div class="comment-card__rating" aria-label="Note : 4 sur 5">
-        <span aria-hidden="true">★★★★☆</span>
-        <strong>4/5</strong>
-      </div>
-
-      <p class="comment-card__text">
-        Une lecture marquante dont les thèmes restent particulièrement
-        actuels.
-      </p>
-
-      <button type="button">
-        Modifier mon avis
-      </button>
-    </article>
-  </div>
+          <button
+            type="button"
+            (click)="modifierCommentaire(commentaire)"
+          >
+            Modifier mon avis
+          </button>
+        </article>
+      }
+    </div>
+  }
 </section>

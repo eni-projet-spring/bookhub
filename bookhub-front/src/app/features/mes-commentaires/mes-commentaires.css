@@ -220,3 +220,20 @@
     border-radius: 10px;
   }
 }
+.comments-message {
+  margin: 0;
+  padding: 1.5rem;
+  border: 1px solid color-mix(
+    in srgb,
+    var(--color-primary) 12%,
+    transparent
+  );
+  border-radius: 14px;
+  background-color: var(--color-surface);
+  text-align: center;
+}
+
+.comments-message--error {
+  color: var(--color-primary);
+  font-weight: 600;
+}

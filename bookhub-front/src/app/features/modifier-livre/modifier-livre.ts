@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 
@@ -17,6 +17,7 @@ export class ModifierLivre implements OnInit {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly livreService = inject(LivreService);
+  private readonly changeDetectorRef = inject(ChangeDetectorRef);
 
   idLivre = 0;
 
@@ -39,7 +40,11 @@ export class ModifierLivre implements OnInit {
 
     if (!Number.isInteger(this.idLivre) || this.idLivre <= 0) {
       this.erreur = 'Identifiant du livre invalide.';
+
       this.chargement = false;
+
+      this.changeDetectorRef.detectChanges();
+
       return;
     }
 
@@ -47,26 +52,36 @@ export class ModifierLivre implements OnInit {
   }
 
   private chargerLivre(): void {
+    this.chargement = true;
+    this.erreur = '';
+
     this.livreService.getBookById(this.idLivre).subscribe({
       next: (livre) => {
+        console.log('Livre reçu pour modification :', livre);
+
         this.formulaire.patchValue({
-          isbn: livre.isbn,
-          titre: livre.titre,
-          auteur: livre.auteur,
-          edition: livre.edition,
-          description: livre.description,
-          couverture: livre.couverture,
+          isbn: livre.isbn ?? '',
+          titre: livre.titre ?? '',
+          auteur: livre.auteur ?? '',
+          edition: livre.edition ?? '',
+          description: livre.description ?? '',
+          couverture: livre.couverture ?? '',
           idCategorie: livre.categorie?.idCategorie ?? livre.idCategorie ?? 0,
         });
 
         this.chargement = false;
+
+        this.changeDetectorRef.detectChanges();
       },
+
       error: (error) => {
-        console.error('Erreur lors du chargement du livre', error);
+        console.error('Erreur lors du chargement du livre :', error);
 
         this.erreur = 'Impossible de charger le livre à modifier.';
 
         this.chargement = false;
+
+        this.changeDetectorRef.detectChanges();
       },
     });
   }
@@ -88,12 +103,15 @@ export class ModifierLivre implements OnInit {
       next: (livre) => {
         this.router.navigate(['/livres', livre.idLivre ?? this.idLivre]);
       },
+
       error: (error) => {
-        console.error('Erreur lors de la modification du livre', error);
+        console.error('Erreur lors de la modification du livre :', error);
 
         this.erreur = 'La modification du livre a échoué.';
 
         this.enregistrement = false;
+
+        this.changeDetectorRef.detectChanges();
       },
     });
   }
