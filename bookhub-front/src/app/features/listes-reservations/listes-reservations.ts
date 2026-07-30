@@ -9,7 +9,7 @@ import { StatistiquesBibliothequeService } from '../../services/statistiques-bib
 @Component({
   selector: 'app-listes-reservations',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterLink],
   templateUrl: './listes-reservations.html',
   styleUrl: './listes-reservations.css',
 })

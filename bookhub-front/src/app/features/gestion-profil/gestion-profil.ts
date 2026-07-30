@@ -3,11 +3,12 @@ import { CommonModule } from '@angular/common';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ProfilService } from '../../services/profil.service';
 import { ProfilUtilisateurDTO } from '../../models/profil-utilisateur.model';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-gestion-profil',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule],
+  imports: [ReactiveFormsModule, CommonModule, RouterLink],
   templateUrl: './gestion-profil.html',
   styleUrl: './gestion-profil.css',
 })

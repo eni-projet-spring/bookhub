@@ -10,7 +10,7 @@
 
       <!-- DASHBOARD -->
       <a
-        class="sidebar-nav__link"
+        class="sidebar-nav__link sidebar-nav__link--active"
         routerLink="/dashboard-bibliothecaire"
       >
         <svg
@@ -49,10 +49,12 @@
           stroke-linejoin="round"
           aria-hidden="true"
         >
-          <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+          <path
+            d="M2 4h6a3 3 0 0 1 3 3v13a2.5 2.5 0 0 0-2.5-2.5H2z"
+          ></path>
 
           <path
-            d="M6.5 2H20v15H6.5A2.5 2.5 0 0 0 4 19.5V4.5A2.5 2.5 0 0 1 6.5 2z"
+            d="M22 4h-6a3 3 0 0 0-3 3v13a2.5 2.5 0 0 1 2.5-2.5H22z"
           ></path>
         </svg>
 
@@ -86,9 +88,9 @@
         <span>Emprunts</span>
       </a>
 
-      <!-- RÉSERVATIONS -->
+      <!-- LISTE DES RÉSERVATIONS -->
       <a
-        class="sidebar-nav__link sidebar-nav__link--active"
+        class="sidebar-nav__link"
         routerLink="/listes-reservations"
       >
         <svg
@@ -137,7 +139,7 @@
         <span>Statistiques</span>
       </a>
 
-      <!-- MON PROFIL -->
+      <!-- PROFIL -->
       <a
         class="sidebar-nav__link"
         routerLink="/gestion-profil"

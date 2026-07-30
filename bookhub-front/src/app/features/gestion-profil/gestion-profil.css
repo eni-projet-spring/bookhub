@@ -1,121 +1,433 @@
-.gestion-profil {
-  max-width: 480px;
-  margin-inline: auto;
-  padding: 2rem 1.5rem;
+/* =========================================================
+   STRUCTURE GÉNÉRALE
+   ========================================================= */
+
+:host {
+  display: block;
+  min-height: 100vh;
 }
+
+.dashboard-layout {
+  display: flex;
+  min-height: 100vh;
+  background-color: var(--color-background);
+}
+
+/* =========================================================
+   SIDEBAR
+   ========================================================= */
+
+.dashboard-layout__sidebar {
+  width: 250px;
+  min-width: 250px;
+  min-height: 100vh;
+
+  padding: 22px 14px;
+
+  box-sizing: border-box;
+
+  background: linear-gradient(
+    180deg,
+    #13284f 0%,
+    #0f2244 100%
+  );
+
+  box-shadow: 4px 0 16px rgb(15 34 68 / 12%);
+}
+
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* =========================================================
+   LIENS DE LA SIDEBAR
+   ========================================================= */
+
+.sidebar-nav__link {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+
+  padding: 14px 18px;
+
+  color: rgb(255 255 255 / 85%);
+
+  font-family: "Inter", sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+
+  text-decoration: none;
+
+  border: none;
+  border-radius: 12px;
+
+  cursor: pointer;
+
+  transition:
+    color 0.25s ease,
+    background 0.25s ease,
+    box-shadow 0.25s ease,
+    transform 0.25s ease;
+}
+
+.sidebar-nav__icon {
+  width: 20px;
+  height: 20px;
+
+  flex-shrink: 0;
+
+  color: currentColor;
+  stroke: currentColor;
+
+  transition:
+    color 0.25s ease,
+    transform 0.25s ease;
+}
+
+/* =========================================================
+   SURVOL DES LIENS
+   ========================================================= */
+
+.sidebar-nav__link:hover {
+  color: #13284f;
+
+  background: linear-gradient(
+    135deg,
+    #f4c542,
+    #ffd966
+  );
+
+  box-shadow: 0 8px 20px rgb(244 197 66 / 35%);
+
+  transform: translateX(5px);
+}
+
+.sidebar-nav__link:hover .sidebar-nav__icon {
+  color: #13284f;
+  transform: scale(1.08);
+}
+
+/* =========================================================
+   LIEN ACTIF
+   ========================================================= */
+
+.sidebar-nav__link--active {
+  color: #13284f;
+
+  background: linear-gradient(
+    135deg,
+    #f4c542,
+    #ffd966
+  );
+
+  border-left: 3px solid #13284f;
+
+  box-shadow: 0 8px 20px rgb(244 197 66 / 40%);
+}
+
+.sidebar-nav__link--active .sidebar-nav__icon {
+  color: #13284f;
+}
+
+/* =========================================================
+   CONTENU PRINCIPAL
+   ========================================================= */
+
+.dashboard-layout__content,
+main {
+  flex: 1;
+  min-width: 0;
+
+  padding: 32px 40px;
+}
+
+.gestion-profil {
+  width: 100%;
+  max-width: 640px;
+
+  margin: 0 auto;
+
+  padding: 20px 24px;
+
+  background-color: #ffffff;
+
+  border: 1px solid rgb(19 40 79 / 5%);
+  border-radius: 12px;
+
+  box-shadow: 0 1px 3px rgb(0 0 0 / 6%);
+}
+
+/* =========================================================
+   TITRE
+   ========================================================= */
 
 .gestion-profil__title {
+  margin: 0 0 24px;
+
+  color: var(--color-primary);
+
   font-family: var(--font-heading);
-  color: var(--color-text);
-  font-size: 1.75rem;
-  margin-bottom: 1.5rem;
+  font-size: 1.5rem;
+  font-weight: 700;
 }
 
+/* =========================================================
+   ÉTAT DE CHARGEMENT
+   ========================================================= */
+
 .gestion-profil__loading {
-  font-family: var(--font-body);
+  padding: 12px 0;
+  margin: 0 0 16px;
+
   color: var(--color-text);
-  margin-bottom: 1rem;
+
+  font-family: var(--font-body);
+  font-size: 0.9rem;
 }
+
+/* =========================================================
+   FORMULAIRE
+   ========================================================= */
 
 .gestion-profil__form {
   display: flex;
   flex-direction: column;
-  gap: 1.25rem;
-  background-color: var(--color-surface);
-  padding: 1.5rem;
-  border-radius: 0.5rem;
+
+  gap: 20px;
 }
 
 .gestion-profil__field {
   display: flex;
   flex-direction: column;
-  gap: 0.375rem;
+
+  gap: 6px;
 }
 
 .gestion-profil__label {
-  font-family: var(--font-body);
-  font-weight: 600;
   color: var(--color-text);
-  font-size: 0.9rem;
+
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  font-weight: 600;
 }
 
 .gestion-profil__input {
-  font-family: var(--font-body);
+  padding: 10px 14px;
+
   color: var(--color-text);
-  background-color: var(--color-background);
+
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+
+  background-color: #ffffff;
+
   border: 1px solid var(--color-surface);
-  border-radius: 0.375rem;
-  padding: 0.625rem 0.75rem;
-  font-size: 1rem;
+  border-radius: 8px;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 .gestion-profil__input:focus {
-  outline: 2px solid var(--color-primary);
-  outline-offset: 1px;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-primary) 15%, transparent);
+
+  outline: none;
+}
+
+.gestion-profil__input.ng-invalid.ng-touched {
+  border-color: var(--color-accent);
 }
 
 .gestion-profil__field-error {
-  font-family: var(--font-body);
+  margin: 0;
+
   color: var(--color-accent);
-  font-size: 0.85rem;
+
+  font-family: var(--font-body);
+  font-size: 0.8rem;
 }
 
+/* =========================================================
+   MESSAGES
+   ========================================================= */
+
 .gestion-profil__message {
+  padding: 12px 0;
+  margin: 0;
+
   font-family: var(--font-body);
   font-size: 0.9rem;
-  border-radius: 0.375rem;
-  padding: 0.625rem 0.75rem;
 }
 
 .gestion-profil__message--error {
   color: var(--color-accent);
-  background-color: color-mix(in srgb, var(--color-accent) 12%, var(--color-background));
 }
 
 .gestion-profil__message--success {
   color: var(--color-success);
-  background-color: color-mix(in srgb, var(--color-success) 12%, var(--color-background));
 }
+
+/* =========================================================
+   ACTIONS / BOUTONS
+   ========================================================= */
 
 .gestion-profil__actions {
   display: flex;
+  align-items: center;
+  justify-content: space-between;
   flex-wrap: wrap;
-  gap: 0.75rem;
-  margin-top: 0.5rem;
+
+  gap: 12px;
+
+  margin-top: 8px;
 }
 
 .gestion-profil__button {
+  padding: 10px 18px;
+
   font-family: var(--font-body);
-  font-weight: 600;
-  font-size: 0.95rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+
+  white-space: nowrap;
+
   border: none;
-  border-radius: 0.375rem;
-  padding: 0.625rem 1.25rem;
+  border-radius: 8px;
+
   cursor: pointer;
+
+  transition:
+    background-color 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.2s ease;
 }
 
 .gestion-profil__button--primary {
-  background-color: var(--color-primary);
   color: var(--color-background);
+  background-color: var(--color-primary);
+}
+
+.gestion-profil__button--primary:hover:not(:disabled) {
+  background-color: #244b87;
+
+  box-shadow: 0 5px 14px rgb(19 40 79 / 22%);
+
+  transform: translateY(-1px);
 }
 
 .gestion-profil__button--primary:disabled {
-  opacity: 0.6;
   cursor: not-allowed;
+  opacity: 0.6;
 }
 
 .gestion-profil__button--danger {
-  background-color: transparent;
   color: var(--color-accent);
-  border: 1px solid var(--color-accent);
+  background-color: color-mix(in srgb, var(--color-accent) 12%, transparent);
 }
 
-@media (max-width: 480px) {
+.gestion-profil__button--danger:hover {
+  background-color: color-mix(in srgb, var(--color-accent) 20%, transparent);
+
+  transform: translateY(-1px);
+}
+
+/* =========================================================
+   RESPONSIVE TABLETTE
+   ========================================================= */
+
+@media screen and (max-width: 1000px) {
+  .dashboard-layout__sidebar {
+    width: 220px;
+    min-width: 220px;
+  }
+
+  .dashboard-layout__content,
+  main {
+    padding: 28px 24px;
+  }
+
+  .sidebar-nav__link {
+    gap: 12px;
+
+    padding: 13px 14px;
+
+    font-size: 14px;
+  }
+}
+
+/* =========================================================
+   RESPONSIVE MOBILE
+   ========================================================= */
+
+@media screen and (max-width: 760px) {
+  .dashboard-layout {
+    flex-direction: column;
+  }
+
+  .dashboard-layout__sidebar {
+    width: 100%;
+    min-width: 0;
+    min-height: auto;
+
+    padding: 12px;
+  }
+
+  .sidebar-nav {
+    flex-direction: row;
+
+    overflow-x: auto;
+
+    padding-bottom: 4px;
+  }
+
+  .sidebar-nav__link {
+    flex-shrink: 0;
+
+    padding: 10px 14px;
+  }
+
+  .sidebar-nav__link:hover {
+    transform: translateY(-2px);
+  }
+
+  .dashboard-layout__content,
+  main {
+    padding: 24px 16px;
+  }
+
   .gestion-profil {
-    padding: 1.5rem 1rem;
+    padding: 18px 16px;
   }
 
   .gestion-profil__actions {
-    flex-direction: column;
+    align-items: stretch;
+    flex-direction: column-reverse;
+  }
+
+  .gestion-profil__button {
+    width: 100%;
+
+    box-sizing: border-box;
+
+    text-align: center;
+  }
+}
+
+/* =========================================================
+   TRÈS PETITS ÉCRANS
+   ========================================================= */
+
+@media screen and (max-width: 480px) {
+  .dashboard-layout__content,
+  main {
+    padding: 20px 12px;
+  }
+
+  .gestion-profil__title {
+    font-size: 1.3rem;
   }
 }
