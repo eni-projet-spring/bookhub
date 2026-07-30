@@ -31,4 +31,12 @@ export class ReservationService {
   annulerReservation(idReservation: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${idReservation}`);
   }
+
+  confirmerReservation(idReservation: number): Observable<ReservationResponse> {
+    return this.http.patch<ReservationResponse>(`${this.apiUrl}/${idReservation}/confirmer`, null);
+  }
+
+  rejeterReservation(idReservation: number): Observable<ReservationResponse> {
+    return this.http.patch<ReservationResponse>(`${this.apiUrl}/${idReservation}/rejeter`, null);
+  }
 }

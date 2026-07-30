@@ -23,10 +23,6 @@ public class ReservationController {
         this.reservationService = reservationService;
     }
 
-    /**
-     * Côté bibliothécaire :
-     * récupère toutes les réservations en attente.
-     */
     @GetMapping("/en-attente")
     @PreAuthorize("hasAnyRole('LIBRARIAN', 'ADMIN')")
     public ResponseEntity<List<ReservationResponse>>
@@ -42,12 +38,8 @@ public class ReservationController {
         return ResponseEntity.ok(reservations);
     }
 
-    /**
-     * Côté lecteur :
-     * récupère uniquement les réservations
-     * de l'utilisateur connecté grâce au JWT.
-     */
     @GetMapping("/mes-reservations")
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<List<ReservationResponse>>
     listerMesReservations(
             Authentication authentication
@@ -64,11 +56,8 @@ public class ReservationController {
         return ResponseEntity.ok(reservations);
     }
 
-    /**
-     * Côté lecteur :
-     * réserve un livre pour l'utilisateur connecté.
-     */
     @PostMapping
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<ReservationResponse> reserverLivre(
             @RequestParam Integer idLivre,
             Authentication authentication
@@ -86,10 +75,6 @@ public class ReservationController {
                 .body(convertirEnResponse(reservation));
     }
 
-    /**
-     * Côté bibliothécaire :
-     * confirme une réservation en attente.
-     */
     @PatchMapping("/{idReservation}/confirmer")
     @PreAuthorize("hasAnyRole('LIBRARIAN', 'ADMIN')")
     public ResponseEntity<ReservationResponse>
@@ -105,12 +90,23 @@ public class ReservationController {
         );
     }
 
-    /**
-     * Côté lecteur :
-     * annule une réservation appartenant
-     * à l'utilisateur connecté.
-     */
+    @PatchMapping("/{idReservation}/rejeter")
+    @PreAuthorize("hasAnyRole('LIBRARIAN', 'ADMIN')")
+    public ResponseEntity<ReservationResponse>
+    rejeterReservation(
+            @PathVariable Integer idReservation
+    ) {
+        Reservation reservation =
+                reservationService
+                        .rejeterReservation(idReservation);
+
+        return ResponseEntity.ok(
+                convertirEnResponse(reservation)
+        );
+    }
+
     @DeleteMapping("/{idReservation}")
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<Void> annulerReservation(
             @PathVariable Integer idReservation,
             Authentication authentication
@@ -125,10 +121,6 @@ public class ReservationController {
         return ResponseEntity.noContent().build();
     }
 
-    /**
-     * Conversion d'une entité Reservation
-     * vers le DTO ReservationResponse.
-     */
     private ReservationResponse convertirEnResponse(
             Reservation reservation
     ) {
@@ -142,18 +134,6 @@ public class ReservationController {
                 reservation.getLivre().getIdLivre(),
                 reservation.getLivre().getTitre(),
                 reservation.getLivre().getIsbn()
-        );
-    }
-    @PatchMapping("/{idReservation}/rejeter")
-    @PreAuthorize("hasAnyRole('LIBRARIAN', 'ADMIN')")
-    public ResponseEntity<ReservationResponse> rejeterReservation(
-            @PathVariable Integer idReservation
-    ) {
-        Reservation reservation =
-                reservationService.rejeterReservation(idReservation);
-
-        return ResponseEntity.ok(
-                convertirEnResponse(reservation)
         );
     }
 }

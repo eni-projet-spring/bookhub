@@ -1,6 +1,94 @@
 <div class="dashboard-layout">
 
   <!-- SIDEBAR -->
+  <aside class="dashboard-layout__sidebar">
+    <nav class="sidebar-nav" aria-label="Navigation bibliothécaire">
+
+      <a
+        class="sidebar-nav__link sidebar-nav__link--active"
+        routerLink="/dashboard-bibliothecaire"
+      >
+        <svg
+          class="sidebar-nav__icon"
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <rect x="6" y="4" width="12" height="17" rx="2"></rect>
+          <path d="M9 4V3a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v1"></path>
+          <path d="M9 11h6"></path>
+          <path d="M9 15h6"></path>
+        </svg>
+
+        Réservations
+      </a>
+
+      <a class="sidebar-nav__link" href="#emprunts-retard">
+        <svg
+          class="sidebar-nav__icon"
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H19V4H6.5A2.5 2.5 0 0 0 4 6.5v13z"></path>
+          <path d="M13 9l3 3-3 3"></path>
+          <path d="M9 12h7"></path>
+        </svg>
+
+        Emprunts
+      </a>
+
+      <a class="sidebar-nav__link" href="#statistiques">
+        <svg
+          class="sidebar-nav__icon"
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <line x1="5" y1="21" x2="5" y2="12"></line>
+          <line x1="12" y1="21" x2="12" y2="7"></line>
+          <line x1="19" y1="21" x2="19" y2="4"></line>
+        </svg>
+
+        Statistiques
+      </a>
+
+      <a class="sidebar-nav__link" routerLink="/livres/ajouter">
+        <svg
+          class="sidebar-nav__icon"
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <path d="M2 4h6a3 3 0 0 1 3 3v13a2.5 2.5 0 0 0-2.5-2.5H2z"></path>
+          <path d="M22 4h-6a3 3 0 0 0-3 3v13a2.5 2.5 0 0 1 2.5-2.5H22z"></path>
+        </svg>
+
+        Ajouter un livre
   <aside class="sidebar">
 
     <nav class="sidebar-nav">
@@ -123,16 +211,27 @@
       <header class="dashboard-header">
         <div>
           <h1>Dashboard bibliothécaire</h1>
-          <p>Suivi des emprunts, des retards, des livres populaires et des réservations.</p>
+
+          <p>
+            Suivi des emprunts, des retards, des livres populaires
+            et des réservations.
+          </p>
         </div>
 
         <button
           type="button"
           class="bouton-actualiser"
           (click)="actualiserDashboard()"
-          [disabled]="chargementEnCours || chargementReservationsEnCours"
+          [disabled]="
+            chargementEnCours ||
+            chargementReservationsEnCours ||
+            idReservationEnCours !== null
+          "
         >
-          @if (chargementEnCours || chargementReservationsEnCours) {
+          @if (
+            chargementEnCours ||
+            chargementReservationsEnCours
+            ) {
             Chargement...
           } @else {
             Actualiser
@@ -141,53 +240,93 @@
       </header>
 
       @if (messageErreur) {
-        <p class="message-erreur">{{ messageErreur }}</p>
+        <p class="message-erreur" role="alert">
+          {{ messageErreur }}
+        </p>
       }
 
       @if (chargementEnCours && !statistiques) {
-        <p class="message-chargement">Chargement du dashboard...</p>
+        <p class="message-chargement">
+          Chargement du dashboard...
+        </p>
       }
 
       @if (statistiques) {
 
-        <!-- CADRE 1 : SUIVI DES EMPRUNTS -->
-        <section class="statistiques">
+        <!-- STATISTIQUES -->
+        <section
+          id="statistiques"
+          class="statistiques"
+        >
           <article class="carte-statistique">
-            <span class="titre-statistique">Emprunts en cours</span>
-            <strong>{{ statistiques.nombreEmpruntsEnCours }}</strong>
+            <span class="titre-statistique">
+              Emprunts en cours
+            </span>
+
+            <strong>
+              {{ statistiques.nombreEmpruntsEnCours }}
+            </strong>
           </article>
 
           <article class="carte-statistique">
-            <span class="titre-statistique">Total des emprunts</span>
-            <strong>{{ statistiques.nombreEmpruntsTotal }}</strong>
+            <span class="titre-statistique">
+              Total des emprunts
+            </span>
+
+            <strong>
+              {{ statistiques.nombreEmpruntsTotal }}
+            </strong>
           </article>
 
-          <article class="carte-statistique" [class.carte-alerte]="statistiques.nombreEmpruntsEnRetard > 0">
-            <span class="titre-statistique">Emprunts en retard</span>
-            <strong>{{ statistiques.nombreEmpruntsEnRetard }}</strong>
+          <article
+            class="carte-statistique"
+            [class.carte-alerte]="
+              statistiques.nombreEmpruntsEnRetard > 0
+            "
+          >
+            <span class="titre-statistique">
+              Emprunts en retard
+            </span>
+
+            <strong>
+              {{ statistiques.nombreEmpruntsEnRetard }}
+            </strong>
           </article>
 
           <article class="carte-statistique">
-            <span class="titre-statistique">Réservations en attente</span>
-            <strong>{{ statistiques.nombreReservationsEnAttente }}</strong>
+            <span class="titre-statistique">
+              Réservations en attente
+            </span>
+
+            <strong>
+              {{ statistiques.nombreReservationsEnAttente }}
+            </strong>
           </article>
         </section>
 
-        <!-- CADRE 2 : LIVRES POPULAIRES -->
+        <!-- LIVRES POPULAIRES -->
         <section class="section-dashboard">
-        <div class="section-titre section-titre--avec-action">
-          <div>
-            <h2>Livres les plus populaires</h2>
-            <p>Classement des livres les plus empruntés.</p>
+          <div class="section-titre section-titre--avec-action">
+            <div>
+              <h2>Livres les plus populaires</h2>
+
+              <p>
+                Classement des livres les plus empruntés.
+              </p>
+            </div>
+
+            <a
+              class="btn btn--primary"
+              routerLink="/livres/ajouter"
+            >
+              + Ajouter un livre
+            </a>
           </div>
 
-          <a class="btn btn--primary" routerLink="/livres/ajouter">
-            + Ajouter un livre
-          </a>
-        </div>
-
           @if (statistiques.livresPopulaires.length === 0) {
-            <p class="message-vide">Aucun emprunt enregistré pour le moment.</p>
+            <p class="message-vide">
+              Aucun emprunt enregistré pour le moment.
+            </p>
           } @else {
             <div class="tableau-conteneur">
               <table>
@@ -198,12 +337,22 @@
                   <th>Nombre d'emprunts</th>
                 </tr>
                 </thead>
+
                 <tbody>
-                  @for (livre of statistiques.livresPopulaires; track livre.idLivre) {
+                  @for (
+                    livre of statistiques.livresPopulaires;
+                    track livre.idLivre
+                    ) {
                     <tr>
                       <td>{{ livre.titre }}</td>
+
                       <td>{{ livre.auteur }}</td>
-                      <td><span class="badge-nombre">{{ livre.nombreEmprunts }}</span></td>
+
+                      <td>
+                        <span class="badge-nombre">
+                          {{ livre.nombreEmprunts }}
+                        </span>
+                      </td>
                     </tr>
                   }
                 </tbody>
@@ -212,15 +361,23 @@
           }
         </section>
 
-        <!-- CADRE 3 : EMPRUNTS EN RETARD -->
-        <section class="section-dashboard">
+        <!-- EMPRUNTS EN RETARD -->
+        <section
+          id="emprunts-retard"
+          class="section-dashboard"
+        >
           <div class="section-titre">
             <h2>Emprunts en retard</h2>
-            <p>Emprunts dont la date de retour prévue est dépassée.</p>
+
+            <p>
+              Emprunts dont la date de retour prévue est dépassée.
+            </p>
           </div>
 
           @if (statistiques.empruntsEnRetard.length === 0) {
-            <p class="message-vide message-succes">Aucun emprunt en retard.</p>
+            <p class="message-vide message-succes">
+              Aucun emprunt en retard.
+            </p>
           } @else {
             <div class="tableau-conteneur">
               <table>
@@ -232,16 +389,36 @@
                   <th>Retard</th>
                 </tr>
                 </thead>
+
                 <tbody>
-                  @for (emprunt of statistiques.empruntsEnRetard; track emprunt.idEmprunt) {
+                  @for (
+                    emprunt of statistiques.empruntsEnRetard;
+                    track emprunt.idEmprunt
+                    ) {
                     <tr>
-                      <td>{{ emprunt.prenomUtilisateur }} {{ emprunt.nomUtilisateur }}</td>
+                      <td>
+                        {{ emprunt.prenomUtilisateur }}
+                        {{ emprunt.nomUtilisateur }}
+                      </td>
+
                       <td>{{ emprunt.titreLivre }}</td>
-                      <td>{{ emprunt.dateFinPrevue | date: 'dd/MM/yyyy' }}</td>
+
+                      <td>
+                        {{
+                          emprunt.dateFinPrevue
+                            | date: 'dd/MM/yyyy'
+                        }}
+                      </td>
+
                       <td>
                         <span class="badge-retard">
                           {{ emprunt.nombreJoursRetard }}
-                          @if (emprunt.nombreJoursRetard > 1) { jours } @else { jour }
+
+                          @if (emprunt.nombreJoursRetard > 1) {
+                            jours
+                          } @else {
+                            jour
+                          }
                         </span>
                       </td>
                     </tr>
@@ -254,50 +431,147 @@
 
       }
 
-      <!-- CADRE 4 : RÉSERVATIONS EN ATTENTE -->
-      <section class="section-dashboard reservations">
+      <!-- RÉSERVATIONS EN ATTENTE -->
+      <section
+        id="reservations"
+        class="section-dashboard reservations"
+      >
         <div class="section-titre">
           <h2>Demandes de réservation en attente</h2>
-          <p>Réservations à traiter par le bibliothécaire.</p>
+
+          <p>
+            Réservations à confirmer ou à rejeter par le
+            bibliothécaire.
+          </p>
         </div>
 
         @if (chargementReservationsEnCours) {
-          <p class="message-chargement">Chargement des réservations...</p>
+          <p class="message-chargement">
+            Chargement des réservations...
+          </p>
         }
 
         @if (messageErreurReservations) {
-          <p class="message-erreur">{{ messageErreurReservations }}</p>
+          <p
+            class="message-erreur"
+            role="alert"
+          >
+            {{ messageErreurReservations }}
+          </p>
         }
 
-        @if (!chargementReservationsEnCours && !messageErreurReservations && reservationsEnAttente.length === 0) {
-          <p class="message-vide">Aucune réservation en attente.</p>
+        @if (
+          !chargementReservationsEnCours &&
+          !messageErreurReservations &&
+          reservationsEnAttente.length === 0
+          ) {
+          <p class="message-vide">
+            Aucune réservation en attente.
+          </p>
         }
 
-        @if (!chargementReservationsEnCours && !messageErreurReservations && reservationsEnAttente.length > 0) {
+        @if (
+          !chargementReservationsEnCours &&
+          !messageErreurReservations &&
+          reservationsEnAttente.length > 0
+          ) {
           <div class="liste-reservations">
-            @for (reservation of reservationsEnAttente; track reservation.idReservation) {
+
+            @for (
+              reservation of reservationsEnAttente;
+              track reservation.idReservation
+              ) {
               <article class="carte-reservation">
+
                 <div class="informations-reservation">
-                  <h3>{{ reservation.titreLivre }}</h3>
-                  <p class="isbn">ISBN : {{ reservation.isbn }}</p>
-                  <p>Position dans la file : <strong>{{ reservation.positionFileAttente }}</strong></p>
-                  <p>Statut : <strong>{{ reservation.statut }}</strong></p>
+                  <h3>
+                    {{ reservation.titreLivre }}
+                  </h3>
+
+                  <p class="isbn">
+                    ISBN : {{ reservation.isbn }}
+                  </p>
+
+                  <p>
+                    Date de la demande :
+                    <strong>
+                      {{
+                        reservation.dateDemande
+                          | date: 'dd/MM/yyyy à HH:mm'
+                      }}
+                    </strong>
+                  </p>
+
+                  <p>
+                    Position dans la file :
+                    <strong>
+                      {{
+                        reservation.positionFileAttente
+                        ?? 'Non définie'
+                      }}
+                    </strong>
+                  </p>
+
+                  <p>
+                    Statut :
+                    <strong>
+                      {{ reservation.statut }}
+                    </strong>
+                  </p>
                 </div>
 
                 <div class="actions-reservation">
-                  <button type="button" class="bouton-confirmer"
-                          (click)="confirmerReservation(reservation.idReservation)"
-                          [disabled]="traitementEnCours">
-                    Confirmer
+
+                  <button
+                    type="button"
+                    class="bouton-confirmer"
+                    (click)="
+                      confirmerReservation(
+                        reservation.idReservation
+                      )
+                    "
+                    [disabled]="
+                      idReservationEnCours ===
+                      reservation.idReservation
+                    "
+                  >
+                    @if (
+                      idReservationEnCours ===
+                      reservation.idReservation
+                      ) {
+                      Traitement...
+                    } @else {
+                      Confirmer
+                    }
                   </button>
-                  <button type="button" class="bouton-rejeter"
-                          (click)="rejeterReservation(reservation.idReservation)"
-                          [disabled]="traitementEnCours">
-                    Rejeter
+
+                  <button
+                    type="button"
+                    class="bouton-rejeter"
+                    (click)="
+                      rejeterReservation(
+                        reservation.idReservation
+                      )
+                    "
+                    [disabled]="
+                      idReservationEnCours ===
+                      reservation.idReservation
+                    "
+                  >
+                    @if (
+                      idReservationEnCours ===
+                      reservation.idReservation
+                      ) {
+                      Traitement...
+                    } @else {
+                      Rejeter
+                    }
                   </button>
+
                 </div>
               </article>
             }
+
           </div>
         }
       </section>
