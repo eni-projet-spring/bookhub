@@ -1,12 +1,5 @@
 <section class="mes-reservations">
-
   <h1>Mes réservations</h1>
-
-  @if (chargementEnCours) {
-    <p>
-      Chargement de vos réservations...
-    </p>
-  }
 
   @if (messageSucces) {
     <p class="message-succes">
@@ -20,32 +13,15 @@
     </p>
   }
 
-  @if (
-    !chargementEnCours &&
-    !messageErreur &&
-    mesReservations.length === 0
-    ) {
-    <p>
-      Vous n'avez aucune réservation.
-    </p>
-  }
-
-  @if (
-    !chargementEnCours &&
-    !messageErreur &&
-    mesReservations.length > 0
-    ) {
+  @if (chargementEnCours) {
+    <p>Chargement en cours...</p>
+  } @else if (mesReservations.length === 0) {
+    <p>Vous n’avez aucune réservation.</p>
+  } @else {
     <div class="liste-reservations">
-
-      @for (
-        reservation of mesReservations;
-        track reservation.idReservation
-        ) {
+      @for (reservation of mesReservations; track reservation.idReservation) {
         <article class="carte-reservation">
-
-          <h2>
-            {{ reservation.titreLivre }}
-          </h2>
+          <h2>{{ reservation.titreLivre }}</h2>
 
           <p>
             <strong>ISBN :</strong>
@@ -57,39 +33,28 @@
             {{ libelleStatut(reservation.statut) }}
           </p>
 
-          @if (reservation.statut === 'EN_ATTENTE') {
+          @if (reservation.positionFileAttente) {
             <p>
-              <strong>Rang dans la file d'attente :</strong>
+              <strong>Rang dans la file d’attente :</strong>
               {{ reservation.positionFileAttente }}
             </p>
+          }
 
+          @if (reservation.statut !== 'ANNULEE') {
             <button
               type="button"
-              [disabled]="
-                idReservationEnCours ===
-                reservation.idReservation
-              "
-              (click)="
-                annulerReservation(
-                  reservation.idReservation
-                )
-              "
+              (click)="annulerReservation(reservation.idReservation)"
+              [disabled]="idReservationEnCours !== null"
             >
-              @if (
-                idReservationEnCours ===
-                reservation.idReservation
-                ) {
-                Annulation...
+              @if (idReservationEnCours === reservation.idReservation) {
+                Annulation en cours...
               } @else {
                 Annuler la réservation
               }
             </button>
           }
-
         </article>
       }
-
     </div>
   }
-
 </section>

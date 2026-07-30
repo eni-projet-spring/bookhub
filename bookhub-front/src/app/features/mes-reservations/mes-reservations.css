@@ -1,118 +1,173 @@
 .mes-reservations {
-  max-width: 1100px;
-  margin: 2rem auto;
-  padding: 0 1rem 3rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  width: 100%;
+  color: var(--color-text);
+  font-family: var(--font-body);
 }
 
 .mes-reservations h1 {
-  margin-bottom: 2rem;
-  text-align: center;
-  font-size: 2rem;
-  color: #1f2937;
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: clamp(2rem, 3vw, 2.6rem);
+  line-height: 1.1;
 }
 
 .liste-reservations {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }
 
 .carte-reservation {
+  display: grid;
+  grid-template-columns: minmax(220px, 1.6fr) minmax(180px, 1fr);
+  gap: 1rem 2rem;
+  align-items: start;
   padding: 1.5rem;
-  background-color: #ffffff;
-  border: 1px solid #e5e7eb;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  border: 1px solid color-mix(
+    in srgb,
+    var(--color-primary) 14%,
+    transparent
+  );
+  border-radius: 16px;
+  background-color: var(--color-surface);
+  box-shadow: 0 8px 24px rgb(0 0 0 / 5%);
   transition:
     transform 0.2s ease,
     box-shadow 0.2s ease;
 }
 
 .carte-reservation:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.12);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px rgb(0 0 0 / 8%);
 }
 
 .carte-reservation h2 {
-  margin: 0 0 1rem;
-  font-size: 1.3rem;
-  color: #1f2937;
+  grid-column: 1 / -1;
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: 1.35rem;
+  line-height: 1.3;
+  overflow-wrap: anywhere;
 }
 
 .carte-reservation p {
-  margin: 0.6rem 0;
-  color: #4b5563;
+  margin: 0;
+  color: color-mix(
+    in srgb,
+    var(--color-text) 72%,
+    transparent
+  );
   line-height: 1.5;
 }
 
+.carte-reservation p strong {
+  color: var(--color-text);
+  font-weight: 700;
+}
+
 .carte-reservation button {
-  width: 100%;
-  margin-top: 1rem;
-  padding: 0.75rem 1rem;
-  border: none;
+  grid-column: 1 / -1;
+  justify-self: start;
+  min-width: 210px;
+  min-height: 44px;
+  padding: 0.75rem 1.25rem;
+  border: 0;
   border-radius: 8px;
-  background-color: #dc2626;
-  color: #ffffff;
-  font-size: 1rem;
-  font-weight: 600;
+  background-color: var(--color-accent);
+  color: var(--color-surface);
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  font-weight: 700;
   cursor: pointer;
   transition:
-    background-color 0.2s ease,
-    transform 0.2s ease;
+    transform 0.2s ease,
+    filter 0.2s ease,
+    opacity 0.2s ease;
 }
 
 .carte-reservation button:hover:not(:disabled) {
-  background-color: #b91c1c;
   transform: translateY(-1px);
+  filter: brightness(0.92);
+}
+
+.carte-reservation button:focus-visible {
+  outline: 3px solid color-mix(
+    in srgb,
+    var(--color-highlight) 70%,
+    transparent
+  );
+  outline-offset: 2px;
 }
 
 .carte-reservation button:disabled {
-  background-color: #9ca3af;
   cursor: not-allowed;
-  opacity: 0.7;
+  opacity: 0.6;
 }
 
 .message-succes,
 .message-erreur {
-  max-width: 700px;
-  margin: 1rem auto 1.5rem;
-  padding: 1rem;
-  border-radius: 8px;
-  text-align: center;
-  font-weight: 600;
+  margin: 0;
+  padding: 1rem 1.25rem;
+  border-radius: 10px;
+  font-weight: 700;
 }
 
 .message-succes {
-  background-color: #dcfce7;
-  border: 1px solid #86efac;
-  color: #166534;
+  border: 1px solid color-mix(
+    in srgb,
+    var(--color-success) 40%,
+    transparent
+  );
+  background-color: color-mix(
+    in srgb,
+    var(--color-success) 12%,
+    var(--color-surface)
+  );
+  color: var(--color-success);
 }
 
 .message-erreur {
-  background-color: #fee2e2;
-  border: 1px solid #fca5a5;
-  color: #991b1b;
+  border: 1px solid color-mix(
+    in srgb,
+    var(--color-accent) 40%,
+    transparent
+  );
+  background-color: color-mix(
+    in srgb,
+    var(--color-accent) 10%,
+    var(--color-surface)
+  );
+  color: var(--color-accent);
 }
 
-.mes-reservations > p {
+.mes-reservations > p:not(.message-succes):not(.message-erreur) {
+  margin: 0;
+  padding: 1.25rem;
+  border: 1px solid color-mix(
+    in srgb,
+    var(--color-primary) 12%,
+    transparent
+  );
+  border-radius: 14px;
+  background-color: var(--color-surface);
   text-align: center;
-  color: #4b5563;
 }
 
-@media (max-width: 600px) {
-  .mes-reservations {
-    margin-top: 1rem;
-  }
-
-  .mes-reservations h1 {
-    font-size: 1.6rem;
-  }
-
-  .liste-reservations {
+@media (max-width: 700px) {
+  .carte-reservation {
     grid-template-columns: 1fr;
   }
 
-  .carte-reservation {
-    padding: 1.2rem;
+  .carte-reservation h2,
+  .carte-reservation button {
+    grid-column: 1;
+  }
+
+  .carte-reservation button {
+    width: 100%;
+    min-width: 0;
   }
 }
