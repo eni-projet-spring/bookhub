@@ -2,8 +2,11 @@ package fr.eni.bookhub.service;
 
 import fr.eni.bookhub.dto.EmpruntResponse;
 import fr.eni.bookhub.entity.Emprunt;
+import fr.eni.bookhub.entity.Exemplaire;
 import fr.eni.bookhub.entity.StatutEmprunt;
+import fr.eni.bookhub.entity.StatutExemplaire;
 import fr.eni.bookhub.repository.EmpruntRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -139,5 +142,59 @@ public class EmpruntServiceImpl implements EmpruntService {
                 emprunt.getDateFinPrevue(),
                 maintenant
         ).toDays();
+    }
+
+    @Override
+    @Transactional
+    public void enregistrerRetour(Integer idEmprunt) {
+
+        Emprunt emprunt = empruntRepository
+                .findById(idEmprunt)
+                .orElseThrow(() ->
+                        new EntityNotFoundException(
+                                "Aucun emprunt trouvé avec l'identifiant "
+                                        + idEmprunt
+                        )
+                );
+
+        /*
+         * On empêche d'enregistrer deux fois le retour
+         * du même exemplaire.
+         */
+        if (
+                emprunt.getDateRetour() != null
+                        || emprunt.getStatut() == StatutEmprunt.RETOURNE
+        ) {
+            throw new IllegalStateException(
+                    "Le retour de cet emprunt a déjà été enregistré."
+            );
+        }
+
+        /*
+         * Mise à jour de l'emprunt.
+         */
+        emprunt.setDateRetour(LocalDateTime.now());
+        emprunt.setStatut(StatutEmprunt.RETOURNE);
+
+        /*
+         * Mise à jour de l'exemplaire associé.
+         */
+        Exemplaire exemplaire = emprunt.getExemplaire();
+
+        if (exemplaire == null) {
+            throw new IllegalStateException(
+                    "Aucun exemplaire n'est associé à cet emprunt."
+            );
+        }
+
+        exemplaire.setStatut(StatutExemplaire.DISPONIBLE);
+
+        /*
+         * Avec @Transactional, Hibernate sauvegarde automatiquement
+         * les modifications apportées aux entités gérées.
+         *
+         * Le save est donc facultatif, mais il rend l'intention claire.
+         */
+        empruntRepository.save(emprunt);
     }
 }
