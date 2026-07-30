@@ -6,6 +6,7 @@ import { ConnexionRequest } from '../models/connexion-request.model';
 import { ConnexionResponse } from '../models/connexion-response.model';
 import { UtilisateurResponse } from '../models/utilisateur-response.model';
 import { InscriptionRequest } from '../models/inscription-request.model';
+import { Role } from '../models/role';
 
 @Injectable({
   providedIn: 'root',
@@ -27,7 +28,6 @@ export class UtilisateurService {
     const { token, ...utilisateur } = connexionResponse;
 
     localStorage.setItem('token', token);
-
     localStorage.setItem('utilisateurConnecte', JSON.stringify(utilisateur));
   }
 
@@ -51,12 +51,10 @@ export class UtilisateurService {
   }
 
   getIdUtilisateurConnecte(): number | null {
-    const utilisateur = this.obtenirUtilisateurConnecte();
-
-    return utilisateur?.idUtilisateur ?? null;
+    return this.obtenirUtilisateurConnecte()?.idUtilisateur ?? null;
   }
 
-  getRole(): 'USER' | 'LIBRARIAN' | 'ADMIN' | null {
+  getRole(): Role | null {
     const utilisateur = this.obtenirUtilisateurConnecte();
 
     return utilisateur?.role ?? null;
