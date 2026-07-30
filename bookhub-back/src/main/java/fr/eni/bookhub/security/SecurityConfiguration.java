@@ -56,6 +56,11 @@ public class SecurityConfiguration {
                         .permitAll()
 
                         .requestMatchers(
+                                "/couvertures/**"
+                        )
+                        .permitAll()
+
+                        .requestMatchers(
                                 org.springframework.http.HttpMethod.GET,
                                 "/api/livres",
                                 "/api/livres/**"

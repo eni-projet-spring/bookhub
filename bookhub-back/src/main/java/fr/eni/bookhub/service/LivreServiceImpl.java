@@ -8,9 +8,14 @@ import fr.eni.bookhub.repository.CategorieRepository;
 import fr.eni.bookhub.repository.LivreRepository;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class LivreServiceImpl implements LivreService {
@@ -27,39 +32,60 @@ public class LivreServiceImpl implements LivreService {
     }
 
     @Override
-    public LivreResponseDTO ajouterLivre(LivreRequestDTO dto) {
-
+    public LivreResponseDTO ajouterLivre(LivreRequestDTO dto, MultipartFile file) {
         String isbn = dto.getIsbn().trim();
 
         if (livreRepository.existsByIsbn(isbn)) {
-            throw new RuntimeException(
-                    "Ce livre existe déjà. Vous pouvez ajouter un nouvel exemplaire."
-            );
+            throw new RuntimeException("Ce livre existe déjà. Vous pouvez ajouter un nouvel exemplaire.");
         }
 
         Categorie categorie = categorieRepository
                 .findById(dto.getIdCategorie())
-                .orElseThrow(() ->
-                        new RuntimeException(
-                                "Catégorie introuvable avec l'identifiant : "
-                                        + dto.getIdCategorie()
-                        )
-                );
+                .orElseThrow(() -> new RuntimeException("Catégorie introuvable avec l'identifiant : " + dto.getIdCategorie()));
 
         Livre livre = new Livre();
-
         livre.setIsbn(isbn);
         livre.setTitre(dto.getTitre().trim());
         livre.setDescription(dto.getDescription().trim());
-        livre.setCouverture(dto.getCouverture());
         livre.setEdition(dto.getEdition().trim());
         livre.setAuteur(dto.getAuteur().trim());
         livre.setCategorie(categorie);
 
+        // Handle file upload
+        if (file != null && !file.isEmpty()) {
+            try {
+                // Generate a unique filename to avoid collisions
+                String originalFilename = file.getOriginalFilename();
+                String extension = originalFilename != null && originalFilename.contains(".")
+                        ? originalFilename.substring(originalFilename.lastIndexOf("."))
+                        : ".jpg";
+                String uniqueFilename = UUID.randomUUID().toString() + extension;
+
+                // Define the path
+                String uploadDir = "src/main/resources/public/couvertures/";
+                Path uploadPath = Paths.get(uploadDir);
+
+                if (!Files.exists(uploadPath)) {
+                    Files.createDirectories(uploadPath);
+                }
+
+                Path filePath = uploadPath.resolve(uniqueFilename);
+                Files.write(filePath, file.getBytes());
+
+                // Save the public URL path to the database
+                livre.setCouverture("/couvertures/" + uniqueFilename);
+
+            } catch (Exception e) {
+                throw new RuntimeException("Échec de l'enregistrement de l'image de couverture : " + e.getMessage());
+            }
+        } else {
+            // Fallback to the URL provided in the DTO if no file is uploaded
+            livre.setCouverture(dto.getCouverture());
+        }
+
         Livre livreEnregistre = livreRepository.save(livre);
 
         LivreResponseDTO response = new LivreResponseDTO();
-
         response.setIdLivre(livreEnregistre.getIdLivre());
         response.setIsbn(livreEnregistre.getIsbn());
         response.setTitre(livreEnregistre.getTitre());
