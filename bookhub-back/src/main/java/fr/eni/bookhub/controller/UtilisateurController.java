@@ -1,9 +1,6 @@
 package fr.eni.bookhub.controller;
 
-import fr.eni.bookhub.dto.ConnexionRequest;
-import fr.eni.bookhub.dto.ConnexionResponse;
-import fr.eni.bookhub.dto.InscriptionUtilisateurDto;
-import fr.eni.bookhub.dto.UtilisateurResponse;
+import fr.eni.bookhub.dto.*;
 import fr.eni.bookhub.entity.Utilisateur;
 import fr.eni.bookhub.service.JwtService;
 import fr.eni.bookhub.service.UtilisateurService;
@@ -80,6 +77,20 @@ public class UtilisateurController {
 
         return ResponseEntity.ok(
                 utilisateurService.listerUtilisateurs()
+        );
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @PatchMapping("/{idUtilisateur}/role")
+    public ResponseEntity<UtilisateurResponse> modifierRole(
+            @PathVariable Integer idUtilisateur,
+            @Valid @RequestBody ModificationRoleRequest request
+    ) {
+        return ResponseEntity.ok(
+                utilisateurService.modifierRole(
+                        idUtilisateur,
+                        request.getRole()
+                )
         );
     }
 }

@@ -124,4 +124,31 @@ public class UtilisateurServiceImpl implements UtilisateurService {
                 utilisateur.getRole()
         );
     }
+    @Override
+    @Transactional
+    public UtilisateurResponse modifierRole(
+            Integer idUtilisateur,
+            Role role
+    ) {
+        Utilisateur utilisateur = utilisateurRepository
+                .findById(idUtilisateur)
+                .orElseThrow(() ->
+                        new IllegalArgumentException(
+                                "Utilisateur introuvable"
+                        )
+                );
+
+        utilisateur.setRole(role);
+
+        Utilisateur utilisateurEnregistre =
+                utilisateurRepository.save(utilisateur);
+
+        return new UtilisateurResponse(
+                utilisateurEnregistre.getIdUtilisateur(),
+                utilisateurEnregistre.getNom(),
+                utilisateurEnregistre.getPrenom(),
+                utilisateurEnregistre.getEmail(),
+                utilisateurEnregistre.getRole()
+        );
+    }
 }
