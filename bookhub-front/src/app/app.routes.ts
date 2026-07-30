@@ -9,7 +9,11 @@ import { MesReservations } from './features/mes-reservations/mes-reservations';
 import { Emprunt } from './features/emprunt/emprunt';
 import { LivreDetail } from './features/livre-detail/livre-detail';
 import { ModifierLivre } from './features/modifier-livre/modifier-livre';
-
+import { DashboardLecteurLayout } from './features/dashboard-lecteur/dashboard-lecteur-layout/dashboard-lecteur-layout';
+import { MonHistorique } from './features/mon-historique/mon-historique';
+import { DashboardLecteurAccueil } from './features/dashboard-lecteur/dashboard-lecteur-accueil/dashboard-lecteur-accueil';
+import { MesCommentaires } from './features/mes-commentaires/mes-commentaires';
+import { MesEmprunts } from './features/dashboard-lecteur/mes-emprunts/mes-emprunts';
 export const routes: Routes = [
   {
     path: '',
@@ -48,12 +52,39 @@ export const routes: Routes = [
     path: 'livres/:id',
     component: LivreDetail,
   },
-  {
-    path: '**',
-    redirectTo: '',
-  },
+
   {
     path: 'emprunts',
     component: Emprunt,
+  },
+  {
+    path: 'dashboard-lecteur',
+    component: DashboardLecteurLayout,
+    children: [
+      {
+        path: '',
+        component: DashboardLecteurAccueil,
+      },
+      {
+        path: 'mes-emprunts',
+        component: MesEmprunts,
+      },
+      {
+        path: 'mon-historique',
+        component: MonHistorique,
+      },
+      {
+        path: 'mes-reservations',
+        component: MesReservations,
+      },
+      {
+        path: 'mes-commentaires',
+        component: MesCommentaires,
+      },
+    ],
+  },
+  {
+    path: '**',
+    redirectTo: '',
   },
 ];
