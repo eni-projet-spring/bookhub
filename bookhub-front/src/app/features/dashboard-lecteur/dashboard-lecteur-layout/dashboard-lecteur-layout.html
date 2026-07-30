@@ -1,0 +1,54 @@
+<div class="dashboard-layout">
+  <aside class="sidebar">
+    <h2>Mon espace</h2>
+
+    <nav aria-label="Navigation de l’espace lecteur">
+      <a
+        routerLink="/dashboard-lecteur"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: true }"
+      >
+        Tableau de bord
+      </a>
+
+      <a
+        routerLink="/dashboard-lecteur/mes-emprunts"
+        routerLinkActive="active"
+      >
+        Mes emprunts
+      </a>
+
+      <a
+        routerLink="/dashboard-lecteur/mes-reservations"
+        routerLinkActive="active"
+      >
+        Mes réservations
+      </a>
+
+      <a
+        routerLink="/dashboard-lecteur/mon-historique"
+        routerLinkActive="active"
+      >
+        Mon historique
+      </a>
+
+      <a
+        routerLink="/dashboard-lecteur/mes-commentaires"
+        routerLinkActive="active"
+      >
+        Mes commentaires
+      </a>
+
+      <a
+        routerLink="/gestion-profil"
+        routerLinkActive="active"
+      >
+        Mon profil
+      </a>
+    </nav>
+  </aside>
+
+  <section class="dashboard-content">
+    <router-outlet></router-outlet>
+  </section>
+</div>

@@ -1,0 +1,222 @@
+.my-comments {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  width: 100%;
+  color: var(--color-text);
+  font-family: var(--font-body);
+}
+
+.my-comments__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 2rem;
+}
+
+.my-comments__header h1 {
+  margin: 0 0 0.35rem;
+  font-family: var(--font-heading);
+  font-size: clamp(2rem, 3vw, 2.6rem);
+  line-height: 1.1;
+}
+
+.my-comments__header p {
+  margin: 0;
+  color: color-mix(
+    in srgb,
+    var(--color-text) 65%,
+    transparent
+  );
+}
+
+.comments-count {
+  display: flex;
+  min-width: 160px;
+  flex-direction: column;
+  gap: 0.3rem;
+  padding: 1rem 1.25rem;
+  border: 1px solid color-mix(
+    in srgb,
+    var(--color-primary) 12%,
+    transparent
+  );
+  border-radius: 14px;
+  background-color: var(--color-surface);
+  box-shadow: 0 8px 24px rgb(0 0 0 / 5%);
+}
+
+.comments-count span {
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.comments-count strong {
+  font-family: var(--font-heading);
+  font-size: 2rem;
+  line-height: 1;
+}
+
+.comments-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.comment-card {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1.5rem;
+  border: 1px solid color-mix(
+    in srgb,
+    var(--color-primary) 12%,
+    transparent
+  );
+  border-radius: 16px;
+  background-color: var(--color-surface);
+  box-shadow: 0 8px 24px rgb(0 0 0 / 5%);
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.comment-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px rgb(0 0 0 / 8%);
+}
+
+.comment-card__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.comment-card__header h2 {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: 1.35rem;
+}
+
+.comment-card__header p {
+  margin: 0.25rem 0 0;
+  color: color-mix(
+    in srgb,
+    var(--color-text) 68%,
+    transparent
+  );
+}
+
+.comment-card__date {
+  flex: 0 0 auto;
+  color: color-mix(
+    in srgb,
+    var(--color-text) 60%,
+    transparent
+  );
+  font-size: 0.85rem;
+}
+
+.comment-card__rating {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: fit-content;
+  padding: 0.55rem 0.8rem;
+  border-radius: 999px;
+  background-color: color-mix(
+    in srgb,
+    var(--color-highlight) 16%,
+    var(--color-surface)
+  );
+}
+
+.comment-card__rating span {
+  color: var(--color-highlight);
+  font-size: 1.25rem;
+  letter-spacing: 0.08rem;
+}
+
+.comment-card__rating strong {
+  color: var(--color-text);
+  font-size: 0.9rem;
+}
+
+.comment-card__text {
+  margin: 0;
+  padding: 1rem;
+  border-left: 4px solid var(--color-highlight);
+  border-radius: 0 8px 8px 0;
+  background-color: color-mix(
+    in srgb,
+    var(--color-background) 75%,
+    var(--color-surface)
+  );
+  line-height: 1.6;
+}
+
+.comment-card button {
+  align-self: flex-end;
+  min-width: 170px;
+  min-height: 42px;
+  padding: 0.7rem 1.2rem;
+  border: 1px solid var(--color-primary);
+  border-radius: 8px;
+  background-color: var(--color-surface);
+  color: var(--color-primary);
+  font-family: var(--font-body);
+  font-weight: 700;
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.comment-card button:hover {
+  background-color: color-mix(
+    in srgb,
+    var(--color-primary) 8%,
+    var(--color-surface)
+  );
+  transform: translateY(-1px);
+}
+
+.comment-card button:focus-visible {
+  outline: 3px solid color-mix(
+    in srgb,
+    var(--color-highlight) 70%,
+    transparent
+  );
+  outline-offset: 2px;
+}
+
+@media (max-width: 700px) {
+  .my-comments__header {
+    flex-direction: column;
+  }
+
+  .comments-count {
+    width: 100%;
+  }
+
+  .comment-card__header {
+    flex-direction: column;
+  }
+
+  .comment-card button {
+    width: 100%;
+  }
+}
+
+@media (max-width: 500px) {
+  .comment-card {
+    padding: 1rem;
+  }
+
+  .comment-card__rating {
+    align-items: flex-start;
+    flex-direction: column;
+    border-radius: 10px;
+  }
+}
