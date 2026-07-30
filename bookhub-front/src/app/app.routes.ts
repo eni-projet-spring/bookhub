@@ -1,14 +1,18 @@
 import { Routes } from '@angular/router';
+
 import { AjoutLivre } from './features/ajout-livre/ajout-livre';
 import { Connexion } from './features/connexion/connexion';
 import { Inscription } from './features/inscription/inscription';
 import { CatalogComponent } from './features/catalog/catalog';
-import { GestionProfil} from './features/gestion-profil/gestion-profil';
+import { GestionProfil } from './features/gestion-profil/gestion-profil';
 import { DashboardBibliothecaire } from './features/dashboard-bibliothecaire/dashboard-bibliothecaire';
 import { MesReservations } from './features/mes-reservations/mes-reservations';
 import { Emprunt } from './features/emprunt/emprunt';
 import { LivreDetail } from './features/livre-detail/livre-detail';
 import { ModifierLivre } from './features/modifier-livre/modifier-livre';
+
+import { bibliothecaireGuard } from './guards/bibliothecaire-guard';
+import { utilisateurGuard } from './guards/utilisateur-guard';
 
 export const routes: Routes = [
   {
@@ -27,18 +31,27 @@ export const routes: Routes = [
   {
     path: 'dashboard-bibliothecaire',
     component: DashboardBibliothecaire,
+    canActivate: [bibliothecaireGuard],
   },
   {
     path: 'mes-reservations',
     component: MesReservations,
+    canActivate: [utilisateurGuard],
+  },
+  {
+    path: 'mes-emprunts',
+    component: Emprunt,
+    canActivate: [utilisateurGuard],
   },
   {
     path: 'livres/ajouter',
     component: AjoutLivre,
+    canActivate: [bibliothecaireGuard],
   },
   {
     path: 'livres/:id/modifier',
     component: ModifierLivre,
+    canActivate: [bibliothecaireGuard],
   },
   {
     path: 'gestion-profil',
@@ -51,9 +64,5 @@ export const routes: Routes = [
   {
     path: '**',
     redirectTo: '',
-  },
-  {
-    path: 'emprunts',
-    component: Emprunt,
   },
 ];

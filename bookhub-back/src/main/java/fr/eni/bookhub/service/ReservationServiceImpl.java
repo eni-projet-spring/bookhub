@@ -123,7 +123,9 @@ public class ReservationServiceImpl implements ReservationService {
 
         reservation.setStatut(StatutReservation.DISPONIBLE);
         reservation.setDisponibilite("DISPONIBLE");
-        reservation.setPositionFileAttente(null);
+
+        // La réservation n'est plus dans la file d'attente.
+        reservation.setPositionFileAttente(0);
 
         Reservation reservationConfirmee =
                 reservationRepository.save(reservation);
@@ -152,7 +154,9 @@ public class ReservationServiceImpl implements ReservationService {
 
         reservation.setStatut(StatutReservation.ANNULEE);
         reservation.setDisponibilite("INDISPONIBLE");
-        reservation.setPositionFileAttente(null);
+
+        // La réservation n'est plus dans la file d'attente.
+        reservation.setPositionFileAttente(0);
 
         Reservation reservationRejetee =
                 reservationRepository.save(reservation);

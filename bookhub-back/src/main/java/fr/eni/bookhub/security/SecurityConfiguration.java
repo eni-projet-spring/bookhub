@@ -190,11 +190,4 @@ public class SecurityConfiguration {
         return new BCryptPasswordEncoder();
     }
 
-    @Bean
-    public CommandLineRunner genererHash(PasswordEncoder passwordEncoder) {
-        return args -> {
-            String hash = passwordEncoder.encode("password");
-            System.out.println("HASH = " + hash);
-        };
-    }
 }
