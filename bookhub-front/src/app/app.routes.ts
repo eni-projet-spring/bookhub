@@ -6,6 +6,7 @@ import { Inscription } from './features/inscription/inscription';
 import { CatalogComponent } from './features/catalog/catalog';
 import { GestionProfil } from './features/gestion-profil/gestion-profil';
 import { DashboardBibliothecaire } from './features/dashboard-bibliothecaire/dashboard-bibliothecaire';
+import { ListesReservations } from './features/listes-reservations/listes-reservations';
 import { MesReservations } from './features/mes-reservations/mes-reservations';
 import { Emprunt } from './features/emprunt/emprunt';
 import { LivreDetail } from './features/livre-detail/livre-detail';
@@ -33,11 +34,21 @@ export const routes: Routes = [
     component: DashboardBibliothecaire,
     canActivate: [bibliothecaireGuard],
   },
+
+  // Liste des réservations à confirmer/rejeter (bibliothécaire)
+  {
+    path: 'listes-reservations',
+    component: ListesReservations,
+    canActivate: [bibliothecaireGuard],
+  },
+
+  // Mes réservations (lecteur)
   {
     path: 'mes-reservations',
     component: MesReservations,
     canActivate: [utilisateurGuard],
   },
+
   {
     path: 'mes-emprunts',
     component: Emprunt,

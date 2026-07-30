@@ -2,16 +2,21 @@
 
   <!-- SIDEBAR -->
   <aside class="dashboard-layout__sidebar">
-    <nav class="sidebar-nav" aria-label="Navigation bibliothécaire">
 
+    <nav
+      class="sidebar-nav"
+      aria-label="Navigation bibliothécaire"
+    >
+
+      <!-- DASHBOARD -->
       <a
         class="sidebar-nav__link sidebar-nav__link--active"
         routerLink="/dashboard-bibliothecaire"
       >
         <svg
           class="sidebar-nav__icon"
-          width="16"
-          height="16"
+          width="20"
+          height="20"
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
@@ -20,143 +25,112 @@
           stroke-linejoin="round"
           aria-hidden="true"
         >
-          <rect x="6" y="4" width="12" height="17" rx="2"></rect>
-          <path d="M9 4V3a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v1"></path>
-          <path d="M9 11h6"></path>
-          <path d="M9 15h6"></path>
-        </svg>
-
-        Réservations
-      </a>
-
-      <a class="sidebar-nav__link" href="#emprunts-retard">
-        <svg
-          class="sidebar-nav__icon"
-          width="16"
-          height="16"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          aria-hidden="true"
-        >
-          <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H19V4H6.5A2.5 2.5 0 0 0 4 6.5v13z"></path>
-          <path d="M13 9l3 3-3 3"></path>
-          <path d="M9 12h7"></path>
-        </svg>
-
-        Emprunts
-      </a>
-
-      <a class="sidebar-nav__link" href="#statistiques">
-        <svg
-          class="sidebar-nav__icon"
-          width="16"
-          height="16"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          aria-hidden="true"
-        >
-          <line x1="5" y1="21" x2="5" y2="12"></line>
-          <line x1="12" y1="21" x2="12" y2="7"></line>
-          <line x1="19" y1="21" x2="19" y2="4"></line>
-        </svg>
-
-        Statistiques
-      </a>
-
-      <a class="sidebar-nav__link" routerLink="/livres/ajouter">
-        <svg
-          class="sidebar-nav__icon"
-          width="16"
-          height="16"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          aria-hidden="true"
-        >
-          <path d="M2 4h6a3 3 0 0 1 3 3v13a2.5 2.5 0 0 0-2.5-2.5H2z"></path>
-          <path d="M22 4h-6a3 3 0 0 0-3 3v13a2.5 2.5 0 0 1 2.5-2.5H22z"></path>
-        </svg>
-
-        Ajouter un livre
-  <aside class="sidebar">
-
-    <nav class="sidebar-nav">
-
-      <a routerLink="/dashboard-bibliothecaire"
-         routerLinkActive="active"
-         class="nav-link">
-
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
-             viewBox="0 0 24 24" fill="none"
-             stroke="currentColor" stroke-width="2">
-          <path d="M3 9.5L12 3l9 6.5"></path>
+          <path d="M3 9.5 12 3l9 6.5"></path>
           <path d="M5 10v10h14V10"></path>
         </svg>
 
         <span>Dashboard</span>
       </a>
 
-      <a routerLink="/livres/ajouter"
-         routerLinkActive="active"
-         class="nav-link">
+      <!-- AJOUTER UN LIVRE -->
+      <a
+        class="sidebar-nav__link"
+        routerLink="/livres/ajouter"
+      >
+        <svg
+          class="sidebar-nav__icon"
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <path
+            d="M2 4h6a3 3 0 0 1 3 3v13a2.5 2.5 0 0 0-2.5-2.5H2z"
+          ></path>
 
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
-             viewBox="0 0 24 24" fill="none"
-             stroke="currentColor" stroke-width="2">
-          <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
-          <path d="M6.5 2H20v15H6.5A2.5 2.5 0 0 0 4 19.5V4.5A2.5 2.5 0 0 1 6.5 2z"></path>
+          <path
+            d="M22 4h-6a3 3 0 0 0-3 3v13a2.5 2.5 0 0 1 2.5-2.5H22z"
+          ></path>
         </svg>
 
         <span>Ajouter un livre</span>
       </a>
 
-      <a routerLink="/emprunts"
-         routerLinkActive="active"
-         class="nav-link">
-
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
-             viewBox="0 0 24 24" fill="none"
-             stroke="currentColor" stroke-width="2">
+      <!-- EMPRUNTS -->
+      <a
+        class="sidebar-nav__link"
+        routerLink="/dashboard-bibliothecaire"
+        fragment="emprunts-retard"
+      >
+        <svg
+          class="sidebar-nav__icon"
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
           <path d="M17 1l4 4-4 4"></path>
-          <path d="M3 11V9a4 4 0 014-4h14"></path>
+          <path d="M3 11V9a4 4 0 0 1 4-4h14"></path>
           <path d="M7 23l-4-4 4-4"></path>
-          <path d="M21 13v2a4 4 0 01-4 4H3"></path>
+          <path d="M21 13v2a4 4 0 0 1-4 4H3"></path>
         </svg>
 
         <span>Emprunts</span>
       </a>
 
-      <a routerLink="/reservations"
-         routerLinkActive="active"
-         class="nav-link">
-
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
-             viewBox="0 0 24 24" fill="none"
-             stroke="currentColor" stroke-width="2">
-          <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+      <!-- LISTE DES RÉSERVATIONS -->
+      <a
+        class="sidebar-nav__link"
+        routerLink="/listes-reservations"
+      >
+        <svg
+          class="sidebar-nav__icon"
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <path
+            d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"
+          ></path>
         </svg>
 
         <span>Réservations</span>
       </a>
 
-      <a routerLink="/dashboard/statistiques"
-         routerLinkActive="active"
-         class="nav-link">
-
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
-             viewBox="0 0 24 24" fill="none"
-             stroke="currentColor" stroke-width="2">
+      <!-- STATISTIQUES -->
+      <a
+        class="sidebar-nav__link"
+        routerLink="/dashboard-bibliothecaire"
+        fragment="statistiques"
+      >
+        <svg
+          class="sidebar-nav__icon"
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
           <line x1="6" y1="20" x2="6" y2="10"></line>
           <line x1="12" y1="20" x2="12" y2="4"></line>
           <line x1="18" y1="20" x2="18" y2="14"></line>
@@ -165,35 +139,56 @@
         <span>Statistiques</span>
       </a>
 
-      <a routerLink="/gestion-profil"
-         routerLinkActive="active"
-         class="nav-link">
-
-        <svg xmlns="http://www.w3.org/2000/svg"
-             width="20"
-             height="20"
-             viewBox="0 0 24 24"
-             fill="none"
-             stroke="currentColor"
-             stroke-width="2">
-
+      <!-- PROFIL -->
+      <a
+        class="sidebar-nav__link"
+        routerLink="/gestion-profil"
+      >
+        <svg
+          class="sidebar-nav__icon"
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
           <circle cx="12" cy="7" r="4"></circle>
           <path d="M5.5 21a6.5 6.5 0 0 1 13 0"></path>
-
         </svg>
 
         <span>Mon profil</span>
       </a>
-      <a routerLink="/parametres"
-         routerLinkActive="active"
-         class="nav-link">
 
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
-             viewBox="0 0 24 24" fill="none"
-             stroke="currentColor" stroke-width="2">
+      <!-- PARAMÈTRES -->
+      <a
+        class="sidebar-nav__link"
+        routerLink="/parametres"
+      >
+        <svg
+          class="sidebar-nav__icon"
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
           <circle cx="12" cy="12" r="3"></circle>
-          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82"></path>
-          <path d="M4.6 9a1.65 1.65 0 0 0-.33-1.82"></path>
+
+          <path
+            d="M19.4 15a1.65 1.65 0 0 0 .33 1.82"
+          ></path>
+
+          <path
+            d="M4.6 9a1.65 1.65 0 0 0-.33-1.82"
+          ></path>
         </svg>
 
         <span>Paramètres</span>
@@ -208,43 +203,43 @@
 
     <section class="dashboard-bibliothecaire">
 
+      <!-- EN-TÊTE -->
       <header class="dashboard-header">
+
         <div>
           <h1>Dashboard bibliothécaire</h1>
 
           <p>
-            Suivi des emprunts, des retards, des livres populaires
-            et des réservations.
+            Suivi des emprunts, des retards et des livres populaires.
           </p>
         </div>
 
         <button
           type="button"
           class="bouton-actualiser"
-          (click)="actualiserDashboard()"
-          [disabled]="
-            chargementEnCours ||
-            chargementReservationsEnCours ||
-            idReservationEnCours !== null
-          "
+          (click)="chargerStatistiques()"
+          [disabled]="chargementEnCours"
         >
-          @if (
-            chargementEnCours ||
-            chargementReservationsEnCours
-            ) {
+          @if (chargementEnCours) {
             Chargement...
           } @else {
             Actualiser
           }
         </button>
+
       </header>
 
+      <!-- MESSAGE D’ERREUR -->
       @if (messageErreur) {
-        <p class="message-erreur" role="alert">
+        <p
+          class="message-erreur"
+          role="alert"
+        >
           {{ messageErreur }}
         </p>
       }
 
+      <!-- CHARGEMENT INITIAL -->
       @if (chargementEnCours && !statistiques) {
         <p class="message-chargement">
           Chargement du dashboard...
@@ -258,7 +253,9 @@
           id="statistiques"
           class="statistiques"
         >
+
           <article class="carte-statistique">
+
             <span class="titre-statistique">
               Emprunts en cours
             </span>
@@ -266,9 +263,11 @@
             <strong>
               {{ statistiques.nombreEmpruntsEnCours }}
             </strong>
+
           </article>
 
           <article class="carte-statistique">
+
             <span class="titre-statistique">
               Total des emprunts
             </span>
@@ -276,6 +275,7 @@
             <strong>
               {{ statistiques.nombreEmpruntsTotal }}
             </strong>
+
           </article>
 
           <article
@@ -284,6 +284,7 @@
               statistiques.nombreEmpruntsEnRetard > 0
             "
           >
+
             <span class="titre-statistique">
               Emprunts en retard
             </span>
@@ -291,9 +292,11 @@
             <strong>
               {{ statistiques.nombreEmpruntsEnRetard }}
             </strong>
+
           </article>
 
           <article class="carte-statistique">
+
             <span class="titre-statistique">
               Réservations en attente
             </span>
@@ -301,12 +304,16 @@
             <strong>
               {{ statistiques.nombreReservationsEnAttente }}
             </strong>
+
           </article>
+
         </section>
 
         <!-- LIVRES POPULAIRES -->
         <section class="section-dashboard">
+
           <div class="section-titre section-titre--avec-action">
+
             <div>
               <h2>Livres les plus populaires</h2>
 
@@ -321,15 +328,21 @@
             >
               + Ajouter un livre
             </a>
+
           </div>
 
           @if (statistiques.livresPopulaires.length === 0) {
+
             <p class="message-vide">
               Aucun emprunt enregistré pour le moment.
             </p>
+
           } @else {
+
             <div class="tableau-conteneur">
+
               <table>
+
                 <thead>
                 <tr>
                   <th>Livre</th>
@@ -339,26 +352,38 @@
                 </thead>
 
                 <tbody>
+
                   @for (
                     livre of statistiques.livresPopulaires;
                     track livre.idLivre
                     ) {
                     <tr>
-                      <td>{{ livre.titre }}</td>
 
-                      <td>{{ livre.auteur }}</td>
+                      <td>
+                        {{ livre.titre }}
+                      </td>
+
+                      <td>
+                        {{ livre.auteur }}
+                      </td>
 
                       <td>
                         <span class="badge-nombre">
                           {{ livre.nombreEmprunts }}
                         </span>
                       </td>
+
                     </tr>
                   }
+
                 </tbody>
+
               </table>
+
             </div>
+
           }
+
         </section>
 
         <!-- EMPRUNTS EN RETARD -->
@@ -366,21 +391,29 @@
           id="emprunts-retard"
           class="section-dashboard"
         >
+
           <div class="section-titre">
+
             <h2>Emprunts en retard</h2>
 
             <p>
               Emprunts dont la date de retour prévue est dépassée.
             </p>
+
           </div>
 
           @if (statistiques.empruntsEnRetard.length === 0) {
+
             <p class="message-vide message-succes">
               Aucun emprunt en retard.
             </p>
+
           } @else {
+
             <div class="tableau-conteneur">
+
               <table>
+
                 <thead>
                 <tr>
                   <th>Lecteur</th>
@@ -391,17 +424,21 @@
                 </thead>
 
                 <tbody>
+
                   @for (
                     emprunt of statistiques.empruntsEnRetard;
                     track emprunt.idEmprunt
                     ) {
                     <tr>
+
                       <td>
                         {{ emprunt.prenomUtilisateur }}
                         {{ emprunt.nomUtilisateur }}
                       </td>
 
-                      <td>{{ emprunt.titreLivre }}</td>
+                      <td>
+                        {{ emprunt.titreLivre }}
+                      </td>
 
                       <td>
                         {{
@@ -412,6 +449,7 @@
 
                       <td>
                         <span class="badge-retard">
+
                           {{ emprunt.nombreJoursRetard }}
 
                           @if (emprunt.nombreJoursRetard > 1) {
@@ -419,162 +457,24 @@
                           } @else {
                             jour
                           }
+
                         </span>
                       </td>
+
                     </tr>
                   }
+
                 </tbody>
+
               </table>
+
             </div>
+
           }
+
         </section>
 
       }
-
-      <!-- RÉSERVATIONS EN ATTENTE -->
-      <section
-        id="reservations"
-        class="section-dashboard reservations"
-      >
-        <div class="section-titre">
-          <h2>Demandes de réservation en attente</h2>
-
-          <p>
-            Réservations à confirmer ou à rejeter par le
-            bibliothécaire.
-          </p>
-        </div>
-
-        @if (chargementReservationsEnCours) {
-          <p class="message-chargement">
-            Chargement des réservations...
-          </p>
-        }
-
-        @if (messageErreurReservations) {
-          <p
-            class="message-erreur"
-            role="alert"
-          >
-            {{ messageErreurReservations }}
-          </p>
-        }
-
-        @if (
-          !chargementReservationsEnCours &&
-          !messageErreurReservations &&
-          reservationsEnAttente.length === 0
-          ) {
-          <p class="message-vide">
-            Aucune réservation en attente.
-          </p>
-        }
-
-        @if (
-          !chargementReservationsEnCours &&
-          !messageErreurReservations &&
-          reservationsEnAttente.length > 0
-          ) {
-          <div class="liste-reservations">
-
-            @for (
-              reservation of reservationsEnAttente;
-              track reservation.idReservation
-              ) {
-              <article class="carte-reservation">
-
-                <div class="informations-reservation">
-                  <h3>
-                    {{ reservation.titreLivre }}
-                  </h3>
-
-                  <p class="isbn">
-                    ISBN : {{ reservation.isbn }}
-                  </p>
-
-                  <p>
-                    Date de la demande :
-                    <strong>
-                      {{
-                        reservation.dateDemande
-                          | date: 'dd/MM/yyyy à HH:mm'
-                      }}
-                    </strong>
-                  </p>
-
-                  <p>
-                    Position dans la file :
-                    <strong>
-                      {{
-                        reservation.positionFileAttente
-                        ?? 'Non définie'
-                      }}
-                    </strong>
-                  </p>
-
-                  <p>
-                    Statut :
-                    <strong>
-                      {{ reservation.statut }}
-                    </strong>
-                  </p>
-                </div>
-
-                <div class="actions-reservation">
-
-                  <button
-                    type="button"
-                    class="bouton-confirmer"
-                    (click)="
-                      confirmerReservation(
-                        reservation.idReservation
-                      )
-                    "
-                    [disabled]="
-                      idReservationEnCours ===
-                      reservation.idReservation
-                    "
-                  >
-                    @if (
-                      idReservationEnCours ===
-                      reservation.idReservation
-                      ) {
-                      Traitement...
-                    } @else {
-                      Confirmer
-                    }
-                  </button>
-
-                  <button
-                    type="button"
-                    class="bouton-rejeter"
-                    (click)="
-                      rejeterReservation(
-                        reservation.idReservation
-                      )
-                    "
-                    [disabled]="
-                      idReservationEnCours ===
-                      reservation.idReservation
-                    "
-                  >
-                    @if (
-                      idReservationEnCours ===
-                      reservation.idReservation
-                      ) {
-                      Traitement...
-                    } @else {
-                      Rejeter
-                    }
-                  </button>
-
-                </div>
-              </article>
-            }
-
-          </div>
-        }
-      </section>
 
     </section>
 
