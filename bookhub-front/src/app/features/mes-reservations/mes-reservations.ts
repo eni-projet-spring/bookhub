@@ -6,7 +6,7 @@ import { ReservationResponse } from '../../models/reservation-response';
 import { ReservationService } from '../../services/reservation.service';
 
 @Component({
-  selector: 'app-mes-reservations',
+  selector: 'app-mes-listes-reservations',
   standalone: true,
   imports: [CommonModule],
   templateUrl: './mes-reservations.html',
