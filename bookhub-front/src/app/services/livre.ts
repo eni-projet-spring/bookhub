@@ -38,7 +38,6 @@ export class LivreService {
   private readonly http = inject(HttpClient);
   private readonly apiUrl = 'http://localhost:8080/api/livres';
 
-
   getBookById(idLivre: number): Observable<LivreResponse> {
     return this.http.get<LivreResponse>(`${this.apiUrl}/${idLivre}`);
   }
@@ -65,5 +64,12 @@ export class LivreService {
 
   deleteBook(idLivre: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${idLivre}`);
+  }
+
+  /**
+   * Ajoute un livre avec sa couverture en tant que fichier (multipart/form-data).
+   */
+  ajouterLivreMultipart(formData: FormData): Observable<LivreResponse> {
+    return this.http.post<LivreResponse>(this.apiUrl, formData);
   }
 }

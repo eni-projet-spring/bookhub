@@ -77,28 +77,42 @@
     </div>
 
     <div class="ajout-livre__field">
-      <label class="form-label" for="couverture">
-        URL de la couverture
-      </label>
+      <span class="form-label">Couverture du livre</span>
 
-      <input
-        class="form-control"
-        id="couverture"
-        type="url"
-        formControlName="couverture"
-        maxlength="255"
-        placeholder="https://..."
-      >
+      <div class="couverture-upload">
+        <!-- Hidden native file input for accessibility and functionality -->
+        <input
+          type="file"
+          id="couvertureFile"
+          class="couverture-upload__input"
+          accept="image/jpeg, image/png, image/webp"
+          (change)="onFileSelected($event)"
+          aria-label="Sélectionner une image de couverture"
+        />
+
+        <!-- Styled label acting as the trigger button -->
+        <label
+          for="couvertureFile"
+          class="couverture-upload__button"
+          [class.couverture-upload__button--selected]="selectedFile"
+        >
+          {{ selectedFile ? 'Couverture sélectionnée' : 'Choisir une image' }}
+        </label>
+
+        <!-- Image Preview -->
+        @if (previewUrl) {
+          <img
+            [src]="previewUrl"
+            alt="Aperçu de la couverture sélectionnée"
+            class="couverture-upload__preview"
+          />
+        }
+      </div>
     </div>
 
     <div class="ajout-livre__field">
       <label class="form-label" for="idCategorie">Catégorie *</label>
-
-      <select
-        class="form-control"
-        id="idCategorie"
-        formControlName="idCategorie"
-      >
+      <select class="form-control" id="idCategorie" formControlName="idCategorie">
         <option [ngValue]="1">Roman</option>
         <option [ngValue]="2">Science-fiction</option>
         <option [ngValue]="3">Policier</option>

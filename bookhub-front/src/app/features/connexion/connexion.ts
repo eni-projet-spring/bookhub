@@ -51,7 +51,11 @@ export class Connexion {
 
         this.connexionEnCours = false;
 
-        this.router.navigate(['/livres/ajouter']);
+        if (connexionResponse.role === 'LIBRARIAN' || connexionResponse.role === 'ADMIN') {
+          this.router.navigate(['/dashboard-bibliothecaire']);
+        } else {
+          this.router.navigate(['/']);
+        }
       },
 
       error: (erreur) => {
