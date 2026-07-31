@@ -20,6 +20,8 @@ export class LivreDetail implements OnInit {
   private readonly reservationService = inject(ReservationService);
   private readonly changeDetectorRef = inject(ChangeDetectorRef);
 
+  private readonly backendBaseUrl = 'http://localhost:8080';
+
   livre?: LivreResponse;
 
   chargement = true;
@@ -37,6 +39,26 @@ export class LivreDetail implements OnInit {
   ngOnInit(): void {
     this.initialiserUtilisateur();
     this.chargerLivre();
+  }
+
+  getCoverImageUrl(couverture: string | null | undefined): string {
+    // 1. Fallback if no cover is provided (replace with your actual default image path if you have one)
+    if (!couverture) {
+      return '';
+    }
+
+    // 2. If it's already a full external URL (legacy data), return it as-is
+    if (couverture.startsWith('http://') || couverture.startsWith('https://')) {
+      return couverture;
+    }
+
+    // 3. If it's a relative path starting with '/' (new local uploads), prepend the backend URL
+    if (couverture.startsWith('/')) {
+      return `${this.backendBaseUrl}${couverture}`;
+    }
+
+    // 4. Fallback for any other unexpected format
+    return `${this.backendBaseUrl}/${couverture}`;
   }
 
   get peutGererLivre(): boolean {

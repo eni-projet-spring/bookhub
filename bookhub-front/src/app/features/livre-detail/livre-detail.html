@@ -14,7 +14,7 @@
       <div class="zone-couverture">
         <img
           class="couverture"
-          [src]="livre.couverture"
+          [src]="getCoverImageUrl(livre.couverture)"
           [alt]="'Couverture de ' + livre.titre"
         >
       </div>
