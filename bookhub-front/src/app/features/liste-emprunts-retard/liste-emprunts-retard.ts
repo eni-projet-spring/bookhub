@@ -3,11 +3,12 @@ import { ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
 
 import { EmpruntResponse } from '../../models/emprunt-response';
 import { EmpruntService } from '../../services/emprunt-service';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-liste-emprunts-retard',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterLink],
   templateUrl: './liste-emprunts-retard.html',
   styleUrl: './liste-emprunts-retard.css',
 })
