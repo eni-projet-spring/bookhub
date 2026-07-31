@@ -68,4 +68,18 @@ export class UtilisateurService {
     localStorage.removeItem('token');
     localStorage.removeItem('utilisateurConnecte');
   }
+
+  listerUtilisateurs(): Observable<UtilisateurResponse[]> {
+    return this.http.get<UtilisateurResponse[]>(this.apiUrl);
+  }
+
+  modifierRole(
+    idUtilisateur: number,
+    role: Role,
+  ): Observable<UtilisateurResponse> {
+    return this.http.patch<UtilisateurResponse>(
+      `${this.apiUrl}/${idUtilisateur}/role`,
+      { role },
+    );
+  }
 }

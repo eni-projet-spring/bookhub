@@ -1,0 +1,196 @@
+<div class="dashboard-layout">
+
+  <!-- SIDEBAR -->
+  <aside class="dashboard-layout__sidebar">
+
+    <nav
+      class="sidebar-nav"
+      aria-label="Navigation administrateur"
+    >
+
+      <a
+        class="sidebar-nav__link"
+        routerLink="/dashboard-administrateur"
+      >
+        <span>Dashboard</span>
+      </a>
+
+      <a
+        class="sidebar-nav__link sidebar-nav__link--active"
+        routerLink="/admin/utilisateurs"
+      >
+        <span>Utilisateurs</span>
+      </a>
+
+    </nav>
+
+  </aside>
+
+  <!-- CONTENU -->
+  <main class="dashboard-layout__content">
+
+    <section class="dashboard-bibliothecaire">
+
+      <header class="dashboard-header">
+
+        <div>
+          <h1>Gestion des utilisateurs</h1>
+
+          <p>
+            Consultez et gérez les comptes de la plateforme.
+          </p>
+        </div>
+
+        <button
+          type="button"
+          class="bouton-actualiser"
+          (click)="chargerUtilisateurs()"
+          [disabled]="chargementEnCours"
+        >
+          @if (chargementEnCours) {
+            Chargement...
+          } @else {
+            Actualiser
+          }
+        </button>
+
+      </header>
+
+      @if (messageSucces) {
+        <p class="message-succes">
+          {{ messageSucces }}
+        </p>
+      }
+
+      @if (messageErreur) {
+        <p
+          class="message-erreur"
+          role="alert"
+        >
+          {{ messageErreur }}
+        </p>
+      }
+
+      @if (
+        chargementEnCours &&
+        utilisateurs.length === 0
+        ) {
+        <p class="message-chargement">
+          Chargement des utilisateurs...
+        </p>
+      }
+
+      @if (
+        !chargementEnCours &&
+        !messageErreur &&
+        utilisateurs.length === 0
+        ) {
+        <p class="message-vide">
+          Aucun utilisateur trouvé.
+        </p>
+      }
+
+      @if (utilisateurs.length > 0) {
+
+        <section class="section-dashboard">
+
+          <div class="section-titre">
+
+            <h2>
+              Utilisateurs enregistrés
+            </h2>
+
+            <p>
+              {{ utilisateurs.length }}
+              utilisateur(s)
+            </p>
+
+          </div>
+
+          <div class="tableau-conteneur">
+
+            <table>
+
+              <thead>
+
+              <tr>
+                <th>Identifiant</th>
+                <th>Nom</th>
+                <th>Prénom</th>
+                <th>Email</th>
+                <th>Rôle</th>
+              </tr>
+
+              </thead>
+
+              <tbody>
+
+                @for (
+                  utilisateur of utilisateurs;
+                  track utilisateur.idUtilisateur
+                  ) {
+
+                  <tr>
+
+                    <td>
+                      {{ utilisateur.idUtilisateur }}
+                    </td>
+
+                    <td>
+                      {{ utilisateur.nom }}
+                    </td>
+
+                    <td>
+                      {{ utilisateur.prenom }}
+                    </td>
+
+                    <td>
+                      {{ utilisateur.email }}
+                    </td>
+
+                    <td>
+
+                      <select
+                        class="select-role"
+                        [value]="utilisateur.role"
+                        (change)="modifierRoleDepuisSelect(
+                          utilisateur,
+                          $any($event.target).value
+                        )"
+                      >
+
+                        <option value="USER">
+                          Lecteur
+                        </option>
+
+                        <option value="LIBRARIAN">
+                          Bibliothécaire
+                        </option>
+
+                        <option value="ADMIN">
+                          Administrateur
+                        </option>
+
+                      </select>
+
+                    </td>
+
+                  </tr>
+
+                }
+
+              </tbody>
+
+            </table>
+
+          </div>
+
+        </section>
+
+      }
+
+    </section>
+
+  </main>
+
+</div>

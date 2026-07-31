@@ -1,9 +1,12 @@
 package fr.eni.bookhub.service;
 
 import fr.eni.bookhub.dto.InscriptionUtilisateurDto;
+import fr.eni.bookhub.dto.UtilisateurResponse;
+import fr.eni.bookhub.entity.Role;
 import fr.eni.bookhub.entity.Utilisateur;
 import jakarta.validation.Valid;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface UtilisateurService {
@@ -20,4 +23,9 @@ public interface UtilisateurService {
      */
     Utilisateur connecter(String email, String motDePasse);
     Utilisateur inscrire(InscriptionUtilisateurDto inscriptionDto);
+    List<UtilisateurResponse> listerUtilisateurs();
+    UtilisateurResponse modifierRole(
+            Integer idUtilisateur,
+            Role role
+    );
 }

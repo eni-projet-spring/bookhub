@@ -15,4 +15,5 @@ public interface EmpruntService {
     List<EmpruntResponse> consulterMesEmprunts(
             String emailUtilisateur
     );
+    void enregistrerRetour(Integer idEmprunt);
 }

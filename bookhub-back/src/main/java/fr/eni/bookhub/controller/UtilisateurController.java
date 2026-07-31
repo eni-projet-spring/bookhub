@@ -1,19 +1,16 @@
 package fr.eni.bookhub.controller;
 
-import fr.eni.bookhub.dto.ConnexionRequest;
-import fr.eni.bookhub.dto.ConnexionResponse;
-import fr.eni.bookhub.dto.InscriptionUtilisateurDto;
-import fr.eni.bookhub.dto.UtilisateurResponse;
+import fr.eni.bookhub.dto.*;
 import fr.eni.bookhub.entity.Utilisateur;
 import fr.eni.bookhub.service.JwtService;
 import fr.eni.bookhub.service.UtilisateurService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/utilisateurs")
@@ -71,5 +68,29 @@ public class UtilisateurController {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(response);
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping
+    public ResponseEntity<List<UtilisateurResponse>>
+    listerUtilisateurs() {
+
+        return ResponseEntity.ok(
+                utilisateurService.listerUtilisateurs()
+        );
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @PatchMapping("/{idUtilisateur}/role")
+    public ResponseEntity<UtilisateurResponse> modifierRole(
+            @PathVariable Integer idUtilisateur,
+            @Valid @RequestBody ModificationRoleRequest request
+    ) {
+        return ResponseEntity.ok(
+                utilisateurService.modifierRole(
+                        idUtilisateur,
+                        request.getRole()
+                )
+        );
     }
 }
