@@ -4,11 +4,12 @@ import { Component, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 
 import { LivreResponse, LivreService } from '../../services/livre';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-ajout-livre',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, RouterLink],
   templateUrl: './ajout-livre.html',
   styleUrl: './ajout-livre.css',
 })
