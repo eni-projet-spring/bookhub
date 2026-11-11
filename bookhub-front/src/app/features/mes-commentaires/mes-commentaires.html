@@ -2,70 +2,71 @@
   <header class="my-comments__header">
     <div>
       <h1>Mes commentaires</h1>
-      <p>
-        Consultez les avis que vous avez publiés sur les livres lus.
-      </p>
+      <p>Retrouvez et modifiez vos avis sur les livres déjà retournés.</p>
     </div>
-
     <div class="comments-count">
       <span>Avis publiés</span>
-      <strong>2</strong>
+      <strong>{{ chargement ? '—' : commentaires.length }}</strong>
     </div>
   </header>
 
-  <div class="comments-list">
-    <article class="comment-card">
-      <header class="comment-card__header">
-        <div>
-          <h2>Dune</h2>
-          <p>Frank Herbert</p>
-        </div>
+  @if (chargement) {
+    <p role="status">Chargement des avis…</p>
+  } @else {
+    @if (erreur) { <p role="alert">{{ erreur }}</p> }
+    @if (succes) { <p role="status">{{ succes }}</p> }
 
-        <span class="comment-card__date">
-          28 juillet 2026
-        </span>
-      </header>
+    <!-- Les livres proposés proviennent uniquement de l'historique de l'utilisateur. -->
+    @if (livresLus.length > 0) {
+      <form class="comment-card" (ngSubmit)="enregistrerAvis()">
+        <h2>Rédiger ou modifier un avis</h2>
+        <label for="avis-livre">Livre lu</label>
+        <select id="avis-livre" name="isbn" [ngModel]="isbn"
+                (ngModelChange)="selectionnerLivre($event)" required>
+          <option value="">Choisir un livre retourné</option>
+          @for (livre of livresLus; track livre.isbn) {
+            <option [value]="livre.isbn">{{ livre.titreLivre }}</option>
+          }
+        </select>
 
-      <div class="comment-card__rating" aria-label="Note : 5 sur 5">
-        <span aria-hidden="true">★★★★★</span>
-        <strong>5/5</strong>
-      </div>
+        <label for="avis-note">Note</label>
+        <select id="avis-note" name="note" [(ngModel)]="note" required>
+          @for (valeur of [1, 2, 3, 4, 5]; track valeur) {
+            <option [ngValue]="valeur">{{ valeur }} / 5</option>
+          }
+        </select>
 
-      <p class="comment-card__text">
-        Un excellent roman de science-fiction, très immersif et riche
-        dans la construction de son univers.
-      </p>
+        <label for="avis-texte">Votre commentaire (1 à 1000 caractères)</label>
+        <textarea id="avis-texte" name="texte" [(ngModel)]="texte"
+                  maxlength="1000" rows="4" required></textarea>
 
-      <button type="button">
-        Modifier mon avis
-      </button>
-    </article>
+        <button type="submit" [disabled]="!isbn || !texte.trim() || enregistrementEnCours">
+          {{ enregistrementEnCours ? 'Enregistrement…' : 'Enregistrer mon avis' }}
+        </button>
+      </form>
+    } @else if (!erreur) {
+      <p>Vous pourrez rédiger un avis après avoir retourné un livre.</p>
+    }
 
-    <article class="comment-card">
-      <header class="comment-card__header">
-        <div>
-          <h2>1984</h2>
-          <p>George Orwell</p>
-        </div>
-
-        <span class="comment-card__date">
-          24 juillet 2026
-        </span>
-      </header>
-
-      <div class="comment-card__rating" aria-label="Note : 4 sur 5">
-        <span aria-hidden="true">★★★★☆</span>
-        <strong>4/5</strong>
-      </div>
-
-      <p class="comment-card__text">
-        Une lecture marquante dont les thèmes restent particulièrement
-        actuels.
-      </p>
-
-      <button type="button">
-        Modifier mon avis
-      </button>
-    </article>
-  </div>
+    <div class="comments-list">
+      @if (commentaires.length === 0 && !erreur) {
+        <p>Aucun avis publié pour le moment.</p>
+      }
+      @for (avis of commentaires; track avis.idCommentaire) {
+        <article class="comment-card">
+          <header class="comment-card__header">
+            <div><h2>{{ avis.titreLivre }}</h2><p>{{ avis.auteurLivre }}</p></div>
+            <span class="comment-card__date">{{ avis.datePublication | date: 'dd/MM/yyyy' }}</span>
+          </header>
+          <div class="comment-card__rating" [attr.aria-label]="'Note : ' + avis.note + ' sur 5'">
+            <strong>{{ avis.note }} / 5</strong>
+          </div>
+          <p class="comment-card__text">{{ avis.texte }}</p>
+          <button type="button" (click)="selectionnerLivre(avis.isbn)">
+            Modifier cet avis
+          </button>
+        </article>
+      }
+    </div>
+  }
 </section>

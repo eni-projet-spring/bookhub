@@ -9,4 +9,6 @@ export interface EmpruntResponse {
   dateRetour: string | null;
   statut: 'EN_COURS' | 'EN_RETARD' | 'RETOURNE';
   nombreJoursRetard: number;
+  auteurLivre?: string | null;
+  couvertureLivre?: string | null;
 }

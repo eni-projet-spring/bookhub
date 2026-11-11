@@ -1,7 +1,6 @@
 package fr.eni.bookhub.dto;
 
 import fr.eni.bookhub.entity.StatutEmprunt;
-
 import java.time.LocalDateTime;
 
 public record EmpruntResponse(
@@ -14,6 +13,8 @@ public record EmpruntResponse(
         LocalDateTime dateFinPrevue,
         LocalDateTime dateRetour,
         StatutEmprunt statut,
-        long nombreJoursRetard
+        long nombreJoursRetard,
+        String auteurLivre,
+        String couvertureLivre
 ) {
 }

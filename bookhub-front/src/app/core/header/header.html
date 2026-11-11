@@ -52,15 +52,15 @@
     }
   </div>
   <div class="header__bottom">
-    <select aria-label="Choisir une catégorie">
-      <option value="">Catégories</option>
-      <option value="roman">Roman</option>
-      <option value="fantasy">Fantasy</option>
-      <option value="science-fiction">Science-fiction</option>
-      <option value="policier">Policier</option>
-      <option value="manga">Manga</option>
-      <option value="histoire">Histoire</option>
-      <option value="jeunesse">Jeunesse</option>
+    <select
+      aria-label="Choisir une catégorie"
+      [ngModel]="categorieSelectionnee"
+      (ngModelChange)="onCategorieChange($event)"
+    >
+      <option value="">Toutes les catégories</option>
+      @for (categorie of categories; track categorie) {
+        <option [value]="categorie">{{ categorie }}</option>
+      }
     </select>
     <nav aria-label="Navigation principale">
       <ul>
@@ -115,12 +115,7 @@
           }
 
           @if (estAdministrateur()) {
-            <a
-              routerLink="/admin/utilisateurs"
-              routerLinkActive="active"
-            >
-              Gestion Utilisateurs
-            </a>
+            <li><a routerLink="/admin/utilisateurs" routerLinkActive="active">Gestion Utilisateurs</a></li>
           }
 
           <li>

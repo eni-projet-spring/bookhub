@@ -4,6 +4,7 @@ import fr.eni.bookhub.dto.EmpruntResponse;
 import fr.eni.bookhub.dto.LivrePopulaireResponse;
 import fr.eni.bookhub.dto.StatistiquesBibliothequeResponse;
 import fr.eni.bookhub.entity.Emprunt;
+import fr.eni.bookhub.entity.Livre;
 import fr.eni.bookhub.entity.StatutEmprunt;
 import fr.eni.bookhub.entity.StatutReservation;
 import fr.eni.bookhub.repository.EmpruntRepository;
@@ -20,6 +21,8 @@ import java.util.List;
 public class StatistiquesBibliothequeServiceImpl
         implements StatistiquesBibliothequeService {
 
+    private static final int LIMITE_LIVRES_POPULAIRES = 5;
+
     private final EmpruntRepository empruntRepository;
     private final ReservationRepository reservationRepository;
 
@@ -33,31 +36,25 @@ public class StatistiquesBibliothequeServiceImpl
 
     @Override
     public StatistiquesBibliothequeResponse consulterStatistiques() {
-
         LocalDateTime maintenant = LocalDateTime.now();
 
         long nombreEmpruntsEnCours =
                 empruntRepository.countByDateRetourIsNull();
 
-        long nombreEmpruntsTotal =
-                empruntRepository.count();
+        long nombreEmpruntsTotal = empruntRepository.count();
 
         long nombreEmpruntsEnRetard =
-                empruntRepository
-                        .countByDateRetourIsNullAndDateFinPrevueBefore(
-                                maintenant
-                        );
-
-        long nombreReservationsEnAttente =
-                reservationRepository.countByStatut(
-                        StatutReservation.EN_ATTENTE
+                empruntRepository.countByDateRetourIsNullAndDateFinPrevueBefore(
+                        maintenant
                 );
 
+        long nombreReservationsEnAttente =
+                reservationRepository.countByStatut(StatutReservation.EN_ATTENTE);
+
         List<LivrePopulaireResponse> livresPopulaires =
-                empruntRepository
-                        .rechercherLivresLesPlusEmpruntes()
+                empruntRepository.rechercherLivresLesPlusEmpruntes()
                         .stream()
-                        .limit(5)
+                        .limit(LIMITE_LIVRES_POPULAIRES)
                         .map(resultat -> new LivrePopulaireResponse(
                                 ((Number) resultat[0]).longValue(),
                                 (String) resultat[1],
@@ -72,12 +69,7 @@ public class StatistiquesBibliothequeServiceImpl
                                 maintenant
                         )
                         .stream()
-                        .map(emprunt ->
-                                convertirEnEmpruntResponse(
-                                        emprunt,
-                                        maintenant
-                                )
-                        )
+                        .map(emprunt -> convertirEnEmpruntResponse(emprunt, maintenant))
                         .toList();
 
         return new StatistiquesBibliothequeResponse(
@@ -94,22 +86,28 @@ public class StatistiquesBibliothequeServiceImpl
             Emprunt emprunt,
             LocalDateTime maintenant
     ) {
-        long nombreJoursRetard = ChronoUnit.DAYS.between(
-                emprunt.getDateFinPrevue(),
-                maintenant
+        Livre livre = emprunt.getExemplaire().getLivre();
+
+        // La requête ne sélectionne que les emprunts non rendus et échus.
+        // Ne jamais exposer un nombre de jours négatif.
+        long nombreJoursRetard = Math.max(
+                0,
+                ChronoUnit.DAYS.between(emprunt.getDateFinPrevue(), maintenant)
         );
 
         return new EmpruntResponse(
                 emprunt.getIdEmprunt(),
                 emprunt.getUtilisateur().getNom(),
                 emprunt.getUtilisateur().getPrenom(),
-                emprunt.getExemplaire().getLivre().getTitre(),
-                emprunt.getExemplaire().getLivre().getIsbn(),
+                livre.getTitre(),
+                livre.getIsbn(),
                 emprunt.getDateDebut(),
                 emprunt.getDateFinPrevue(),
                 emprunt.getDateRetour(),
                 StatutEmprunt.EN_RETARD,
-                nombreJoursRetard
+                nombreJoursRetard,
+                livre.getAuteur(),
+                livre.getCouverture()
         );
     }
 }

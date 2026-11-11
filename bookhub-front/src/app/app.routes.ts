@@ -96,6 +96,7 @@ export const routes: Routes = [
   {
     path: 'dashboard-lecteur',
     component: DashboardLecteurLayout,
+    canActivate: [utilisateurGuard],
     children: [
       {
         path: '',

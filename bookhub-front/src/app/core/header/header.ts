@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { UtilisateurService } from '../../services/utilisateur.service';
 import { FormsModule } from '@angular/forms';
+import { LivreService } from '../../services/livre';
 
 @Component({
   selector: 'app-header',
@@ -10,11 +11,26 @@ import { FormsModule } from '@angular/forms';
   templateUrl: './header.html',
   styleUrl: './header.css',
 })
-export class Header {
+export class Header implements OnInit {
+  categories: string[] = [];
+  categorieSelectionnee = '';
+
+  ngOnInit(): void {
+    this.livreService.getAllBooks().subscribe({
+      next: livres => {
+        this.categories = [...new Set(livres.map(livre => livre.libelleCategorie).filter((valeur): valeur is string => !!valeur))].sort((a,b) => a.localeCompare(b, 'fr'));
+        this.changeDetectorRef.markForCheck();
+      },
+      error: () => { this.categories = []; this.changeDetectorRef.markForCheck(); },
+    });
+  }
+
   protected messageSucces: string | undefined;
   constructor(
     private utilisateurService: UtilisateurService,
     private router: Router,
+    private livreService: LivreService,
+    private changeDetectorRef: ChangeDetectorRef,
   ) {}
 
   estConnecte(): boolean {
@@ -23,7 +39,7 @@ export class Header {
 
   estUtilisateur(): boolean {
     const role = this.utilisateurService.getRole();
-    return role === 'USER' || role === 'ADMIN';
+    return role === 'USER';
   }
 
   estBibliothecaire(): boolean {
@@ -41,13 +57,24 @@ export class Header {
   }
 
   onSearch(term: string): void {
-    const cleanTerm = term.trim();
+    const search = term.trim();
+    void this.router.navigate(['/'], {
+      queryParams: {
+        search: search || null,
+        categorie: this.categorieSelectionnee || null,
+      },
+    });
+  }
 
-    // If the user typed something, add it to the URL.
-    // If they cleared the box, remove the search parameter.
-    const queryParams = cleanTerm ? { search: cleanTerm } : {};
-
-    // Navigate to the home/catalog page with the new URL parameters
-    this.router.navigate(['/'], { queryParams });
+  onCategorieChange(categorie: string): void {
+    this.categorieSelectionnee = categorie;
+    const currentSearch = this.router.parseUrl(this.router.url).queryParams['search'];
+    void this.router.navigate(['/'], {
+      queryParams: {
+        search: currentSearch || null,
+        categorie: categorie || null,
+      },
+    });
   }
 }
+
