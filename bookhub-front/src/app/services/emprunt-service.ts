@@ -11,6 +11,10 @@ export class EmpruntService {
 
   constructor(private http: HttpClient) {}
 
+  consulterTousLesEmprunts(): Observable<EmpruntResponse[]> {
+    return this.http.get<EmpruntResponse[]>(`${this.apiUrl}`);
+  }
+
   consulterEmpruntsEnRetard(): Observable<EmpruntResponse[]> {
     return this.http.get<EmpruntResponse[]>(`${this.apiUrl}/retards`);
   }
