@@ -281,3 +281,9 @@
     width: 100%;
   }
 }
+
+/* Jaquette réelle et accès à la rédaction d'un avis. */
+.history-card__cover { overflow: hidden; background: var(--color-primary); }
+.history-card__cover-image { display: block; width: 100%; height: 155px; object-fit: cover; }
+.history-card__review-link { align-self: flex-end; color: var(--color-primary); font-weight: 700; }
+@media (max-width: 800px) { .history-card__cover-image { height: 125px; } }
