@@ -1,0 +1,35 @@
+<section class="dashboard-bibliothecaire">
+  <header class="dashboard-header">
+    <div><h1>Statistiques de la bibliothèque</h1><p>Données calculées à partir des emprunts et réservations.</p></div>
+    <button type="button" class="bouton-actualiser" (click)="actualiser()" [disabled]="chargement">
+      Actualiser
+    </button>
+  </header>
+  @if (erreur) { <p role="alert" class="message-erreur">{{ erreur }}</p> }
+  @if (chargement && !statistiques) { <p>Chargement…</p> }
+  @if (statistiques) {
+    <section class="statistiques" aria-label="Indicateurs">
+      <article class="carte-statistique"><span class="titre-statistique">Emprunts non retournés</span><strong>{{ statistiques.nombreEmpruntsEnCours }}</strong></article>
+      <article class="carte-statistique"><span class="titre-statistique">Total des emprunts</span><strong>{{ statistiques.nombreEmpruntsTotal }}</strong></article>
+      <article class="carte-statistique"><span class="titre-statistique">Retards</span><strong>{{ statistiques.nombreEmpruntsEnRetard }}</strong></article>
+      <article class="carte-statistique"><span class="titre-statistique">Réservations en attente</span><strong>{{ statistiques.nombreReservationsEnAttente }}</strong></article>
+    </section>
+    <section class="section-dashboard">
+      <div class="section-titre"><h2>Livres les plus empruntés</h2></div>
+      @if (!statistiques.livresPopulaires.length) {
+        <p class="message-vide">Aucun emprunt recensé.</p>
+      } @else {
+        <div class="tableau-conteneur">
+          <table>
+            <thead><tr><th>Livre</th><th>Auteur</th><th>Emprunts</th></tr></thead>
+            <tbody>
+              @for (livre of statistiques.livresPopulaires; track livre.idLivre) {
+                <tr><td>{{ livre.titre }}</td><td>{{ livre.auteur }}</td><td>{{ livre.nombreEmprunts }}</td></tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      }
+    </section>
+  }
+</section>
