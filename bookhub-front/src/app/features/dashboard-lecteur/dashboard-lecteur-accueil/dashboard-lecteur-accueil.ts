@@ -79,21 +79,23 @@ export class DashboardLecteurAccueil implements OnInit {
     return this.emprunts.filter((e) => e.statut !== 'RETOURNE' && !e.dateRetour);
   }
 
-  /** Évalue aussi les dates dépassées quand le statut n'a pas encore été recalculé. */
+  /** L'API calcule le retard selon dateFinPrevue et dateRetour. */
   get empruntsEnRetard(): EmpruntResponse[] {
-    const aujourdHui = new Date().toLocaleDateString('en-CA');
-    return this.empruntsEnCours.filter((e) =>
-      e.statut === 'EN_RETARD' || e.dateFinPrevue < aujourdHui);
+    return this.empruntsEnCours.filter((e) => e.statut === 'EN_RETARD');
   }
 
   get empruntsProchains(): EmpruntResponse[] {
     const debut = new Date();
-    const fin = new Date();
+    debut.setHours(0, 0, 0, 0);
+    const fin = new Date(debut);
     fin.setDate(fin.getDate() + 7);
-    const dateDebut = debut.toLocaleDateString('en-CA');
-    const dateFin = fin.toLocaleDateString('en-CA');
-    return this.empruntsEnCours.filter((e) =>
-      e.dateFinPrevue >= dateDebut && e.dateFinPrevue <= dateFin);
+    // Dates comparées comme instants, indépendamment du format local Safari.
+    return this.empruntsEnCours.filter((e) => {
+      if (e.statut === 'EN_RETARD') return false;
+      const dateRetourPrevue = new Date(e.dateFinPrevue).getTime();
+      return Number.isFinite(dateRetourPrevue) &&
+        dateRetourPrevue >= debut.getTime() && dateRetourPrevue < fin.getTime();
+    });
   }
 
   get empruntsRetournes(): number {
