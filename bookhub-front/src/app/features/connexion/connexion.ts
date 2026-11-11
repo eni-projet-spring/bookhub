@@ -1,6 +1,8 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { Role } from '../../models/role';
 import { UtilisateurService } from '../../services/utilisateur.service';
 
 @Component({
@@ -19,7 +21,6 @@ export class Connexion {
       nonNullable: true,
       validators: [Validators.required, Validators.email],
     }),
-
     motDePasse: new FormControl('', {
       nonNullable: true,
       validators: [Validators.required],
@@ -32,6 +33,10 @@ export class Connexion {
   ) {}
 
   seConnecter(): void {
+    if (this.connexionEnCours) {
+      return;
+    }
+
     if (this.formulaireConnexion.invalid) {
       this.formulaireConnexion.markAllAsTouched();
       this.messageErreur = 'Veuillez remplir correctement tous les champs.';
@@ -42,27 +47,31 @@ export class Connexion {
     this.messageErreur = '';
 
     const connexionRequest = this.formulaireConnexion.getRawValue();
+    connexionRequest.email = connexionRequest.email.trim().toLowerCase();
 
     this.utilisateurService.login(connexionRequest).subscribe({
       next: (connexionResponse) => {
-        console.log('Connexion réussie');
-
         this.utilisateurService.enregistrerConnexion(connexionResponse);
-
         this.connexionEnCours = false;
 
-        if (connexionResponse.role === 'LIBRARIAN' || connexionResponse.role === 'ADMIN') {
-          this.router.navigate(['/dashboard-bibliothecaire']);
-        } else {
-          this.router.navigate(['/']);
-        }
+        const destination =
+          connexionResponse.role === Role.USER
+            ? '/dashboard-lecteur'
+            : connexionResponse.role === Role.LIBRARIAN ||
+                connexionResponse.role === Role.ADMIN
+              ? '/dashboard-bibliothecaire'
+              : '/';
+
+        void this.router.navigateByUrl(destination);
       },
-
-      error: (erreur) => {
-        console.error('Erreur de connexion :', erreur);
-
-        this.messageErreur = erreur.error?.message ?? 'Email ou mot de passe incorrect.';
-
+      error: (erreur: HttpErrorResponse) => {
+        if (erreur.status === 0) {
+          this.messageErreur = 'Impossible de contacter le serveur BookHub.';
+        } else if (erreur.status === 401) {
+          this.messageErreur = 'Adresse email ou mot de passe incorrect.';
+        } else {
+          this.messageErreur = 'La connexion a échoué. Veuillez réessayer.';
+        }
         this.connexionEnCours = false;
       },
     });
