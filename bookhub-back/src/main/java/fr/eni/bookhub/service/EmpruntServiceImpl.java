@@ -104,7 +104,9 @@ public class EmpruntServiceImpl implements EmpruntService {
                 calculerNombreJoursRetard(
                         emprunt,
                         maintenant
-                )
+                ),
+                emprunt.getExemplaire().getLivre().getAuteur(),
+                emprunt.getExemplaire().getLivre().getCouverture()
         );
     }
 
