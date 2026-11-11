@@ -1,0 +1,18 @@
+<div class="dashboard-layout">
+  <aside class="sidebar">
+    <h2>Espace bibliothécaire</h2>
+    <nav aria-label="Navigation de l'espace bibliothécaire">
+      <a routerLink="/dashboard-bibliothecaire" routerLinkActive="active"
+         [routerLinkActiveOptions]="{exact: true}">Tableau de bord</a>
+      <a routerLink="/dashboard-bibliothecaire/emprunts" routerLinkActive="active">Tous les emprunts</a>
+      <a routerLink="/dashboard-bibliothecaire/retards" routerLinkActive="active">Retards et retours</a>
+      <a routerLink="/dashboard-bibliothecaire/reservations" routerLinkActive="active">Réservations</a>
+      <a routerLink="/dashboard-bibliothecaire/statistiques" routerLinkActive="active">Statistiques</a>
+      <a routerLink="/livres/ajouter" routerLinkActive="active">Ajouter un livre</a>
+      <a routerLink="/gestion-profil" routerLinkActive="active">Mon profil</a>
+    </nav>
+  </aside>
+  <main class="dashboard-content">
+    <router-outlet></router-outlet>
+  </main>
+</div>
