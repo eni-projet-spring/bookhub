@@ -1,7 +1,7 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { LivreResponse, LivreService } from '../../services/livre';
-import { Observable, switchMap } from 'rxjs';
+import { map, Observable, switchMap } from 'rxjs';
 import { RouterLink, ActivatedRoute } from '@angular/router';
 
 @Component({
@@ -24,7 +24,12 @@ export class CatalogComponent implements OnInit {
     this.books$ = this.route.queryParamMap.pipe(
       switchMap((params) => {
         const searchTerm = params.get('search') || '';
-        return this.livreService.getAllBooks(searchTerm);
+        const categorie = params.get('categorie') || '';
+        return this.livreService.getAllBooks(searchTerm).pipe(
+          map((books) => categorie
+            ? books.filter((book) => book.libelleCategorie?.toLocaleLowerCase('fr') === categorie.toLocaleLowerCase('fr'))
+            : books),
+        );
       }),
     );
   }
