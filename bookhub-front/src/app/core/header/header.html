@@ -40,8 +40,8 @@
     @if (estConnecte()) {
       <a
         class="account-btn"
-        routerLink="/gestion-profil"
-        aria-label="Mon profil"
+        [routerLink]="lienProfil"
+        [attr.aria-label]="'Profil de ' + nomUtilisateurConnecte"
         title="Mon profil"
       >
         <img
@@ -49,6 +49,7 @@
           alt=""
         >
       </a>
+      <span class="header__account-name">{{ nomUtilisateurConnecte }}</span>
     }
   </div>
   <div class="header__bottom">
@@ -115,7 +116,7 @@
           }
 
           @if (estAdministrateur()) {
-            <li><a routerLink="/admin/utilisateurs" routerLinkActive="active">Gestion Utilisateurs</a></li>
+            <li><a routerLink="/dashboard-administrateur" routerLinkActive="active">Dashboard administrateur</a></li>
           }
 
           <li>
