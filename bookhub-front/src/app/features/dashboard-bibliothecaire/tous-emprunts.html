@@ -1,0 +1,56 @@
+<section class="staff-page">
+  <header class="staff-header">
+    <div><h1>Tous les emprunts</h1><p>Suivi des prêts et retours de tous les lecteurs.</p></div>
+    <button type="button" (click)="actualiser()" [disabled]="chargement">Actualiser</button>
+  </header>
+  <div class="staff-filters">
+    <label>Rechercher
+      <input name="recherche" [(ngModel)]="recherche" type="search"
+             placeholder="Titre, auteur, lecteur, ISBN" />
+    </label>
+    <label>Statut
+      <select name="statut" [(ngModel)]="filtre">
+        <option value="TOUS">Tous</option>
+        <option value="EN_COURS">En cours</option>
+        <option value="EN_RETARD">En retard</option>
+        <option value="RETOURNE">Retourné</option>
+      </select>
+    </label>
+  </div>
+  @if (messageSucces) { <p role="status">{{ messageSucces }}</p> }
+  @if (erreur) { <p role="alert">{{ erreur }}</p> }
+  @if (chargement) {
+    <p>Chargement des emprunts…</p>
+  } @else if (!erreur && empruntsFiltres.length === 0) {
+    <p>Aucun emprunt ne correspond aux critères.</p>
+  } @else if (!erreur) {
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th>Lecteur</th><th>Livre</th><th>Date d'emprunt</th>
+          <th>Retour prévu</th><th>Statut</th><th>Action</th></tr></thead>
+        <tbody>
+          @for (emprunt of empruntsFiltres; track emprunt.idEmprunt) {
+            <tr>
+              <td>{{ emprunt.prenomUtilisateur }} {{ emprunt.nomUtilisateur }}</td>
+              <td>{{ emprunt.titreLivre }}</td>
+              <td>{{ emprunt.dateDebut | date:'dd/MM/yyyy' }}</td>
+              <td>{{ emprunt.dateFinPrevue | date:'dd/MM/yyyy' }}</td>
+              <td>{{ emprunt.statut === 'EN_RETARD' ? 'En retard' :
+                     emprunt.statut === 'RETOURNE' ? 'Retourné' : 'En cours' }}</td>
+              <td>
+                @if (emprunt.statut !== 'RETOURNE') {
+                  <button type="button" (click)="enregistrerRetour(emprunt)"
+                          [disabled]="retourEnCours !== null">
+                    {{ retourEnCours === emprunt.idEmprunt ? 'Enregistrement…' : 'Enregistrer le retour' }}
+                  </button>
+                } @else {
+                  <span>Terminé</span>
+                }
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</section>
