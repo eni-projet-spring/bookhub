@@ -1,45 +1,52 @@
-import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
+import { ReactiveFormsModule, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ProfilService } from '../../services/profil.service';
+import { UtilisateurService } from '../../services/utilisateur.service';
 import { ProfilUtilisateurDTO } from '../../models/profil-utilisateur.model';
-import { RouterLink } from '@angular/router';
 
+/** Écran partagé entre les trois rôles, intégré dans leur layout respectif. */
 @Component({
   selector: 'app-gestion-profil',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule, RouterLink],
+  imports: [ReactiveFormsModule],
   templateUrl: './gestion-profil.html',
   styleUrl: './gestion-profil.css',
 })
 export class GestionProfil implements OnInit {
+  private readonly profilService = inject(ProfilService);
+  private readonly utilisateurService = inject(UtilisateurService);
+  private readonly cdr = inject(ChangeDetectorRef);
   messageErreur = '';
   messageSucces = '';
   chargementEnCours = false;
+  enregistrementEnCours = false;
 
   formulaireProfil = new FormGroup({
-    nom: new FormControl('', [Validators.required]),
-    prenom: new FormControl('', [Validators.required]),
-    email: new FormControl({ value: '', disabled: true }, [Validators.required, Validators.email]),
-    motDePasse: new FormControl('', [Validators.minLength(6)]),
+    nom: new FormControl('', { nonNullable: true, validators: [Validators.required, Validators.maxLength(25)] }),
+    prenom: new FormControl('', { nonNullable: true, validators: [Validators.required, Validators.maxLength(25)] }),
+    email: new FormControl({ value: '', disabled: true }, { nonNullable: true }),
+    motDePasse: new FormControl('', { nonNullable: true, validators: [Validators.minLength(6)] }),
+    confirmationMotDePasse: new FormControl('', { nonNullable: true }),
   });
 
-  constructor(private profilService: ProfilService) {}
-
-  ngOnInit(): void {
-    this.chargerProfil();
-  }
+  ngOnInit(): void { this.chargerProfil(); }
 
   chargerProfil(): void {
     this.chargementEnCours = true;
+    this.messageErreur = '';
     this.profilService.getProfil().subscribe({
-      next: (profil) => {
-        this.formulaireProfil.patchValue(profil);
+      next: profil => {
+        this.formulaireProfil.patchValue({
+          nom: profil.nom, prenom: profil.prenom, email: profil.email,
+          motDePasse: '', confirmationMotDePasse: '',
+        });
         this.chargementEnCours = false;
+        this.cdr.markForCheck();
       },
       error: () => {
-        this.messageErreur = 'Impossible de charger le profil.';
+        this.messageErreur = 'Impossible de charger votre profil.';
         this.chargementEnCours = false;
+        this.cdr.markForCheck();
       },
     });
   }
@@ -47,43 +54,43 @@ export class GestionProfil implements OnInit {
   enregistrer(): void {
     if (this.formulaireProfil.invalid) {
       this.formulaireProfil.markAllAsTouched();
-      this.messageErreur = 'Veuillez remplir correctement tous les champs.';
+      this.messageErreur = 'Veuillez corriger les champs du formulaire.';
       return;
     }
-
+    const valeurs = this.formulaireProfil.getRawValue();
+    if (valeurs.motDePasse !== valeurs.confirmationMotDePasse) {
+      this.messageErreur = 'La confirmation du mot de passe ne correspond pas.';
+      return;
+    }
+    const dto: ProfilUtilisateurDTO = {
+      nom: valeurs.nom.trim(),
+      prenom: valeurs.prenom.trim(),
+      email: valeurs.email,
+      motDePasse: valeurs.motDePasse || undefined,
+    };
+    if (!dto.nom || !dto.prenom) {
+      this.messageErreur = 'Le nom et le prénom sont obligatoires.';
+      return;
+    }
+    this.enregistrementEnCours = true;
     this.messageErreur = '';
     this.messageSucces = '';
-
-    const valeurs = this.formulaireProfil.getRawValue();
-    const dto: ProfilUtilisateurDTO = {
-      nom: valeurs.nom!,
-      prenom: valeurs.prenom!,
-      email: valeurs.email!,
-      motDePasse: valeurs.motDePasse ? valeurs.motDePasse : undefined,
-    };
-
     this.profilService.editProfil(dto).subscribe({
-      next: () => {
-        this.messageSucces = 'Profil mis à jour avec succès.';
-        this.formulaireProfil.patchValue({ motDePasse: '' });
+      next: profil => {
+        this.enregistrementEnCours = false;
+        this.formulaireProfil.patchValue({ motDePasse: '', confirmationMotDePasse: '' });
+        // Conserver un affichage du nom à jour dans l'en-tête.
+        const utilisateur = this.utilisateurService.obtenirUtilisateurConnecte();
+        if (utilisateur) {
+          this.utilisateurService.mettreAJourIdentiteLocale(profil.nom, profil.prenom);
+        }
+        this.messageSucces = 'Votre profil a été mis à jour.';
+        this.cdr.markForCheck();
       },
       error: () => {
-        this.messageErreur = 'Une erreur est survenue lors de la mise à jour.';
-      },
-    });
-  }
-
-  supprimer(): void {
-    if (!confirm('Voulez-vous vraiment supprimer votre compte ? Cette action est irréversible.')) {
-      return;
-    }
-
-    this.profilService.deleteProfil().subscribe({
-      next: () => {
-        this.messageSucces = 'Profil supprimé.';
-      },
-      error: () => {
-        this.messageErreur = 'Une erreur est survenue lors de la suppression.';
+        this.enregistrementEnCours = false;
+        this.messageErreur = 'La modification du profil a échoué.';
+        this.cdr.markForCheck();
       },
     });
   }
