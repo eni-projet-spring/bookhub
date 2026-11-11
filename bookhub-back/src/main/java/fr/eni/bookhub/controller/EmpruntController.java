@@ -21,6 +21,12 @@ public class EmpruntController {
     }
 
     @PreAuthorize("hasAnyRole('LIBRARIAN', 'ADMIN')")
+    @GetMapping
+    public List<EmpruntResponse> consulterTousLesEmprunts() {
+        return empruntService.consulterTousLesEmprunts();
+    }
+
+    @PreAuthorize("hasAnyRole('LIBRARIAN', 'ADMIN')")
     @GetMapping("/utilisateur/{idUtilisateur}")
     public List<EmpruntResponse> rechercherEmpruntsUtilisateur(
             @PathVariable Integer idUtilisateur
