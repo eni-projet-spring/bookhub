@@ -1,0 +1,13 @@
+<div class="dashboard-layout">
+  <aside class="sidebar">
+    <h2>Administration</h2>
+    <nav aria-label="Navigation de l'espace administrateur">
+      <a routerLink="/dashboard-administrateur" routerLinkActive="active"
+         [routerLinkActiveOptions]="{exact: true}">Tableau de bord</a>
+      <a routerLink="/dashboard-administrateur/utilisateurs" routerLinkActive="active">Gestion des utilisateurs</a>
+      <a routerLink="/dashboard-bibliothecaire">Espace bibliothécaire</a>
+      <a routerLink="/gestion-profil" routerLinkActive="active">Mon profil</a>
+    </nav>
+  </aside>
+  <main class="dashboard-content"><router-outlet></router-outlet></main>
+</div>
