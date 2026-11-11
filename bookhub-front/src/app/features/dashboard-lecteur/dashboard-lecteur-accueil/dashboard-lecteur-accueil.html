@@ -24,41 +24,36 @@
     </div>
   </header>
 
+  <!-- Rappels calculés à partir des emprunts et réservations réellement chargés. -->
   <section class="reminders-card" aria-labelledby="reminders-title">
     <div class="reminders-card__heading">
       <span class="reminders-card__icon" aria-hidden="true">!</span>
-
-      <div>
-        <h2 id="reminders-title">Rappels</h2>
-      </div>
+      <h2 id="reminders-title">Rappels</h2>
     </div>
-
     <div class="reminders-list">
-      <article class="reminder-item">
-        <span class="reminder-item__symbol" aria-hidden="true">▤</span>
-        <p>
-          Vous avez <strong>2 livres</strong><br>
-          à rendre cette semaine.
-        </p>
-      </article>
-
-      <article class="reminder-item">
-        <span class="reminder-item__symbol" aria-hidden="true">◇</span>
-        <p>
-          <strong>1 réservation</strong><br>
-          est disponible.
-        </p>
-      </article>
-
-      <article class="reminder-item">
-        <span class="reminder-item__symbol reminder-item__symbol--success" aria-hidden="true">
-          ✓
-        </span>
-        <p>
-          <strong>Aucun retard.</strong><br>
-          Tout est à jour !
-        </p>
-      </article>
+      @if (chargementEmprunts || chargementReservations) {
+        <p>Chargement de vos rappels…</p>
+      } @else {
+        @if (erreurEmprunts || erreurReservations) {
+          <p role="alert">{{ erreurEmprunts }} {{ erreurReservations }}</p>
+        }
+        @if (!erreurEmprunts) {
+          <article class="reminder-item">
+            <span class="reminder-item__symbol" aria-hidden="true">▤</span>
+            <p><strong>{{ empruntsProchains.length }} livre(s)</strong> à rendre dans les sept prochains jours.</p>
+          </article>
+          <article class="reminder-item">
+            <span class="reminder-item__symbol" aria-hidden="true">!</span>
+            <p><strong>{{ empruntsEnRetard.length }} emprunt(s)</strong> en retard.</p>
+          </article>
+        }
+        @if (!erreurReservations) {
+          <article class="reminder-item">
+            <span class="reminder-item__symbol" aria-hidden="true">◇</span>
+            <p><strong>{{ reservationsDisponibles.length }} réservation(s)</strong> disponible(s).</p>
+          </article>
+        }
+      }
     </div>
   </section>
 
@@ -69,7 +64,7 @@
 
         <div>
           <p>Emprunts en cours</p>
-          <strong>2</strong>
+          <strong>{{ chargementEmprunts || erreurEmprunts ? '—' : empruntsEnCours.length }}</strong>
         </div>
       </div>
 
@@ -87,7 +82,7 @@
 
         <div>
           <p>Réservations</p>
-          <strong>1</strong>
+          <strong>{{ chargementReservations || erreurReservations ? '—' : reservationsActives.length }}</strong>
         </div>
       </div>
 
@@ -105,12 +100,12 @@
 
         <div>
           <p>Retards</p>
-          <strong>0</strong>
+          <strong>{{ chargementEmprunts || erreurEmprunts ? '—' : empruntsEnRetard.length }}</strong>
         </div>
       </div>
 
       <span class="stat-card__status">
-        Aucun retard
+        {{ empruntsEnRetard.length === 0 ? 'Aucun retard détecté' : 'Consulter les retards' }}
       </span>
     </article>
 
@@ -121,13 +116,13 @@
         </span>
 
         <div>
-          <p>Commentaires</p>
-          <strong>18</strong>
+          <p>Historique des retours</p>
+          <strong>{{ chargementEmprunts || erreurEmprunts ? '—' : empruntsRetournes }}</strong>
         </div>
       </div>
 
-      <a routerLink="/dashboard-lecteur/mes-commentaires">
-        Voir mes commentaires
+      <a routerLink="/dashboard-lecteur/mon-historique">
+        Voir mon historique
         <span aria-hidden="true">→</span>
       </a>
     </article>
@@ -144,55 +139,36 @@
         </a>
       </header>
 
-      <div class="loan">
-        <div class="loan__cover loan__cover--dune" aria-hidden="true">
-          DUNE
-        </div>
-
-        <div class="loan__content">
-          <h3>Dune</h3>
-          <p class="loan__author">Frank Herbert</p>
-
-          <div class="loan__dates">
-            <p>
-              <strong>Emprunté le</strong>
-              <span>20 juillet 2026</span>
-            </p>
-
-            <p>
-              <strong>Retour prévu le</strong>
-              <span>12 août 2026</span>
-            </p>
+      @if (chargementEmprunts) {
+        <p>Chargement de vos emprunts…</p>
+      } @else if (erreurEmprunts) {
+        <p role="alert">{{ erreurEmprunts }}</p>
+      } @else if (empruntsEnCours.length === 0) {
+        <p>Vous n'avez aucun emprunt en cours.</p>
+      } @else {
+        @for (emprunt of empruntsEnCours.slice(0, 3); track emprunt.idEmprunt) {
+          <div class="loan">
+            <div class="loan__cover">
+              @if (getCoverImageUrl(emprunt.couvertureLivre)) {
+                <img class="loan__cover-image"
+                     [src]="getCoverImageUrl(emprunt.couvertureLivre)"
+                     [alt]="'Couverture de ' + emprunt.titreLivre" />
+              } @else {
+                <span>Sans couverture</span>
+              }
+            </div>
+            <div class="loan__content">
+              <h3>{{ emprunt.titreLivre }}</h3>
+              <p class="loan__author">{{ emprunt.auteurLivre || 'Auteur non renseigné' }}</p>
+              <div class="loan__dates">
+                <p><strong>Emprunté le</strong><span>{{ emprunt.dateDebut | date: 'dd/MM/yyyy' }}</span></p>
+                <p><strong>Retour prévu le</strong><span>{{ emprunt.dateFinPrevue | date: 'dd/MM/yyyy' }}</span></p>
+              </div>
+              <span class="status-badge">{{ emprunt.statut === 'EN_RETARD' ? 'En retard' : 'En cours' }}</span>
+            </div>
           </div>
-
-          <span class="status-badge">En cours</span>
-        </div>
-      </div>
-
-      <div class="loan">
-        <div class="loan__cover loan__cover--nineteen" aria-hidden="true">
-          1984
-        </div>
-
-        <div class="loan__content">
-          <h3>1984</h3>
-          <p class="loan__author">George Orwell</p>
-
-          <div class="loan__dates">
-            <p>
-              <strong>Emprunté le</strong>
-              <span>22 juillet 2026</span>
-            </p>
-
-            <p>
-              <strong>Retour prévu le</strong>
-              <span>5 août 2026</span>
-            </p>
-          </div>
-
-          <span class="status-badge">En cours</span>
-        </div>
-      </div>
+        }
+      }
     </article>
 
     <article class="dashboard-panel categories-panel">
@@ -200,50 +176,32 @@
         <h2>Mes lectures par catégorie</h2>
       </header>
 
-      <div class="categories-content">
-        <div
-          class="donut-chart"
-          role="img"
-          aria-label="Répartition des lectures par catégorie"
-        >
-          <div class="donut-chart__center">
-            <strong>64</strong>
-            <span>lectures</span>
+      @if (chargementEmprunts || chargementLivres) {
+        <p>Chargement de la répartition…</p>
+      } @else if (erreurEmprunts || erreurLivres) {
+        <p role="alert">{{ erreurEmprunts }} {{ erreurLivres }}</p>
+      } @else if (repartitionCategories.length === 0) {
+        <p>Aucune lecture catégorisée pour le moment.</p>
+      } @else {
+        <div class="categories-content">
+          <div class="donut-chart" [style.background]="graphiqueCategories"
+               role="img" aria-label="Répartition des emprunts par catégorie">
+            <div class="donut-chart__center">
+              <strong>{{ nombreLecturesClassees }}</strong>
+              <span>emprunts classés</span>
+            </div>
           </div>
+          <ul class="category-list">
+            @for (categorie of repartitionCategories; track categorie.nom) {
+              <li>
+                <span class="category-dot category-dot--primary"></span>
+                <span>{{ categorie.nom }}</span>
+                <strong>{{ categorie.pourcentage }} %</strong>
+              </li>
+            }
+          </ul>
         </div>
-
-        <ul class="category-list">
-          <li>
-            <span class="category-dot category-dot--primary"></span>
-            <span>Roman</span>
-            <strong>28 %</strong>
-          </li>
-
-          <li>
-            <span class="category-dot category-dot--success"></span>
-            <span>Science-fiction</span>
-            <strong>24 %</strong>
-          </li>
-
-          <li>
-            <span class="category-dot category-dot--highlight"></span>
-            <span>BD</span>
-            <strong>16 %</strong>
-          </li>
-
-          <li>
-            <span class="category-dot category-dot--accent"></span>
-            <span>Manga</span>
-            <strong>14 %</strong>
-          </li>
-
-          <li>
-            <span class="category-dot category-dot--neutral"></span>
-            <span>Autres</span>
-            <strong>18 %</strong>
-          </li>
-        </ul>
-      </div>
+      }
     </article>
 
     <article class="dashboard-panel reservations-panel">
@@ -256,16 +214,23 @@
         </a>
       </header>
 
-      <div class="reservation-preview">
-        <div>
-          <strong>Le Comte de Monte-Cristo</strong>
-          <p>Votre réservation est disponible.</p>
-        </div>
-
-        <span class="availability-badge">
-          Disponible
-        </span>
-      </div>
+      @if (chargementReservations) {
+        <p>Chargement de vos réservations…</p>
+      } @else if (erreurReservations) {
+        <p role="alert">{{ erreurReservations }}</p>
+      } @else if (reservationsActives.length === 0) {
+        <p>Aucune réservation en cours.</p>
+      } @else {
+        @for (reservation of reservationsActives.slice(0, 3); track reservation.idReservation) {
+          <div class="reservation-preview">
+            <div>
+              <strong>{{ reservation.titreLivre }}</strong>
+              <p>{{ reservation.statut === 'DISPONIBLE' ? 'Disponible' : 'En attente' }}</p>
+            </div>
+            <span class="availability-badge">{{ reservation.statut }}</span>
+          </div>
+        }
+      }
     </article>
 
     <article class="dashboard-panel notifications-panel">
@@ -274,19 +239,23 @@
       </header>
 
       <ul class="notification-list">
-        <li>
-          <span aria-hidden="true">✓</span>
-          <p>
-            Votre réservation est disponible.
-          </p>
-        </li>
-
-        <li>
-          <span aria-hidden="true">▤</span>
-          <p>
-            Le retour de votre livre est prévu prochainement.
-          </p>
-        </li>
+        @if (chargementEmprunts || chargementReservations) {
+          <li>Chargement des informations…</li>
+        } @else if (erreurEmprunts || erreurReservations) {
+          <li>Informations temporairement indisponibles.</li>
+        } @else if (empruntsEnRetard.length === 0 && empruntsProchains.length === 0 && reservationsDisponibles.length === 0) {
+          <li>Aucune notification à signaler.</li>
+        } @else {
+          @if (empruntsEnRetard.length > 0) {
+            <li><span aria-hidden="true">!</span><p>Vous avez {{ empruntsEnRetard.length }} emprunt(s) en retard.</p></li>
+          }
+          @if (empruntsProchains.length > 0) {
+            <li><span aria-hidden="true">▤</span><p>{{ empruntsProchains.length }} emprunt(s) à rendre prochainement.</p></li>
+          }
+          @if (reservationsDisponibles.length > 0) {
+            <li><span aria-hidden="true">✓</span><p>{{ reservationsDisponibles.length }} réservation(s) disponible(s).</p></li>
+          }
+        }
       </ul>
     </article>
   </section>
