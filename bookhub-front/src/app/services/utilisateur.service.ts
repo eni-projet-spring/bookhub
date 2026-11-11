@@ -54,6 +54,15 @@ export class UtilisateurService {
     return this.obtenirUtilisateurConnecte()?.idUtilisateur ?? null;
   }
 
+  /** Met à jour le cache d'affichage sans changer le JWT ni les droits. */
+  mettreAJourIdentiteLocale(nom: string, prenom: string): void {
+    const utilisateur = this.obtenirUtilisateurConnecte();
+    if (utilisateur) {
+      localStorage.setItem('utilisateurConnecte',
+        JSON.stringify({ ...utilisateur, nom, prenom }));
+    }
+  }
+
   getRole(): Role | null {
     const utilisateur = this.obtenirUtilisateurConnecte();
 
