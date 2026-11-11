@@ -1,5 +1,4 @@
 import { Routes } from '@angular/router';
-import { ProfilRedirection } from './features/gestion-profil/profil-redirection';
 import { profilRedirectionGuard } from './guards/profil-redirection-guard';
 import { AjoutLivre } from './features/ajout-livre/ajout-livre';
 import { Connexion } from './features/connexion/connexion';
@@ -66,7 +65,7 @@ export const routes: Routes = [
   { path: 'mes-emprunts', component: Emprunt, canActivate: [utilisateurGuard] },
   { path: 'livres/ajouter', redirectTo: 'dashboard-bibliothecaire/ajouter-livre' },
   { path: 'livres/:id/modifier', component: ModifierLivre, canActivate: [bibliothecaireGuard] },
-  { path: 'gestion-profil', component: ProfilRedirection, canActivate: [profilRedirectionGuard] },
+  { path: 'gestion-profil', component: GestionProfil, canActivate: [profilRedirectionGuard] },
   { path: 'livres/:id', component: LivreDetail },
   { path: 'emprunts', component: Emprunt },
   // Ne pas toucher au dashboard lecteur déjà validé.
