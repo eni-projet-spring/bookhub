@@ -1,110 +1,111 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { CommonModule } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { CategorieResponse, LivreResponse, LivreService } from '../../services/livre';
 
-import { LivreResponse, LivreService } from '../../services/livre';
-import { RouterLink } from '@angular/router';
-
+/** Formulaire partagé par le bibliothécaire et l'administrateur. */
 @Component({
   selector: 'app-ajout-livre',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterLink],
+  imports: [ReactiveFormsModule],
   templateUrl: './ajout-livre.html',
   styleUrl: './ajout-livre.css',
 })
-export class AjoutLivre {
+export class AjoutLivre implements OnInit {
   private readonly formBuilder = inject(FormBuilder);
   private readonly livreService = inject(LivreService);
+  private readonly cdr = inject(ChangeDetectorRef);
 
+  categories: CategorieResponse[] = [];
+  chargementCategories = false;
   messageSucces = '';
   messageErreur = '';
   envoiEnCours = false;
-
-  // New properties for file handling
   selectedFile: File | null = null;
   previewUrl: string | ArrayBuffer | null = null;
 
   formulaireLivre = this.formBuilder.nonNullable.group({
-    isbn: ['', [Validators.required, Validators.minLength(13), Validators.maxLength(13)]],
+    isbn: ['', [Validators.required, Validators.pattern(/^[0-9]{13}$/)]],
     titre: ['', [Validators.required, Validators.maxLength(100)]],
     description: ['', [Validators.required, Validators.maxLength(400)]],
-    // 'couverture' is removed from the reactive form as it is now handled by the file input
     edition: ['', [Validators.required, Validators.maxLength(100)]],
     auteur: ['', [Validators.required, Validators.maxLength(100)]],
-    idCategorie: [1, [Validators.required, Validators.min(1)]],
+    idCategorie: [0, [Validators.required, Validators.min(1)]],
   });
+
+  ngOnInit(): void {
+    this.chargementCategories = true;
+    this.livreService.getCategories().subscribe({
+      next: categories => {
+        this.categories = categories;
+        this.chargementCategories = false;
+        this.cdr.markForCheck();
+      },
+      error: () => {
+        this.messageErreur = 'Impossible de récupérer les catégories du catalogue.';
+        this.chargementCategories = false;
+        this.cdr.markForCheck();
+      },
+    });
+  }
 
   onFileSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
-    if (input.files && input.files.length > 0) {
-      this.selectedFile = input.files[0];
-
-      // Generate local preview using native FileReader
-      const reader = new FileReader();
-      reader.onload = () => {
-        this.previewUrl = reader.result;
-      };
-      reader.readAsDataURL(this.selectedFile);
-    } else {
-      this.selectedFile = null;
-      this.previewUrl = null;
+    const fichier = input.files?.[0] ?? null;
+    this.messageErreur = '';
+    this.selectedFile = null;
+    this.previewUrl = null;
+    if (!fichier) return;
+    if (!['image/jpeg', 'image/png', 'image/webp'].includes(fichier.type)) {
+      this.messageErreur = 'La couverture doit être une image JPEG, PNG ou WebP.';
+      input.value = '';
+      return;
     }
+    if (fichier.size > 3 * 1024 * 1024) {
+      this.messageErreur = 'La couverture ne doit pas dépasser 3 Mo.';
+      input.value = '';
+      return;
+    }
+    this.selectedFile = fichier;
+    const reader = new FileReader();
+    reader.onload = () => {
+      this.previewUrl = reader.result;
+      this.cdr.markForCheck();
+    };
+    reader.readAsDataURL(fichier);
   }
 
   ajouterLivre(): void {
     this.messageSucces = '';
     this.messageErreur = '';
-
-    if (this.formulaireLivre.invalid) {
+    if (this.formulaireLivre.invalid || !this.categories.some(c => c.idCategorie === this.formulaireLivre.controls.idCategorie.value)) {
       this.formulaireLivre.markAllAsTouched();
+      this.messageErreur = 'Veuillez compléter les champs et sélectionner une catégorie valide.';
       return;
     }
-
+    if (this.envoiEnCours) return;
     this.envoiEnCours = true;
-
-    // 1. Build the FormData object
     const formData = new FormData();
-
-    // Extract form values and append the JSON part for the backend DTO
-    const livreData = {
-      ...this.formulaireLivre.getRawValue(),
-      couverture: '', // Send empty string, backend will override with the saved file path
-    };
-
-    // Append as a Blob with application/json type so Spring's @RequestPart can parse it
+    const livreData = { ...this.formulaireLivre.getRawValue(), couverture: '' };
     formData.append('dto', new Blob([JSON.stringify(livreData)], { type: 'application/json' }));
-
-    // Append the file if one was selected
     if (this.selectedFile) {
       formData.append('file', this.selectedFile, this.selectedFile.name);
     }
-
-    // 2. Call the new multipart service method
     this.livreService.ajouterLivreMultipart(formData).subscribe({
       next: (livre: LivreResponse) => {
-        this.messageSucces = `Le livre « ${livre.titre} » a bien été ajouté.`;
-
-        // Reset form (without 'couverture' since it's no longer in the form group)
+        this.messageSucces = `Le livre « ${livre.titre} » a été ajouté au catalogue.`;
         this.formulaireLivre.reset({
-          isbn: '',
-          titre: '',
-          description: '',
-          edition: '',
-          auteur: '',
-          idCategorie: 1,
+          isbn: '', titre: '', description: '', edition: '', auteur: '', idCategorie: 0,
         });
-
-        // Reset file state
         this.selectedFile = null;
         this.previewUrl = null;
         this.envoiEnCours = false;
+        this.cdr.markForCheck();
       },
-
       error: (erreur: HttpErrorResponse) => {
-        console.error(erreur);
-        this.messageErreur = erreur.error?.message ?? 'Impossible d’ajouter le livre.';
+        this.messageErreur = erreur.error?.message ?? "Impossible d'ajouter le livre.";
         this.envoiEnCours = false;
+        this.cdr.markForCheck();
       },
     });
   }
