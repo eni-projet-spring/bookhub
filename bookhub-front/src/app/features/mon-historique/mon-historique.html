@@ -42,6 +42,7 @@
               <div><dt>Retourné le</dt><dd>{{ emprunt.dateRetour | date: 'dd/MM/yyyy' }}</dd></div>
             </dl>
             <p>ISBN : {{ emprunt.isbn }}</p>
+            <a class="history-card__review-link" routerLink="/dashboard-lecteur/mes-commentaires" [queryParams]="{ isbn: emprunt.isbn }">Rédiger ou modifier mon avis</a>
           </div>
         </article>
       }
