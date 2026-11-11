@@ -1,0 +1,26 @@
+<section class="admin-accueil">
+  <header class="admin-header">
+    <div><h1>Tableau de bord administrateur</h1><p>Supervision des comptes et gestion des rôles de BookHub.</p></div>
+    <button type="button" (click)="actualiser()" [disabled]="chargement">Actualiser</button>
+  </header>
+  @if (erreur) { <p role="alert">{{ erreur }}</p> }
+  @if (chargement) { <p>Chargement…</p> }
+  @if (!chargement && !erreur) {
+    <div class="indicateurs">
+      <article><span>Comptes</span><strong>{{ total }}</strong></article>
+      <article><span>Lecteurs</span><strong>{{ lecteurs }}</strong></article>
+      <article><span>Bibliothécaires</span><strong>{{ bibliothecaires }}</strong></article>
+      <article><span>Administrateurs</span><strong>{{ administrateurs }}</strong></article>
+    </div>
+    <section class="admin-section">
+      <h2>Gestion des utilisateurs</h2>
+      <p>Consulter les comptes enregistrés et attribuer leurs rôles.</p>
+      <a routerLink="/dashboard-administrateur/utilisateurs">Ouvrir la gestion des utilisateurs</a>
+    </section>
+    <section class="admin-section">
+      <h2>Exploitation de la bibliothèque</h2>
+      <p>Accéder aux opérations quotidiennes avec les droits administrateur.</p>
+      <a routerLink="/dashboard-bibliothecaire">Ouvrir l'espace bibliothécaire</a>
+    </section>
+  }
+</section>
