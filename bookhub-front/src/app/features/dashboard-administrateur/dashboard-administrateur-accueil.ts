@@ -3,21 +3,29 @@ import { RouterLink } from '@angular/router';
 import { UtilisateurService } from '../../services/utilisateur.service';
 import { UtilisateurResponse } from '../../models/utilisateur-response.model';
 import { Role } from '../../models/role';
+import { IndicateursAdministrateur, IndicateursAdministrateurService } from '../../services/indicateurs-administrateur.service';
 
-/** Indicateurs réels des comptes, chargés via l'API réservée à ADMIN. */
+/** Tableau administrateur : navigation et tuiles calquées sur le dashboard lecteur. */
 @Component({
   selector: 'app-dashboard-administrateur-accueil',
   standalone: true,
   imports: [RouterLink],
   templateUrl: './dashboard-administrateur-accueil.html',
-  styleUrl: './dashboard-administrateur-accueil.css',
+  styleUrls: [
+    '../dashboard-lecteur/dashboard-lecteur-accueil/dashboard-lecteur-accueil.css',
+    './dashboard-administrateur-accueil.css',
+  ],
 })
 export class DashboardAdministrateurAccueil implements OnInit {
-  private readonly service = inject(UtilisateurService);
+  private readonly comptesService = inject(UtilisateurService);
+  private readonly indicateursService = inject(IndicateursAdministrateurService);
   private readonly cdr = inject(ChangeDetectorRef);
   utilisateurs: UtilisateurResponse[] = [];
-  chargement = false;
-  erreur = '';
+  indicateurs: IndicateursAdministrateur | null = null;
+  chargementComptes = true;
+  chargementIndicateurs = true;
+  erreurComptes = '';
+  erreurIndicateurs = '';
 
   get total(): number { return this.utilisateurs.length; }
   get lecteurs(): number { return this.compter(Role.USER); }
@@ -25,22 +33,36 @@ export class DashboardAdministrateurAccueil implements OnInit {
   get administrateurs(): number { return this.compter(Role.ADMIN); }
 
   private compter(role: Role): number {
-    return this.utilisateurs.filter((utilisateur) => utilisateur.role === role).length;
+    return this.utilisateurs.filter(u => u.role === role).length;
   }
 
   ngOnInit(): void { this.actualiser(); }
   actualiser(): void {
-    this.chargement = true;
-    this.erreur = '';
-    this.service.listerUtilisateurs().subscribe({
-      next: (utilisateurs) => {
+    this.chargementComptes = true;
+    this.chargementIndicateurs = true;
+    this.erreurComptes = '';
+    this.erreurIndicateurs = '';
+    this.comptesService.listerUtilisateurs().subscribe({
+      next: utilisateurs => {
         this.utilisateurs = utilisateurs;
-        this.chargement = false;
+        this.chargementComptes = false;
         this.cdr.markForCheck();
       },
       error: () => {
-        this.erreur = 'Impossible de charger les comptes utilisateurs.';
-        this.chargement = false;
+        this.erreurComptes = 'Les comptes sont indisponibles.';
+        this.chargementComptes = false;
+        this.cdr.markForCheck();
+      },
+    });
+    this.indicateursService.consulter().subscribe({
+      next: indicateurs => {
+        this.indicateurs = indicateurs;
+        this.chargementIndicateurs = false;
+        this.cdr.markForCheck();
+      },
+      error: () => {
+        this.erreurIndicateurs = 'Les indicateurs métier sont indisponibles.';
+        this.chargementIndicateurs = false;
         this.cdr.markForCheck();
       },
     });
