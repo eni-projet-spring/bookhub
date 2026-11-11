@@ -57,10 +57,11 @@ export class Connexion {
         const destination =
           connexionResponse.role === Role.USER
             ? '/dashboard-lecteur'
-            : connexionResponse.role === Role.LIBRARIAN ||
-                connexionResponse.role === Role.ADMIN
-              ? '/dashboard-bibliothecaire'
-              : '/';
+            : connexionResponse.role === Role.ADMIN
+              ? '/dashboard-administrateur'
+              : connexionResponse.role === Role.LIBRARIAN
+                ? '/dashboard-bibliothecaire'
+                : '/';
 
         void this.router.navigateByUrl(destination);
       },
