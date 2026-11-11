@@ -1,0 +1,13 @@
+.admin-accueil { display: flex; flex-direction: column; gap: 1.5rem; }
+.admin-header { display: flex; justify-content: space-between; align-items: center; gap: 1rem; }
+.admin-header h1 { margin: 0 0 .5rem; color: var(--color-primary); font-family: var(--font-heading); }
+.admin-header p { margin: 0; }
+.admin-header button { border: 0; border-radius: 8px; padding: .65rem 1rem; background: var(--color-primary); color: white; cursor: pointer; }
+.admin-header button:disabled { opacity: .6; }
+.indicateurs { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem; }
+.indicateurs article, .admin-section { background: #fff; border: 1px solid #ddd; border-radius: 12px; padding: 1.25rem; }
+.indicateurs span { display: block; color: var(--color-text); }
+.indicateurs strong { display: block; margin-top: .5rem; color: var(--color-primary); font-size: 1.8rem; }
+.admin-section h2 { margin-top: 0; }
+.admin-section a { color: var(--color-primary); font-weight: 600; }
+@media (max-width: 700px) { .admin-header { align-items: flex-start; flex-direction: column; } }
