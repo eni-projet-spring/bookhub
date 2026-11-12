@@ -4,12 +4,11 @@ import { ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
 import { Role } from '../../models/role';
 import { UtilisateurResponse } from '../../models/utilisateur-response.model';
 import { UtilisateurService } from '../../services/utilisateur.service';
-import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-liste-utilisateurs',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule],
   templateUrl: './liste-utilisateurs.html',
   styleUrl: './liste-utilisateurs.css',
 })
