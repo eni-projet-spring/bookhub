@@ -24,39 +24,6 @@
     </div>
   </header>
 
-  <!-- Rappels calculés à partir des emprunts et réservations réellement chargés. -->
-  <section class="reminders-card" aria-labelledby="reminders-title">
-    <div class="reminders-card__heading">
-      <span class="reminders-card__icon" aria-hidden="true">!</span>
-      <h2 id="reminders-title">Rappels</h2>
-    </div>
-    <div class="reminders-list">
-      @if (chargementEmprunts || chargementReservations) {
-        <p>Chargement de vos rappels…</p>
-      } @else {
-        @if (erreurEmprunts || erreurReservations) {
-          <p role="alert">{{ erreurEmprunts }} {{ erreurReservations }}</p>
-        }
-        @if (!erreurEmprunts) {
-          <article class="reminder-item">
-            <span class="reminder-item__symbol" aria-hidden="true">▤</span>
-            <p><strong>{{ empruntsProchains.length }} livre(s)</strong> à rendre dans les sept prochains jours.</p>
-          </article>
-          <article class="reminder-item">
-            <span class="reminder-item__symbol" aria-hidden="true">!</span>
-            <p><strong>{{ empruntsEnRetard.length }} emprunt(s)</strong> en retard.</p>
-          </article>
-        }
-        @if (!erreurReservations) {
-          <article class="reminder-item">
-            <span class="reminder-item__symbol" aria-hidden="true">◇</span>
-            <p><strong>{{ reservationsDisponibles.length }} réservation(s)</strong> disponible(s).</p>
-          </article>
-        }
-      }
-    </div>
-  </section>
-
   <section class="statistics" aria-label="Résumé de votre activité">
     <article class="stat-card">
       <div class="stat-card__top">
