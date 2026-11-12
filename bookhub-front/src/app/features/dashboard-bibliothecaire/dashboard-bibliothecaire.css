@@ -1,6 +1,17 @@
-.bouton-actualiser { padding: .75rem 1.1rem; background: var(--color-primary); border: 0; border-radius: 8px; color: white; cursor: pointer; }
-.bouton-actualiser:disabled { opacity: .6; }
-.staff-alerts { padding: 0; list-style-position: inside; }
-.staff-alerts li { display: flex; justify-content: space-between; gap: .75rem; padding: .75rem .25rem; border-bottom: 1px solid #e9ecef; }
-.staff-alerts li span { text-align: right; }
-@media (max-width: 700px) { .staff-alerts li { flex-direction: column; } .staff-alerts li span { text-align: left; } }
+.staff-message-error { padding: .8rem 1rem; border: 1px solid #eb9e99; border-radius: 8px; color: #9f2d26; background: #fff5f5; }
+.staff-borrower { margin: -.4rem 0 .65rem; color: var(--color-text); font-weight: 650; font-size: .92rem; }
+.staff-status-late { color: var(--color-accent); background: color-mix(in srgb, var(--color-accent) 12%, var(--color-surface)); }
+.staff-ranking { margin: 0; padding: 0; list-style: none; counter-reset: staff-books; }
+.staff-ranking li { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 1rem 0; border-bottom: 1px solid color-mix(in srgb, var(--color-primary) 10%, transparent); counter-increment: staff-books; }
+.staff-ranking li:last-child { border-bottom: 0; }
+.staff-ranking li::before { content: counter(staff-books, decimal-leading-zero); color: var(--color-primary); font-weight: 800; font-size: .9rem; }
+.staff-ranking li > div { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: .3rem; }
+.staff-ranking li > div strong { font-family: var(--font-heading); font-size: 1rem; }
+.staff-ranking li > div span { color: var(--color-text); font-size: .9rem; }
+.staff-ranking__count { flex-shrink: 0; font-size: .85rem; font-weight: 700; color: var(--color-primary); }
+.staff-action-preview { display: flex; align-items: center; gap: 1rem; padding: .75rem 0; }
+.staff-action-preview p { margin: .4rem 0 0; }
+.staff-action-icon { display: grid; flex-shrink: 0; width: 54px; height: 54px; place-items: center; background: color-mix(in srgb, var(--color-highlight) 20%, var(--color-surface)); color: var(--color-accent); border-radius: 50%; font-size: 1.8rem; }
+.notification-list a { color: var(--color-primary); text-decoration: none; font-weight: 600; }
+.notification-list a:hover { text-decoration: underline; }
+@media(max-width:520px) { .staff-ranking li { align-items: flex-start; flex-wrap: wrap; } .staff-ranking__count { margin-left: 2.1rem; } }
