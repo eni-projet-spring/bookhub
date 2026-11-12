@@ -1,22 +1,22 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { TestBed } from '@angular/core/testing';
+import { of } from 'rxjs';
 import { ListeUtilisateurs } from './liste-utilisateurs';
+import { UtilisateurService } from '../../services/utilisateur.service';
 
 describe('ListeUtilisateurs', () => {
-  let component: ListeUtilisateurs;
-  let fixture: ComponentFixture<ListeUtilisateurs>;
-
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [ListeUtilisateurs],
+      providers: [
+        { provide: UtilisateurService, useValue: { listerUtilisateurs: () => of([]) } },
+      ],
     }).compileComponents();
-
-    fixture = TestBed.createComponent(ListeUtilisateurs);
-    component = fixture.componentInstance;
-    await fixture.whenStable();
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
+  it('accepte une liste vide sans requête HTTP réelle', () => {
+    const fixture = TestBed.createComponent(ListeUtilisateurs);
+    fixture.detectChanges();
+    expect(fixture.componentInstance.utilisateurs).toEqual([]);
+    expect(fixture.componentInstance.messageErreur).toBe('');
   });
 });
