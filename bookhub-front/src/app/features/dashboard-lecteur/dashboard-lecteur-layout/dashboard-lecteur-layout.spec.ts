@@ -1,22 +1,19 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { TestBed } from '@angular/core/testing';
+import { provideRouter } from '@angular/router';
 import { DashboardLecteurLayout } from './dashboard-lecteur-layout';
 
 describe('DashboardLecteurLayout', () => {
-  let component: DashboardLecteurLayout;
-  let fixture: ComponentFixture<DashboardLecteurLayout>;
-
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [DashboardLecteurLayout],
+      providers: [provideRouter([])],
     }).compileComponents();
-
-    fixture = TestBed.createComponent(DashboardLecteurLayout);
-    component = fixture.componentInstance;
-    await fixture.whenStable();
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
+  it('affiche le menu interne sans dépendre d’une route réelle', () => {
+    const fixture = TestBed.createComponent(DashboardLecteurLayout);
+    fixture.detectChanges();
+    expect(fixture.componentInstance).toBeTruthy();
+    expect(fixture.nativeElement.textContent).toContain('Mes emprunts');
   });
 });
