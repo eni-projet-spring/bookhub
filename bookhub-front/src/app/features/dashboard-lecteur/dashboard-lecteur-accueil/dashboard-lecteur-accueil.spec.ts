@@ -29,6 +29,8 @@ describe('DashboardLecteurAccueil', () => {
     fixture.detectChanges();
     expect(fixture.componentInstance.empruntsEnCours.length).toBe(0);
     expect(fixture.componentInstance.reservationsActives.length).toBe(0);
+    expect(fixture.nativeElement.querySelector('.reminders-card')).toBeNull();
+    expect(fixture.nativeElement.querySelectorAll('.stat-card').length).toBe(4);
     expect(fixture.nativeElement.textContent).toContain("Vous n'avez aucun emprunt en cours.");
   });
 });
