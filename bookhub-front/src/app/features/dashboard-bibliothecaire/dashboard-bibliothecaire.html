@@ -1,277 +1,76 @@
-<!-- Écran enfant : le menu commun appartient au layout bibliothécaire. -->
-<section class="dashboard-bibliothecaire">
+<section class="reader-dashboard">
+  <header class="dashboard-header">
+    <div>
+      <h1>Tableau de bord bibliothécaire</h1>
+      <p class="dashboard-welcome">Bienvenue dans votre espace de gestion.</p>
+      <p class="dashboard-description">Suivi des prêts, retards et réservations de la bibliothèque.</p>
+    </div>
+    <button type="button" class="bouton-actualiser"
+            (click)="chargerStatistiques()" [disabled]="chargementEnCours">
+      {{ chargementEnCours ? 'Chargement…' : 'Actualiser' }}
+    </button>
+  </header>
+  @if (messageErreur) { <p role="alert">{{ messageErreur }}</p> }
 
-      <!-- EN-TÊTE -->
-      <header class="dashboard-header">
+  <section class="statistics" aria-label="Activité de la bibliothèque">
+    <article class="stat-card"><div class="stat-card__top"><div>
+      <p>Emprunts non retournés</p>
+      <strong>{{ statistiques ? statistiques.nombreEmpruntsEnCours : '—' }}</strong>
+    </div></div><a routerLink="/dashboard-bibliothecaire/emprunts">Tous les emprunts →</a></article>
+    <article class="stat-card"><div class="stat-card__top"><div>
+      <p>Emprunts enregistrés</p>
+      <strong>{{ statistiques ? statistiques.nombreEmpruntsTotal : '—' }}</strong>
+    </div></div><a routerLink="/dashboard-bibliothecaire/emprunts">Consulter les prêts →</a></article>
+    <article class="stat-card"><div class="stat-card__top"><div>
+      <p>Emprunts en retard</p>
+      <strong>{{ statistiques ? statistiques.nombreEmpruntsEnRetard : '—' }}</strong>
+    </div></div><a routerLink="/dashboard-bibliothecaire/retards">Gérer les retards →</a></article>
+    <article class="stat-card"><div class="stat-card__top"><div>
+      <p>Réservations en attente</p>
+      <strong>{{ statistiques ? statistiques.nombreReservationsEnAttente : '—' }}</strong>
+    </div></div><a routerLink="/dashboard-bibliothecaire/reservations">Traiter les réservations →</a></article>
+  </section>
 
-        <div>
-          <h1>Dashboard bibliothécaire</h1>
-
-          <p>
-            Suivi des emprunts, des retards et des livres populaires.
-          </p>
-        </div>
-
-        <button
-          type="button"
-          class="bouton-actualiser"
-          (click)="chargerStatistiques()"
-          [disabled]="chargementEnCours"
-        >
-          @if (chargementEnCours) {
-            Chargement...
-          } @else {
-            Actualiser
+  <section class="dashboard-grid">
+    <article class="dashboard-panel">
+      <header class="panel-header"><h2>Derniers points de vigilance</h2>
+        <a routerLink="/dashboard-bibliothecaire/retards">Gérer →</a></header>
+      @if (chargementEnCours) { <p>Chargement…</p> }
+      @else if (statistiques && statistiques.empruntsEnRetard.length === 0) {
+        <p>Aucun emprunt en retard.</p>
+      } @else if (statistiques) {
+        <ul class="staff-alerts">
+          @for (emprunt of statistiques.empruntsEnRetard.slice(0, 5); track emprunt.idEmprunt) {
+            <li><strong>{{ emprunt.titreLivre }}</strong>
+              <span>{{ emprunt.prenomUtilisateur }} {{ emprunt.nomUtilisateur }}</span></li>
           }
-        </button>
-
-      </header>
-
-      <!-- MESSAGE D’ERREUR -->
-      @if (messageErreur) {
-        <p
-          class="message-erreur"
-          role="alert"
-        >
-          {{ messageErreur }}
-        </p>
+        </ul>
       }
-
-      <!-- CHARGEMENT INITIAL -->
-      @if (chargementEnCours && !statistiques) {
-        <p class="message-chargement">
-          Chargement du dashboard...
-        </p>
-      }
-
-      @if (statistiques) {
-
-        <!-- STATISTIQUES -->
-        <section
-          id="statistiques"
-          class="statistiques"
-        >
-
-          <article class="carte-statistique">
-
-            <span class="titre-statistique">
-              Emprunts en cours
-            </span>
-
-            <strong>
-              {{ statistiques.nombreEmpruntsEnCours }}
-            </strong>
-
-          </article>
-
-          <article class="carte-statistique">
-
-            <span class="titre-statistique">
-              Total des emprunts
-            </span>
-
-            <strong>
-              {{ statistiques.nombreEmpruntsTotal }}
-            </strong>
-
-          </article>
-
-          <article
-            class="carte-statistique"
-            [class.carte-alerte]="
-              statistiques.nombreEmpruntsEnRetard > 0
-            "
-          >
-
-            <span class="titre-statistique">
-              Emprunts en retard
-            </span>
-
-            <strong>
-              {{ statistiques.nombreEmpruntsEnRetard }}
-            </strong>
-
-          </article>
-
-          <article class="carte-statistique">
-
-            <span class="titre-statistique">
-              Réservations en attente
-            </span>
-
-            <strong>
-              {{ statistiques.nombreReservationsEnAttente }}
-            </strong>
-
-          </article>
-
-        </section>
-
-        <!-- LIVRES POPULAIRES -->
-        <section class="section-dashboard">
-
-          <div class="section-titre section-titre--avec-action">
-
-            <div>
-              <h2>Livres les plus populaires</h2>
-
-              <p>
-                Classement des livres les plus empruntés.
-              </p>
-            </div>
-
-            <a
-              class="btn btn--primary"
-              routerLink="/livres/ajouter"
-            >
-              + Ajouter un livre
-            </a>
-
-          </div>
-
-          @if (statistiques.livresPopulaires.length === 0) {
-
-            <p class="message-vide">
-              Aucun emprunt enregistré pour le moment.
-            </p>
-
-          } @else {
-
-            <div class="tableau-conteneur">
-
-              <table>
-
-                <thead>
-                <tr>
-                  <th>Livre</th>
-                  <th>Auteur</th>
-                  <th>Nombre d'emprunts</th>
-                </tr>
-                </thead>
-
-                <tbody>
-
-                  @for (
-                    livre of statistiques.livresPopulaires;
-                    track livre.idLivre
-                    ) {
-                    <tr>
-
-                      <td>
-                        {{ livre.titre }}
-                      </td>
-
-                      <td>
-                        {{ livre.auteur }}
-                      </td>
-
-                      <td>
-                        <span class="badge-nombre">
-                          {{ livre.nombreEmprunts }}
-                        </span>
-                      </td>
-
-                    </tr>
-                  }
-
-                </tbody>
-
-              </table>
-
-            </div>
-
+    </article>
+    <article class="dashboard-panel">
+      <header class="panel-header"><h2>Livres les plus empruntés</h2>
+        <a routerLink="/dashboard-bibliothecaire/statistiques">Statistiques →</a></header>
+      @if (chargementEnCours) { <p>Chargement…</p> }
+      @else if (statistiques && statistiques.livresPopulaires.length === 0) {
+        <p>Aucun emprunt enregistré.</p>
+      } @else if (statistiques) {
+        <ol class="staff-alerts">
+          @for (livre of statistiques.livresPopulaires; track livre.idLivre) {
+            <li><strong>{{ livre.titre }}</strong>
+              <span>{{ livre.nombreEmprunts }} emprunt(s)</span></li>
           }
-
-        </section>
-
-        <!-- EMPRUNTS EN RETARD -->
-        <section
-          id="emprunts-retard"
-          class="section-dashboard"
-        >
-
-          <div class="section-titre">
-
-            <h2>Emprunts en retard</h2>
-
-            <p>
-              Emprunts dont la date de retour prévue est dépassée.
-            </p>
-
-          </div>
-
-          @if (statistiques.empruntsEnRetard.length === 0) {
-
-            <p class="message-vide message-succes">
-              Aucun emprunt en retard.
-            </p>
-
-          } @else {
-
-            <div class="tableau-conteneur">
-
-              <table>
-
-                <thead>
-                <tr>
-                  <th>Lecteur</th>
-                  <th>Livre</th>
-                  <th>Date de retour prévue</th>
-                  <th>Retard</th>
-                </tr>
-                </thead>
-
-                <tbody>
-
-                  @for (
-                    emprunt of statistiques.empruntsEnRetard;
-                    track emprunt.idEmprunt
-                    ) {
-                    <tr>
-
-                      <td>
-                        {{ emprunt.prenomUtilisateur }}
-                        {{ emprunt.nomUtilisateur }}
-                      </td>
-
-                      <td>
-                        {{ emprunt.titreLivre }}
-                      </td>
-
-                      <td>
-                        {{
-                          emprunt.dateFinPrevue
-                            | date: 'dd/MM/yyyy'
-                        }}
-                      </td>
-
-                      <td>
-                        <span class="badge-retard">
-
-                          {{ emprunt.nombreJoursRetard }}
-
-                          @if (emprunt.nombreJoursRetard > 1) {
-                            jours
-                          } @else {
-                            jour
-                          }
-
-                        </span>
-                      </td>
-
-                    </tr>
-                  }
-
-                </tbody>
-
-              </table>
-
-            </div>
-
-          }
-
-        </section>
-
+        </ol>
       }
-
-    </section>
+    </article>
+    <article class="dashboard-panel">
+      <header class="panel-header"><h2>Gestion des réservations</h2></header>
+      <p>Consulter les demandes et décider de leur traitement.</p>
+      <a routerLink="/dashboard-bibliothecaire/reservations">Ouvrir les réservations →</a>
+    </article>
+    <article class="dashboard-panel">
+      <header class="panel-header"><h2>Catalogue</h2></header>
+      <p>Enregistrer de nouveaux livres et compléter leurs informations.</p>
+      <a routerLink="/dashboard-bibliothecaire/ajouter-livre">Ajouter un livre →</a>
+    </article>
+  </section>
+</section>
