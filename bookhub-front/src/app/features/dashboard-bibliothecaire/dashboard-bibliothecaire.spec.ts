@@ -1,4 +1,8 @@
 import { TestBed } from '@angular/core/testing';
+import { registerLocaleData } from '@angular/common';
+import localeFr from '@angular/common/locales/fr';
+
+registerLocaleData(localeFr);
 import { provideRouter } from '@angular/router';
 import { of } from 'rxjs';
 import { DashboardBibliothecaire } from './dashboard-bibliothecaire';
