@@ -1,76 +1,160 @@
 <section class="reader-dashboard">
   <header class="dashboard-header">
     <div>
-      <h1>Tableau de bord bibliothécaire</h1>
-      <p class="dashboard-welcome">Bienvenue dans votre espace de gestion.</p>
-      <p class="dashboard-description">Suivi des prêts, retards et réservations de la bibliothèque.</p>
+      <h1>Tableau de bord</h1>
+      <p class="dashboard-welcome">Bienvenue dans votre espace bibliothécaire !</p>
+      <p class="dashboard-description">Voici un aperçu de l'activité de la bibliothèque.</p>
     </div>
-    <button type="button" class="bouton-actualiser"
-            (click)="chargerStatistiques()" [disabled]="chargementEnCours">
-      {{ chargementEnCours ? 'Chargement…' : 'Actualiser' }}
-    </button>
+    <div class="date-card">
+      <span class="date-card__icon" aria-hidden="true">▣</span>
+      <div>
+        <p>{{ currentDate | date: 'EEEE d MMMM y' : '' : 'fr' }}</p>
+        <strong>{{ currentDate | date: 'HH:mm' }}</strong>
+      </div>
+    </div>
   </header>
-  @if (messageErreur) { <p role="alert">{{ messageErreur }}</p> }
 
-  <section class="statistics" aria-label="Activité de la bibliothèque">
-    <article class="stat-card"><div class="stat-card__top"><div>
-      <p>Emprunts non retournés</p>
-      <strong>{{ statistiques ? statistiques.nombreEmpruntsEnCours : '—' }}</strong>
-    </div></div><a routerLink="/dashboard-bibliothecaire/emprunts">Tous les emprunts →</a></article>
-    <article class="stat-card"><div class="stat-card__top"><div>
-      <p>Emprunts enregistrés</p>
-      <strong>{{ statistiques ? statistiques.nombreEmpruntsTotal : '—' }}</strong>
-    </div></div><a routerLink="/dashboard-bibliothecaire/emprunts">Consulter les prêts →</a></article>
-    <article class="stat-card"><div class="stat-card__top"><div>
-      <p>Emprunts en retard</p>
-      <strong>{{ statistiques ? statistiques.nombreEmpruntsEnRetard : '—' }}</strong>
-    </div></div><a routerLink="/dashboard-bibliothecaire/retards">Gérer les retards →</a></article>
-    <article class="stat-card"><div class="stat-card__top"><div>
-      <p>Réservations en attente</p>
-      <strong>{{ statistiques ? statistiques.nombreReservationsEnAttente : '—' }}</strong>
-    </div></div><a routerLink="/dashboard-bibliothecaire/reservations">Traiter les réservations →</a></article>
+  @if (messageErreur) {
+    <p role="alert" class="staff-message-error">{{ messageErreur }}</p>
+  }
+
+  <!-- Les quatre indicateurs sont calculés côté serveur, sans valeur factice. -->
+  <section class="statistics" aria-label="Résumé de l'activité de la bibliothèque">
+    <article class="stat-card">
+      <div class="stat-card__top">
+        <span class="stat-card__icon" aria-hidden="true">▤</span>
+        <div>
+          <p>Emprunts en cours</p>
+          <strong>{{ statistiques ? statistiques.nombreEmpruntsEnCours : '—' }}</strong>
+        </div>
+      </div>
+      <a routerLink="/dashboard-bibliothecaire/emprunts">Voir tous les emprunts <span aria-hidden="true">→</span></a>
+    </article>
+
+    <article class="stat-card">
+      <div class="stat-card__top">
+        <span class="stat-card__icon stat-card__icon--highlight" aria-hidden="true">◷</span>
+        <div>
+          <p>Réservations en attente</p>
+          <strong>{{ statistiques ? statistiques.nombreReservationsEnAttente : '—' }}</strong>
+        </div>
+      </div>
+      <a routerLink="/dashboard-bibliothecaire/reservations">Traiter les réservations <span aria-hidden="true">→</span></a>
+    </article>
+
+    <article class="stat-card">
+      <div class="stat-card__top">
+        <span class="stat-card__icon stat-card__icon--accent" aria-hidden="true">◴</span>
+        <div>
+          <p>Emprunts en retard</p>
+          <strong>{{ statistiques ? statistiques.nombreEmpruntsEnRetard : '—' }}</strong>
+        </div>
+      </div>
+      <a routerLink="/dashboard-bibliothecaire/retards">Gérer les retards <span aria-hidden="true">→</span></a>
+    </article>
+
+    <article class="stat-card">
+      <div class="stat-card__top">
+        <span class="stat-card__icon stat-card__icon--success" aria-hidden="true">☆</span>
+        <div>
+          <p>Emprunts enregistrés</p>
+          <strong>{{ statistiques ? statistiques.nombreEmpruntsTotal : '—' }}</strong>
+        </div>
+      </div>
+      <a routerLink="/dashboard-bibliothecaire/statistiques">Voir les statistiques <span aria-hidden="true">→</span></a>
+    </article>
   </section>
 
   <section class="dashboard-grid">
-    <article class="dashboard-panel">
-      <header class="panel-header"><h2>Derniers points de vigilance</h2>
-        <a routerLink="/dashboard-bibliothecaire/retards">Gérer →</a></header>
-      @if (chargementEnCours) { <p>Chargement…</p> }
-      @else if (statistiques && statistiques.empruntsEnRetard.length === 0) {
+    <article class="dashboard-panel loans-panel">
+      <header class="panel-header">
+        <h2>Emprunts en retard</h2>
+        <a routerLink="/dashboard-bibliothecaire/retards">Voir tous <span aria-hidden="true">→</span></a>
+      </header>
+      @if (chargementEnCours && !statistiques) {
+        <p>Chargement des emprunts…</p>
+      } @else if (statistiques && statistiques.empruntsEnRetard.length === 0) {
         <p>Aucun emprunt en retard.</p>
       } @else if (statistiques) {
-        <ul class="staff-alerts">
-          @for (emprunt of statistiques.empruntsEnRetard.slice(0, 5); track emprunt.idEmprunt) {
-            <li><strong>{{ emprunt.titreLivre }}</strong>
-              <span>{{ emprunt.prenomUtilisateur }} {{ emprunt.nomUtilisateur }}</span></li>
-          }
-        </ul>
+        @for (emprunt of statistiques.empruntsEnRetard.slice(0, 3); track emprunt.idEmprunt) {
+          <div class="loan">
+            <div class="loan__cover">
+              @if (getCoverImageUrl(emprunt.couvertureLivre)) {
+                <img
+                  class="loan__cover-image"
+                  [src]="getCoverImageUrl(emprunt.couvertureLivre)"
+                  [alt]="'Couverture de ' + emprunt.titreLivre"
+                />
+              } @else {
+                <span>Sans couverture</span>
+              }
+            </div>
+            <div class="loan__content">
+              <h3>{{ emprunt.titreLivre }}</h3>
+              <p class="loan__author">{{ emprunt.auteurLivre || 'Auteur non renseigné' }}</p>
+              <p class="staff-borrower">{{ emprunt.prenomUtilisateur }} {{ emprunt.nomUtilisateur }}</p>
+              <div class="loan__dates">
+                <p><strong>Emprunté le</strong><span>{{ emprunt.dateDebut | date: 'dd/MM/yyyy' }}</span></p>
+                <p><strong>Retour prévu le</strong><span>{{ emprunt.dateFinPrevue | date: 'dd/MM/yyyy' }}</span></p>
+              </div>
+              <span class="status-badge staff-status-late">En retard</span>
+            </div>
+          </div>
+        }
       }
     </article>
-    <article class="dashboard-panel">
-      <header class="panel-header"><h2>Livres les plus empruntés</h2>
-        <a routerLink="/dashboard-bibliothecaire/statistiques">Statistiques →</a></header>
-      @if (chargementEnCours) { <p>Chargement…</p> }
-      @else if (statistiques && statistiques.livresPopulaires.length === 0) {
-        <p>Aucun emprunt enregistré.</p>
+
+    <article class="dashboard-panel categories-panel">
+      <header class="panel-header">
+        <h2>Livres les plus empruntés</h2>
+        <a routerLink="/dashboard-bibliothecaire/statistiques">Statistiques <span aria-hidden="true">→</span></a>
+      </header>
+      @if (chargementEnCours && !statistiques) {
+        <p>Chargement du classement…</p>
+      } @else if (statistiques && statistiques.livresPopulaires.length === 0) {
+        <p>Aucun emprunt enregistré pour le moment.</p>
       } @else if (statistiques) {
-        <ol class="staff-alerts">
-          @for (livre of statistiques.livresPopulaires; track livre.idLivre) {
-            <li><strong>{{ livre.titre }}</strong>
-              <span>{{ livre.nombreEmprunts }} emprunt(s)</span></li>
+        <ol class="staff-ranking">
+          @for (livre of statistiques.livresPopulaires.slice(0, 5); track livre.idLivre) {
+            <li>
+              <div>
+                <strong>{{ livre.titre }}</strong>
+                <span>{{ livre.auteur }}</span>
+              </div>
+              <span class="staff-ranking__count">{{ livre.nombreEmprunts }} emprunt(s)</span>
+            </li>
           }
         </ol>
       }
     </article>
-    <article class="dashboard-panel">
-      <header class="panel-header"><h2>Gestion des réservations</h2></header>
-      <p>Consulter les demandes et décider de leur traitement.</p>
-      <a routerLink="/dashboard-bibliothecaire/reservations">Ouvrir les réservations →</a>
+
+    <article class="dashboard-panel reservations-panel">
+      <header class="panel-header">
+        <h2>Réservations à traiter</h2>
+        <a routerLink="/dashboard-bibliothecaire/reservations">Voir toutes <span aria-hidden="true">→</span></a>
+      </header>
+      @if (chargementEnCours && !statistiques) {
+        <p>Chargement…</p>
+      } @else if (statistiques) {
+        <div class="staff-action-preview">
+          <span class="staff-action-icon" aria-hidden="true">◇</span>
+          <div>
+            <strong>{{ statistiques.nombreReservationsEnAttente }} réservation(s) en attente</strong>
+            <p>Consultez les demandes avant confirmation ou rejet.</p>
+          </div>
+        </div>
+      }
     </article>
-    <article class="dashboard-panel">
-      <header class="panel-header"><h2>Catalogue</h2></header>
-      <p>Enregistrer de nouveaux livres et compléter leurs informations.</p>
-      <a routerLink="/dashboard-bibliothecaire/ajouter-livre">Ajouter un livre →</a>
+
+    <article class="dashboard-panel notifications-panel">
+      <header class="panel-header">
+        <h2>Actions courantes</h2>
+      </header>
+      <ul class="notification-list">
+        <li><span aria-hidden="true">＋</span><p><a routerLink="/dashboard-bibliothecaire/ajouter-livre">Ajouter un livre au catalogue</a></p></li>
+        <li><span aria-hidden="true">▤</span><p><a routerLink="/dashboard-bibliothecaire/emprunts">Consulter les emprunts</a></p></li>
+        <li><span aria-hidden="true">◷</span><p><a routerLink="/dashboard-bibliothecaire/retards">Enregistrer des retours</a></p></li>
+      </ul>
     </article>
   </section>
 </section>
