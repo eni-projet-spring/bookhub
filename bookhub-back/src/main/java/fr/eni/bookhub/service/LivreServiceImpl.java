@@ -54,12 +54,17 @@ public class LivreServiceImpl implements LivreService {
         // Handle file upload
         if (file != null && !file.isEmpty()) {
             try {
-                // Generate a unique filename to avoid collisions
-                String originalFilename = file.getOriginalFilename();
-                String extension = originalFilename != null && originalFilename.contains(".")
-                        ? originalFilename.substring(originalFilename.lastIndexOf("."))
-                        : ".jpg";
-                String uniqueFilename = UUID.randomUUID().toString() + extension;
+                // Ne jamais construire un nom public depuis l'extension fournie par l'utilisateur.
+                if (file.getSize() > 3 * 1024 * 1024) {
+                    throw new IllegalArgumentException("Couverture trop volumineuse (3 Mo max).");
+                }
+                String extension = switch (file.getContentType() == null ? "" : file.getContentType()) {
+                    case "image/jpeg" -> ".jpg";
+                    case "image/png" -> ".png";
+                    case "image/webp" -> ".webp";
+                    default -> throw new IllegalArgumentException("Format de couverture non autorisé.");
+                };
+                String uniqueFilename = UUID.randomUUID() + extension;
 
                 // Define the path
                 String uploadDir = "src/main/resources/public/couvertures/";

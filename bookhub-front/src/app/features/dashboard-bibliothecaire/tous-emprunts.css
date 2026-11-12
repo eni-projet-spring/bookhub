@@ -1,0 +1,13 @@
+.staff-page { display: flex; flex-direction: column; gap: 1.25rem; }
+.staff-header { display: flex; justify-content: space-between; align-items: center; gap: 1rem; }
+.staff-header h1 { margin: 0 0 .4rem; font-family: var(--font-heading); }
+.staff-header p { margin: 0; }
+.staff-filters { display: flex; flex-wrap: wrap; gap: 1rem; }
+.staff-filters label { display: flex; flex-direction: column; gap: .35rem; font-weight: 600; }
+.staff-filters input, .staff-filters select { min-height: 40px; padding: .5rem; border: 1px solid var(--color-primary); border-radius: 8px; background: var(--color-surface); color: var(--color-text); }
+.staff-page button { min-height: 40px; padding: .5rem .8rem; border: 0; border-radius: 8px; background: var(--color-primary); color: white; cursor: pointer; }
+.staff-page button:disabled { opacity: .6; cursor: not-allowed; }
+.table-scroll { overflow-x: auto; }
+.staff-page table { width: 100%; border-collapse: collapse; background: var(--color-surface); }
+.staff-page th, .staff-page td { padding: .75rem; text-align: left; border-bottom: 1px solid #ddd; }
+@media (max-width: 700px) { .staff-header { flex-direction: column; align-items: flex-start; } }

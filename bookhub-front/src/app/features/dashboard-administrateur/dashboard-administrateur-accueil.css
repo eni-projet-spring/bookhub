@@ -1,0 +1,6 @@
+.refresh-button { padding: .75rem 1.1rem; background: var(--color-primary); color: white; border: 0; border-radius: 8px; cursor: pointer; }
+.refresh-button:disabled { opacity: .6; }
+.ranking-list { margin: 1rem 0 0; padding-left: 1.25rem; }
+.ranking-list li { display: flex; justify-content: space-between; gap: .5rem; padding: .75rem .25rem; border-bottom: 1px solid #e9ecef; }
+.ranking-list strong { text-align: right; color: var(--color-primary); }
+@media(max-width:700px) { .ranking-list li { flex-direction: column; } .ranking-list strong { text-align: left; } }

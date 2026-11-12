@@ -42,9 +42,21 @@ export class Header implements OnInit {
     return role === 'USER';
   }
 
+  get nomUtilisateurConnecte(): string {
+    const compte = this.utilisateurService.obtenirUtilisateurConnecte();
+    return compte ? `${compte.prenom} ${compte.nom}`.trim() : '';
+  }
+
+  get lienProfil(): string {
+    const role = this.utilisateurService.getRole();
+    return role === 'ADMIN' ? '/dashboard-administrateur/profil'
+      : role === 'LIBRARIAN' ? '/dashboard-bibliothecaire/profil'
+      : '/dashboard-lecteur/profil';
+  }
+
   estBibliothecaire(): boolean {
     const role = this.utilisateurService.getRole();
-    return role === 'LIBRARIAN' || role === 'ADMIN';
+    return role === 'LIBRARIAN';
   }
 
   estAdministrateur(): boolean {

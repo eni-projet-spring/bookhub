@@ -10,6 +10,8 @@ public interface EmpruntService {
             Integer idUtilisateur
     );
 
+    List<EmpruntResponse> consulterTousLesEmprunts();
+
     List<EmpruntResponse> consulterEmpruntsEnRetard();
 
     List<EmpruntResponse> consulterMesEmprunts(

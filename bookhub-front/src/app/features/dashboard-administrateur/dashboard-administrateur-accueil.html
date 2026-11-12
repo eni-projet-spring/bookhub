@@ -1,0 +1,71 @@
+<section class="reader-dashboard">
+  <header class="dashboard-header">
+    <div>
+      <h1>Tableau de bord administrateur</h1>
+      <p class="dashboard-welcome">Bienvenue dans votre espace d'administration.</p>
+      <p class="dashboard-description">Suivi des comptes et de l'activité réelle de la bibliothèque.</p>
+    </div>
+    <button class="refresh-button" type="button" (click)="actualiser()"
+            [disabled]="chargementComptes || chargementIndicateurs">Actualiser</button>
+  </header>
+
+  <section class="statistics" aria-label="Comptes par rôle">
+    <article class="stat-card"><div class="stat-card__top"><div><p>Comptes enregistrés</p>
+      <strong>{{ chargementComptes || erreurComptes ? '—' : total }}</strong></div></div>
+      <a routerLink="/dashboard-administrateur/utilisateurs">Voir les comptes →</a></article>
+    <article class="stat-card"><div class="stat-card__top"><div><p>Lecteurs</p>
+      <strong>{{ chargementComptes || erreurComptes ? '—' : lecteurs }}</strong></div></div>
+      <a routerLink="/dashboard-administrateur/utilisateurs">Gérer les utilisateurs →</a></article>
+    <article class="stat-card"><div class="stat-card__top"><div><p>Bibliothécaires</p>
+      <strong>{{ chargementComptes || erreurComptes ? '—' : bibliothecaires }}</strong></div></div>
+      <a routerLink="/dashboard-administrateur/utilisateurs">Voir les rôles →</a></article>
+    <article class="stat-card"><div class="stat-card__top"><div><p>Administrateurs</p>
+      <strong>{{ chargementComptes || erreurComptes ? '—' : administrateurs }}</strong></div></div>
+      <a routerLink="/dashboard-administrateur/utilisateurs">Voir les rôles →</a></article>
+  </section>
+  @if (erreurComptes) { <p role="alert">{{ erreurComptes }}</p> }
+  @if (erreurIndicateurs) { <p role="alert">{{ erreurIndicateurs }}</p> }
+
+  <section class="dashboard-grid">
+    <article class="dashboard-panel">
+      <header class="panel-header"><h2>Livres les plus réservés</h2></header>
+      <p>Classement historique de toutes les réservations, quel que soit leur statut.</p>
+      @if (chargementIndicateurs) { <p>Chargement…</p> }
+      @else if (indicateurs && indicateurs.livresLesPlusReserves.length === 0) {
+        <p>Aucune réservation enregistrée.</p>
+      } @else if (indicateurs) {
+        <ol class="ranking-list">
+          @for (livre of indicateurs.livresLesPlusReserves; track livre.titre) {
+            <li><span>{{ livre.titre }}</span><strong>{{ livre.nombreReservations }} réservation(s)</strong></li>
+          }
+        </ol>
+      }
+    </article>
+    <article class="dashboard-panel">
+      <header class="panel-header"><h2>Catégories les mieux notées</h2></header>
+      <p>Note moyenne calculée sur les commentaires enregistrés.</p>
+      @if (chargementIndicateurs) { <p>Chargement…</p> }
+      @else if (indicateurs && indicateurs.categoriesLesMieuxNotees.length === 0) {
+        <p>Aucun avis disponible pour établir un classement.</p>
+      } @else if (indicateurs) {
+        <ol class="ranking-list">
+          @for (categorie of indicateurs.categoriesLesMieuxNotees; track categorie.categorie) {
+            <li><span>{{ categorie.categorie }}</span>
+              <strong>{{ categorie.noteMoyenne.toFixed(1) }}/5 · {{ categorie.nombreAvis }} avis</strong></li>
+          }
+        </ol>
+      }
+    </article>
+    <article class="dashboard-panel">
+      <header class="panel-header"><h2>Gestion des comptes</h2></header>
+      <p>Consulter les utilisateurs et gérer leurs rôles selon les droits administrateur.</p>
+      <a routerLink="/dashboard-administrateur/utilisateurs">Accéder aux comptes →</a>
+    </article>
+    <article class="dashboard-panel">
+      <header class="panel-header"><h2>Exploitation</h2></header>
+      <p>Gestion du catalogue et des opérations bibliothécaire.</p>
+      <a routerLink="/dashboard-administrateur/ajouter-livre">Ajouter un livre →</a>
+      <p><a routerLink="/dashboard-bibliothecaire">Ouvrir l'espace bibliothécaire →</a></p>
+    </article>
+  </section>
+</section>

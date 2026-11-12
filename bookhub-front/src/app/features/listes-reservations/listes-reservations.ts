@@ -1,6 +1,5 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
-import { RouterLink } from '@angular/router';
 
 import { ReservationResponse } from "../../models/reservation-response";
 import { ReservationService } from '../../services/reservation.service';
@@ -9,7 +8,7 @@ import { StatistiquesBibliothequeService } from '../../services/statistiques-bib
 @Component({
   selector: 'app-listes-reservations',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule],
   templateUrl: './listes-reservations.html',
   styleUrl: './listes-reservations.css',
 })

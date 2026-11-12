@@ -1,451 +1,160 @@
-<div class="dashboard-layout">
+<section class="reader-dashboard">
+  <header class="dashboard-header">
+    <div>
+      <h1>Tableau de bord</h1>
+      <p class="dashboard-welcome">Bienvenue dans votre espace bibliothécaire !</p>
+      <p class="dashboard-description">Voici un aperçu de l'activité de la bibliothèque.</p>
+    </div>
+    <div class="date-card">
+      <span class="date-card__icon" aria-hidden="true">▣</span>
+      <div>
+        <p>{{ currentDate | date: 'EEEE d MMMM y' : '' : 'fr' }}</p>
+        <strong>{{ currentDate | date: 'HH:mm' }}</strong>
+      </div>
+    </div>
+  </header>
 
-  <!-- SIDEBAR -->
-  <aside class="dashboard-layout__sidebar">
+  @if (messageErreur) {
+    <p role="alert" class="staff-message-error">{{ messageErreur }}</p>
+  }
 
-    <nav
-      class="sidebar-nav"
-      aria-label="Navigation bibliothécaire"
-    >
-
-      <!-- DASHBOARD -->
-      <a
-        class="sidebar-nav__link sidebar-nav__link--active"
-        routerLink="/dashboard-bibliothecaire"
-      >
-        <svg
-          class="sidebar-nav__icon"
-          width="20"
-          height="20"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          aria-hidden="true"
-        >
-          <path d="M3 9.5 12 3l9 6.5"></path>
-          <path d="M5 10v10h14V10"></path>
-        </svg>
-
-        <span>Dashboard</span>
-      </a>
-
-      <!-- AJOUTER UN LIVRE -->
-      <a
-        class="sidebar-nav__link"
-        routerLink="/livres/ajouter"
-      >
-        <svg
-          class="sidebar-nav__icon"
-          width="20"
-          height="20"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          aria-hidden="true"
-        >
-          <path
-            d="M2 4h6a3 3 0 0 1 3 3v13a2.5 2.5 0 0 0-2.5-2.5H2z"
-          ></path>
-
-          <path
-            d="M22 4h-6a3 3 0 0 0-3 3v13a2.5 2.5 0 0 1 2.5-2.5H22z"
-          ></path>
-        </svg>
-
-        <span>Ajouter un livre</span>
-      </a>
-
-      <!-- EMPRUNTS -->
-      <a
-        class="sidebar-nav__link"
-        routerLink="/emprunts-retard"
-      >
-        <svg
-          class="sidebar-nav__icon"
-          width="20"
-          height="20"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          aria-hidden="true"
-        >
-          <path d="M17 1l4 4-4 4"></path>
-          <path d="M3 11V9a4 4 0 0 1 4-4h14"></path>
-          <path d="M7 23l-4-4 4-4"></path>
-          <path d="M21 13v2a4 4 0 0 1-4 4H3"></path>
-        </svg>
-
-        <span>Emprunts</span>
-      </a>
-
-      <!-- LISTE DES RÉSERVATIONS -->
-      <a
-        class="sidebar-nav__link"
-        routerLink="/listes-reservations"
-      >
-        <svg
-          class="sidebar-nav__icon"
-          width="20"
-          height="20"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          aria-hidden="true"
-        >
-          <path
-            d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"
-          ></path>
-        </svg>
-
-        <span>Réservations</span>
-      </a>
-
-      <!-- STATISTIQUES -->
-      <a
-        class="sidebar-nav__link"
-        routerLink="/dashboard-bibliothecaire"
-        fragment="statistiques"
-      >
-        <svg
-          class="sidebar-nav__icon"
-          width="20"
-          height="20"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          aria-hidden="true"
-        >
-          <line x1="6" y1="20" x2="6" y2="10"></line>
-          <line x1="12" y1="20" x2="12" y2="4"></line>
-          <line x1="18" y1="20" x2="18" y2="14"></line>
-        </svg>
-
-        <span>Statistiques</span>
-      </a>
-
-      <!-- PROFIL -->
-      <a
-        class="sidebar-nav__link"
-        routerLink="/gestion-profil"
-      >
-        <svg
-          class="sidebar-nav__icon"
-          width="20"
-          height="20"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          aria-hidden="true"
-        >
-          <circle cx="12" cy="7" r="4"></circle>
-          <path d="M5.5 21a6.5 6.5 0 0 1 13 0"></path>
-        </svg>
-
-        <span>Mon profil</span>
-      </a>
-
-    </nav>
-
-  </aside>
-
-  <!-- CONTENU PRINCIPAL -->
-  <main class="dashboard-layout__content">
-
-    <section class="dashboard-bibliothecaire">
-
-      <!-- EN-TÊTE -->
-      <header class="dashboard-header">
-
+  <!-- Les quatre indicateurs sont calculés côté serveur, sans valeur factice. -->
+  <section class="statistics" aria-label="Résumé de l'activité de la bibliothèque">
+    <article class="stat-card">
+      <div class="stat-card__top">
+        <span class="stat-card__icon" aria-hidden="true">▤</span>
         <div>
-          <h1>Dashboard bibliothécaire</h1>
-
-          <p>
-            Suivi des emprunts, des retards et des livres populaires.
-          </p>
+          <p>Emprunts en cours</p>
+          <strong>{{ statistiques ? statistiques.nombreEmpruntsEnCours : '—' }}</strong>
         </div>
+      </div>
+      <a routerLink="/dashboard-bibliothecaire/emprunts">Voir tous les emprunts <span aria-hidden="true">→</span></a>
+    </article>
 
-        <button
-          type="button"
-          class="bouton-actualiser"
-          (click)="chargerStatistiques()"
-          [disabled]="chargementEnCours"
-        >
-          @if (chargementEnCours) {
-            Chargement...
-          } @else {
-            Actualiser
-          }
-        </button>
+    <article class="stat-card">
+      <div class="stat-card__top">
+        <span class="stat-card__icon stat-card__icon--highlight" aria-hidden="true">◷</span>
+        <div>
+          <p>Réservations en attente</p>
+          <strong>{{ statistiques ? statistiques.nombreReservationsEnAttente : '—' }}</strong>
+        </div>
+      </div>
+      <a routerLink="/dashboard-bibliothecaire/reservations">Traiter les réservations <span aria-hidden="true">→</span></a>
+    </article>
 
+    <article class="stat-card">
+      <div class="stat-card__top">
+        <span class="stat-card__icon stat-card__icon--accent" aria-hidden="true">◴</span>
+        <div>
+          <p>Emprunts en retard</p>
+          <strong>{{ statistiques ? statistiques.nombreEmpruntsEnRetard : '—' }}</strong>
+        </div>
+      </div>
+      <a routerLink="/dashboard-bibliothecaire/retards">Gérer les retards <span aria-hidden="true">→</span></a>
+    </article>
+
+    <article class="stat-card">
+      <div class="stat-card__top">
+        <span class="stat-card__icon stat-card__icon--success" aria-hidden="true">☆</span>
+        <div>
+          <p>Emprunts enregistrés</p>
+          <strong>{{ statistiques ? statistiques.nombreEmpruntsTotal : '—' }}</strong>
+        </div>
+      </div>
+      <a routerLink="/dashboard-bibliothecaire/statistiques">Voir les statistiques <span aria-hidden="true">→</span></a>
+    </article>
+  </section>
+
+  <section class="dashboard-grid">
+    <article class="dashboard-panel loans-panel">
+      <header class="panel-header">
+        <h2>Emprunts en retard</h2>
+        <a routerLink="/dashboard-bibliothecaire/retards">Voir tous <span aria-hidden="true">→</span></a>
       </header>
-
-      <!-- MESSAGE D’ERREUR -->
-      @if (messageErreur) {
-        <p
-          class="message-erreur"
-          role="alert"
-        >
-          {{ messageErreur }}
-        </p>
-      }
-
-      <!-- CHARGEMENT INITIAL -->
       @if (chargementEnCours && !statistiques) {
-        <p class="message-chargement">
-          Chargement du dashboard...
-        </p>
-      }
-
-      @if (statistiques) {
-
-        <!-- STATISTIQUES -->
-        <section
-          id="statistiques"
-          class="statistiques"
-        >
-
-          <article class="carte-statistique">
-
-            <span class="titre-statistique">
-              Emprunts en cours
-            </span>
-
-            <strong>
-              {{ statistiques.nombreEmpruntsEnCours }}
-            </strong>
-
-          </article>
-
-          <article class="carte-statistique">
-
-            <span class="titre-statistique">
-              Total des emprunts
-            </span>
-
-            <strong>
-              {{ statistiques.nombreEmpruntsTotal }}
-            </strong>
-
-          </article>
-
-          <article
-            class="carte-statistique"
-            [class.carte-alerte]="
-              statistiques.nombreEmpruntsEnRetard > 0
-            "
-          >
-
-            <span class="titre-statistique">
-              Emprunts en retard
-            </span>
-
-            <strong>
-              {{ statistiques.nombreEmpruntsEnRetard }}
-            </strong>
-
-          </article>
-
-          <article class="carte-statistique">
-
-            <span class="titre-statistique">
-              Réservations en attente
-            </span>
-
-            <strong>
-              {{ statistiques.nombreReservationsEnAttente }}
-            </strong>
-
-          </article>
-
-        </section>
-
-        <!-- LIVRES POPULAIRES -->
-        <section class="section-dashboard">
-
-          <div class="section-titre section-titre--avec-action">
-
-            <div>
-              <h2>Livres les plus populaires</h2>
-
-              <p>
-                Classement des livres les plus empruntés.
-              </p>
+        <p>Chargement des emprunts…</p>
+      } @else if (statistiques && statistiques.empruntsEnRetard.length === 0) {
+        <p>Aucun emprunt en retard.</p>
+      } @else if (statistiques) {
+        @for (emprunt of statistiques.empruntsEnRetard.slice(0, 3); track emprunt.idEmprunt) {
+          <div class="loan">
+            <div class="loan__cover">
+              @if (getCoverImageUrl(emprunt.couvertureLivre)) {
+                <img
+                  class="loan__cover-image"
+                  [src]="getCoverImageUrl(emprunt.couvertureLivre)"
+                  [alt]="'Couverture de ' + emprunt.titreLivre"
+                />
+              } @else {
+                <span>Sans couverture</span>
+              }
             </div>
-
-            <a
-              class="btn btn--primary"
-              routerLink="/livres/ajouter"
-            >
-              + Ajouter un livre
-            </a>
-
+            <div class="loan__content">
+              <h3>{{ emprunt.titreLivre }}</h3>
+              <p class="loan__author">{{ emprunt.auteurLivre || 'Auteur non renseigné' }}</p>
+              <p class="staff-borrower">{{ emprunt.prenomUtilisateur }} {{ emprunt.nomUtilisateur }}</p>
+              <div class="loan__dates">
+                <p><strong>Emprunté le</strong><span>{{ emprunt.dateDebut | date: 'dd/MM/yyyy' }}</span></p>
+                <p><strong>Retour prévu le</strong><span>{{ emprunt.dateFinPrevue | date: 'dd/MM/yyyy' }}</span></p>
+              </div>
+              <span class="status-badge staff-status-late">En retard</span>
+            </div>
           </div>
-
-          @if (statistiques.livresPopulaires.length === 0) {
-
-            <p class="message-vide">
-              Aucun emprunt enregistré pour le moment.
-            </p>
-
-          } @else {
-
-            <div class="tableau-conteneur">
-
-              <table>
-
-                <thead>
-                <tr>
-                  <th>Livre</th>
-                  <th>Auteur</th>
-                  <th>Nombre d'emprunts</th>
-                </tr>
-                </thead>
-
-                <tbody>
-
-                  @for (
-                    livre of statistiques.livresPopulaires;
-                    track livre.idLivre
-                    ) {
-                    <tr>
-
-                      <td>
-                        {{ livre.titre }}
-                      </td>
-
-                      <td>
-                        {{ livre.auteur }}
-                      </td>
-
-                      <td>
-                        <span class="badge-nombre">
-                          {{ livre.nombreEmprunts }}
-                        </span>
-                      </td>
-
-                    </tr>
-                  }
-
-                </tbody>
-
-              </table>
-
-            </div>
-
-          }
-
-        </section>
-
-        <!-- EMPRUNTS EN RETARD -->
-        <section
-          id="emprunts-retard"
-          class="section-dashboard"
-        >
-
-          <div class="section-titre">
-
-            <h2>Emprunts en retard</h2>
-
-            <p>
-              Emprunts dont la date de retour prévue est dépassée.
-            </p>
-
-          </div>
-
-          @if (statistiques.empruntsEnRetard.length === 0) {
-
-            <p class="message-vide message-succes">
-              Aucun emprunt en retard.
-            </p>
-
-          } @else {
-
-            <div class="tableau-conteneur">
-
-              <table>
-
-                <thead>
-                <tr>
-                  <th>Lecteur</th>
-                  <th>Livre</th>
-                  <th>Date de retour prévue</th>
-                  <th>Retard</th>
-                </tr>
-                </thead>
-
-                <tbody>
-
-                  @for (
-                    emprunt of statistiques.empruntsEnRetard;
-                    track emprunt.idEmprunt
-                    ) {
-                    <tr>
-
-                      <td>
-                        {{ emprunt.prenomUtilisateur }}
-                        {{ emprunt.nomUtilisateur }}
-                      </td>
-
-                      <td>
-                        {{ emprunt.titreLivre }}
-                      </td>
-
-                      <td>
-                        {{
-                          emprunt.dateFinPrevue
-                            | date: 'dd/MM/yyyy'
-                        }}
-                      </td>
-
-                      <td>
-                        <span class="badge-retard">
-
-                          {{ emprunt.nombreJoursRetard }}
-
-                          @if (emprunt.nombreJoursRetard > 1) {
-                            jours
-                          } @else {
-                            jour
-                          }
-
-                        </span>
-                      </td>
-
-                    </tr>
-                  }
-
-                </tbody>
-
-              </table>
-
-            </div>
-
-          }
-
-        </section>
-
+        }
       }
+    </article>
 
-    </section>
+    <article class="dashboard-panel categories-panel">
+      <header class="panel-header">
+        <h2>Livres les plus empruntés</h2>
+        <a routerLink="/dashboard-bibliothecaire/statistiques">Statistiques <span aria-hidden="true">→</span></a>
+      </header>
+      @if (chargementEnCours && !statistiques) {
+        <p>Chargement du classement…</p>
+      } @else if (statistiques && statistiques.livresPopulaires.length === 0) {
+        <p>Aucun emprunt enregistré pour le moment.</p>
+      } @else if (statistiques) {
+        <ol class="staff-ranking">
+          @for (livre of statistiques.livresPopulaires.slice(0, 5); track livre.idLivre) {
+            <li>
+              <div>
+                <strong>{{ livre.titre }}</strong>
+                <span>{{ livre.auteur }}</span>
+              </div>
+              <span class="staff-ranking__count">{{ livre.nombreEmprunts }} emprunt(s)</span>
+            </li>
+          }
+        </ol>
+      }
+    </article>
 
-  </main>
+    <article class="dashboard-panel reservations-panel">
+      <header class="panel-header">
+        <h2>Réservations à traiter</h2>
+        <a routerLink="/dashboard-bibliothecaire/reservations">Voir toutes <span aria-hidden="true">→</span></a>
+      </header>
+      @if (chargementEnCours && !statistiques) {
+        <p>Chargement…</p>
+      } @else if (statistiques) {
+        <div class="staff-action-preview">
+          <span class="staff-action-icon" aria-hidden="true">◇</span>
+          <div>
+            <strong>{{ statistiques.nombreReservationsEnAttente }} réservation(s) en attente</strong>
+            <p>Consultez les demandes avant confirmation ou rejet.</p>
+          </div>
+        </div>
+      }
+    </article>
 
-</div>
+    <article class="dashboard-panel notifications-panel">
+      <header class="panel-header">
+        <h2>Actions courantes</h2>
+      </header>
+      <ul class="notification-list">
+        <li><span aria-hidden="true">＋</span><p><a routerLink="/dashboard-bibliothecaire/ajouter-livre">Ajouter un livre au catalogue</a></p></li>
+        <li><span aria-hidden="true">▤</span><p><a routerLink="/dashboard-bibliothecaire/emprunts">Consulter les emprunts</a></p></li>
+        <li><span aria-hidden="true">◷</span><p><a routerLink="/dashboard-bibliothecaire/retards">Enregistrer des retours</a></p></li>
+      </ul>
+    </article>
+  </section>
+</section>

@@ -47,6 +47,16 @@ public class EmpruntServiceImpl implements EmpruntService {
     }
 
     @Override
+    public List<EmpruntResponse> consulterTousLesEmprunts() {
+        LocalDateTime maintenant = LocalDateTime.now();
+        return empruntRepository.findAll()
+                .stream()
+                .sorted((a, b) -> b.getDateDebut().compareTo(a.getDateDebut()))
+                .map(emprunt -> convertirEnResponse(emprunt, maintenant))
+                .toList();
+    }
+
+    @Override
     public List<EmpruntResponse> consulterEmpruntsEnRetard() {
         LocalDateTime maintenant = LocalDateTime.now();
 

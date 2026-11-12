@@ -251,3 +251,10 @@
     height: 42px;
   }
 }
+
+/* Identité de la session, sous la pastille de compte en haut à droite. */
+.header__top { grid-template-areas: 'logo search account'; }
+.header__top > a:first-child { grid-area: logo; }
+.header__account-name { grid-area: account; justify-self: end; align-self: end; padding-top: 52px; font-size: .8rem; font-weight: 600; white-space: nowrap; }
+.account-btn { grid-area: account; align-self: start; }
+@media(max-width:900px) { .header__top { grid-template-areas: 'logo account' 'search search'; } .header__account-name { grid-area: account; font-size: .7rem; padding-top: 46px; } }

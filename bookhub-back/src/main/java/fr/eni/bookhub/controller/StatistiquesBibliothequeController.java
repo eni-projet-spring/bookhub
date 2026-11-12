@@ -3,6 +3,7 @@ package fr.eni.bookhub.controller;
 import fr.eni.bookhub.dto.StatistiquesBibliothequeResponse;
 import fr.eni.bookhub.service.StatistiquesBibliothequeService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,6 +20,7 @@ public class StatistiquesBibliothequeController {
         this.statistiquesService = statistiquesService;
     }
 
+    @PreAuthorize("hasAnyRole('LIBRARIAN', 'ADMIN')")
     @GetMapping("/statistiques")
     public ResponseEntity<StatistiquesBibliothequeResponse>
     consulterStatistiques() {

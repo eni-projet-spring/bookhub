@@ -38,6 +38,11 @@ export class LivreService {
   private readonly http = inject(HttpClient);
   private readonly apiUrl = 'http://localhost:8080/api/livres';
 
+  /** Catégories réelles, sans identifiants codés en dur. */
+  getCategories(): Observable<CategorieResponse[]> {
+    return this.http.get<CategorieResponse[]>('http://localhost:8080/api/categories');
+  }
+
   getBookById(idLivre: number): Observable<LivreResponse> {
     return this.http.get<LivreResponse>(`${this.apiUrl}/${idLivre}`);
   }
