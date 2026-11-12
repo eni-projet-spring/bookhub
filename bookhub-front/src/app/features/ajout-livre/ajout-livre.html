@@ -16,9 +16,9 @@
     <div class="ajout-livre__field">
       <label for="idCategorie">Catégorie *</label>
       <select class="form-control" id="idCategorie" formControlName="idCategorie">
-        <option [value]="0">Choisir une catégorie</option>
+        <option [ngValue]="0">Choisir une catégorie</option>
         @for (categorie of categories; track categorie.idCategorie) {
-          <option [value]="categorie.idCategorie">{{ categorie.libelle }}</option>
+          <option [ngValue]="categorie.idCategorie">{{ categorie.libelle }}</option>
         }
       </select>
       @if (chargementCategories) { <small>Chargement des catégories…</small> }
