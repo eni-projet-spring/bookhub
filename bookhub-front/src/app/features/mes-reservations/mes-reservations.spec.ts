@@ -1,22 +1,24 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { TestBed } from '@angular/core/testing';
+import { of } from 'rxjs';
 import { MesReservations } from './mes-reservations';
+import { ReservationService } from '../../services/reservation.service';
 
 describe('MesReservations', () => {
-  let component: MesReservations;
-  let fixture: ComponentFixture<MesReservations>;
-
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [MesReservations],
+      providers: [
+        { provide: ReservationService, useValue: {
+          listerMesReservations: () => of([]),
+        } },
+      ],
     }).compileComponents();
-
-    fixture = TestBed.createComponent(MesReservations);
-    component = fixture.componentInstance;
-    await fixture.whenStable();
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
+  it('affiche un état vide sans solliciter le backend réel', () => {
+    const fixture = TestBed.createComponent(MesReservations);
+    fixture.detectChanges();
+    expect(fixture.componentInstance.mesReservations).toEqual([]);
+    expect(fixture.componentInstance.messageErreur).toBe('');
   });
 });
