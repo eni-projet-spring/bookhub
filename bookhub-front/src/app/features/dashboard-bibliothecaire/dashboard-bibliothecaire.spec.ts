@@ -32,6 +32,8 @@ describe('DashboardBibliothecaire', () => {
     const fixture = TestBed.createComponent(DashboardBibliothecaire);
     fixture.detectChanges();
     expect(fixture.componentInstance.statistiques?.nombreEmpruntsTotal).toBe(6);
+    expect(fixture.nativeElement.querySelectorAll('.stat-card').length).toBe(4);
+    expect(fixture.nativeElement.querySelectorAll('.dashboard-panel').length).toBe(4);
     expect(fixture.nativeElement.textContent).toContain('Réservations en attente');
   });
 });
